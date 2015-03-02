@@ -10,7 +10,7 @@
 #include <linux/spi/spidev.h>
 
 static const char *spiDevice = "/dev/spidev1.0";
-static const char *gpioDevice = "/sys/class/gpio/gpio199";
+static const char *gpioDevice = "/sys/class/gpio/gpio199/value";
 static uint32_t mode = 0;
 static uint8_t bits = 8;
 static uint32_t speed = 6000000;
@@ -21,8 +21,7 @@ int main( int argc, char *argv[] ) {
 	int ret; // return conde for spi calls
 
 	// Open gpio file and check for error
-	FILE * f = fopen( gpioDevice, "r" );
-	gpioFd = fileno(f);
+	gpioFd = open( gpioDevice, O_RDONLY | O_NONBLOCK );
 	if ( gpioFd < 0 ) {
 		perror( "gpio file open" );
 		return EXIT_FAILURE;
