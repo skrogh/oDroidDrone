@@ -21,7 +21,8 @@ int main( int argc, char *argv[] ) {
 	int ret; // return conde for spi calls
 
 	// Open gpio file and check for error
-	gpioFd = open( gpioDevice, O_RDONLY | O_NONBLOCK );
+	File * f = fopen( gpioDevice, "r" );
+	gpioFd = fileno(f);
 	if ( gpioFd < 0 ) {
 		perror( "gpio file open" );
 		return EXIT_FAILURE;
