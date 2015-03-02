@@ -1,3 +1,4 @@
+
 #include <stdint.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -8,6 +9,7 @@
 #include <sys/ioctl.h>
 #include <linux/types.h>
 #include <linux/spi/spidev.h>
+#include <endian.h>
 
 static const char *spiDevice = "/dev/spidev1.0";
 static const char *gpioDevice = "/sys/class/gpio/gpio199/value";
@@ -38,9 +40,9 @@ void gpioIntHandler( void ) {
 		perror( "can't send spi message" );
 
 	printf("Acc: %3.3f\n     %3.3f\n     %3.3f\n",
-		((float*)&tr)[0],
-		((float*)&tr)[1],
-		((float*)&tr)[2] );
+		be32toh( ((float*)&tr)[0] ),
+		be32toh( ((float*)&tr)[1] ),
+		be32toh( ((float*)&tr)[2] ) );
 	printf("Gyro: %3.3f\n      %3.3f\n      %3.3f\n",
 		((float*)&tr)[3],
 		((float*)&tr)[4],
@@ -49,13 +51,13 @@ void gpioIntHandler( void ) {
 		((float*)&tr)[6],
 		((float*)&tr)[7],
 		((float*)&tr)[8] );
-/*
+
 	for ( ret = 0; ret < MESSAGE_LENGTH; ret++ ) {
 		if ( !( ret % 6 ) )
 			puts( "" );
 		printf( "%.2X ", rx[ret] );
 	}
-	puts( "" );*/
+	puts( "" );
 }
 
 int main( int argc, char *argv[] ) {
