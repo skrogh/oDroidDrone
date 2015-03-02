@@ -37,13 +37,13 @@ int main( int argc, char *argv[] ) {
 	/*
 	 * spi mode
 	 */
-	ret = ioctl(fd, SPI_IOC_WR_MODE, &mode);
+	ret = ioctl(spiFd, SPI_IOC_WR_MODE, &mode);
 	if (ret == -1) {
 		perror("can't set spi mode");
 		return EXIT_FAILURE;
 	}
 
-	ret = ioctl(fd, SPI_IOC_RD_MODE, &mode);
+	ret = ioctl(spiFd, SPI_IOC_RD_MODE, &mode);
 	if (ret == -1) {
 		perror("can't get spi mode");
 		return EXIT_FAILURE;
@@ -52,13 +52,13 @@ int main( int argc, char *argv[] ) {
 	/*
 	 * bits per word
 	 */
-	ret = ioctl(fd, SPI_IOC_WR_BITS_PER_WORD, &bits);
+	ret = ioctl(spiFd, SPI_IOC_WR_BITS_PER_WORD, &bits);
 	if (ret == -1) {
 		perror("can't set bits per word");
 		return EXIT_FAILURE;
 	}
 
-	ret = ioctl(fd, SPI_IOC_RD_BITS_PER_WORD, &bits);
+	ret = ioctl(spiFd, SPI_IOC_RD_BITS_PER_WORD, &bits);
 	if (ret == -1) {
 		perror("can't get bits per word");
 		return EXIT_FAILURE;
@@ -67,13 +67,13 @@ int main( int argc, char *argv[] ) {
 	/*
 	 * max speed hz
 	 */
-	ret = ioctl(fd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
+	ret = ioctl(spiFd, SPI_IOC_WR_MAX_SPEED_HZ, &speed);
 	if (ret == -1) {
 		perror("can't set max speed hz");
 		return EXIT_FAILURE;
 	}
 
-	ret = ioctl(fd, SPI_IOC_RD_MAX_SPEED_HZ, &speed);
+	ret = ioctl(spiFd, SPI_IOC_RD_MAX_SPEED_HZ, &speed);
 	if (ret == -1) {
 		perror("can't get max speed hz");
 		return EXIT_FAILURE;
