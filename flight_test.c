@@ -15,7 +15,7 @@ static uint32_t mode = 0;
 static uint8_t bits = 8;
 static uint32_t speed = 6000000;
 static uint16_t delay = 0;
-#define MESSAGE_LENGTH  (16*2) // flight controller sends 16bit bytes
+#define MESSAGE_LENGTH  (18*2) // flight controller sends 16bit bytes
 
 static int gpioFd, spiFd;
 
