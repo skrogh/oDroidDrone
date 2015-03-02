@@ -15,7 +15,7 @@ static uint32_t mode = 0;
 static uint8_t bits = 8;
 static uint32_t speed = 6000000;
 static uint16_t delay = 0;
-#define MESSAGE_LENGTH = 8;
+#define MESSAGE_LENGTH (8);
 
 static int gpioFd, spiFd;
 
