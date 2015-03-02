@@ -21,6 +21,19 @@ static uint16_t delay = 0;
 
 static int gpioFd, spiFd;
 
+
+void unpackFloat( uint8_t* from ) {
+	uint32_t tmp = (from[ 3] << 0) | (from[ 2] << 8) | (from[1] << 16) | (from[0] << 24);
+	return *(float*)&tmp;
+}
+void unpackFloats( uint8_t* from, float to[], uint32_t n ) {
+	uint32_t i;
+	for( i = 0; i < n; i++ ) {
+		to[i] = unpackFloat( from );
+		from += 4;
+	}
+}
+
 void gpioIntHandler( void ) {
 	int ret;
 	uint8_t tx[MESSAGE_LENGTH] = { 0 };
@@ -38,23 +51,29 @@ void gpioIntHandler( void ) {
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
 	if ( ret < 1 )
 		perror( "can't send spi message" );
-printf( "%x", rx[0] );
-	uint32_t acc_[3] = {
-		(rx[3] << 0) | (rx[2] << 8) | (rx[1] << 16) | (rx[0] << 24),
-		(rx[7] << 0) | (rx[6] << 8) | (rx[5] << 16) | (rx[4] << 24),
-		(rx[11] << 0) | (rx[10] << 8) | (rx[9] << 16) | (rx[8] << 24)
-	};
-	float* acc = (float*)acc_;
-	printf( "Acc: 0x%X\n     0x%X\n    0x %X\n",
-		*(unsigned int*)&acc[0], *(unsigned int*)&acc[1],*(unsigned int*)&acc[2] );
+
+
+	float acc[3];
+	unpackFloats( rx[0], acc );
+	float gyro[3];
+	unpackFloats( rx[sizeof(acc)], gyro );
+	float alpha[3];
+	unpackFloats( rx[sizeof(acc)+sizeof(gyro)], alpha );
+
 	printf( "Acc: %3.3f\n     %3.3f\n     %3.3f\n",
 		acc[0], acc[1], acc[2] );
+	printf( "Gyro: %3.3f\n      %3.3f\n      %3.3f\n",
+		gyro[0], gyro[1], gyro[2] );
+	printf( "Alpha: %3.3f\n       %3.3f\n       %3.3f\n",
+		alpha[0], alpha[1], alpha[2] );
+	/*
 	for ( ret = 0; ret < MESSAGE_LENGTH; ret++ ) {
 		if ( !( ret % 6 ) )
 			puts( "" );
 		printf( "%.2X ", rx[ret] );
 	}
 	puts( "" );
+	*/
 }
 
 int main( int argc, char *argv[] ) {
