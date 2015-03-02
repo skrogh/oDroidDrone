@@ -40,7 +40,7 @@ void gpioIntHandler( void ) {
 		perror( "can't send spi message" );
 
 	float acc[3] = {
-		(rx[0] << 0) | (rx[1] << 8) | (rx[2] << 16) | (rx[3] << 24),
+		(rx[3] << 0) | (rx[2] << 8) | (rx[1] << 16) | (rx[0] << 24),
 		(rx[4] << 0) | (rx[5] << 8) | (rx[6] << 16) | (rx[7] << 24),
 		(rx[8] << 0) | (rx[9] << 8) | (rx[10] << 16) | (rx[11] << 24)
 	};
