@@ -15,18 +15,18 @@ static uint32_t mode = 0;
 static uint8_t bits = 8;
 static uint32_t speed = 6000000;
 static uint16_t delay = 0;
-static uint32_t messageLength = 8;
+#define MESSAGE_LENGTH = 8;
 
 static int gpioFd, spiFd;
 
 void gpioIntHandler( void ) {
 	int ret;
-	uint8_t tx[messageLength] = { 0 };
-	uint8_t rx[messageLength] = { 0 };
+	uint8_t tx[MESSAGE_LENGTH] = { 0 };
+	uint8_t rx[MESSAGE_LENGTH] = { 0 };
 	struct spi_ioc_transfer tr = {
 		.tx_buf = (unsigned long)tx,
 		.rx_buf = (unsigned long)rx,
-		.len = messageLength,
+		.len = MESSAGE_LENGTH,
 		.delay_usecs = delay,
 		.speed_hz = speed,
 		.bits_per_word = bits,
@@ -36,7 +36,7 @@ void gpioIntHandler( void ) {
 	if ( ret < 1 )
 		perror( "can't send spi message" );
 
-	for ( ret = 0; ret < ARRAY_SIZE(tx); ret++ ) {
+	for ( ret = 0; ret < MESSAGE_LENGTH; ret++ ) {
 		if ( !( ret % 6 ) )
 			puts( "" );
 		printf( "%.2X ", rx[ret] );
