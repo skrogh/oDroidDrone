@@ -38,13 +38,15 @@ void gpioIntHandler( void ) {
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
 	if ( ret < 1 )
 		perror( "can't send spi message" );
-
-	float acc[3] = {
+printf( "%x", rx[0] );
+	uint32_t acc_[3] = {
 		(rx[3] << 0) | (rx[2] << 8) | (rx[1] << 16) | (rx[0] << 24),
-		(rx[4] << 0) | (rx[5] << 8) | (rx[6] << 16) | (rx[7] << 24),
-		(rx[8] << 0) | (rx[9] << 8) | (rx[10] << 16) | (rx[11] << 24)
+		(rx[7] << 0) | (rx[6] << 8) | (rx[5] << 16) | (rx[4] << 24),
+		(rx[11] << 0) | (rx[10] << 8) | (rx[9] << 16) | (rx[8] << 24)
 	};
-
+	float* acc = (float*)acc_;
+	printf( "Acc: 0x%X\n     0x%X\n    0x %X\n",
+		*(unsigned int*)&acc[0], *(unsigned int*)&acc[1],*(unsigned int*)&acc[2] );
 	printf( "Acc: %3.3f\n     %3.3f\n     %3.3f\n",
 		acc[0], acc[1], acc[2] );
 	for ( ret = 0; ret < MESSAGE_LENGTH; ret++ ) {
@@ -56,6 +58,8 @@ void gpioIntHandler( void ) {
 }
 
 int main( int argc, char *argv[] ) {
+	float tmp = 0.12584944;
+	printf( "0x%x\n",*(unsigned int*)(&tmp) );
 	int ret; // return conde for spi calls
 
 	// Open gpio file and check for error
