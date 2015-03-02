@@ -96,7 +96,7 @@ int main( int argc, char *argv[] ) {
 		lseek ( gpioFd, 0, SEEK_SET);
 		read( gpioFd, &c, 1);
 		// start polling for next interrupt
-		rc = poll( &fdset, 1, 1000000 );
+		rc = poll( &fdset, 1, 500 );
 
 		if (rc < 0) {
 			perror("poll() failed!");
