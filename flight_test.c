@@ -54,11 +54,11 @@ void gpioIntHandler( void ) {
 
 
 	float acc[3];
-	unpackFloats( rx[0], acc, 3 );
+	unpackFloats( &rx[0], acc, 3 );
 	float gyro[3];
-	unpackFloats( rx[sizeof(acc)], gyro, 3 );
+	unpackFloats( &rx[sizeof(acc)], gyro, 3 );
 	float alpha[3];
-	unpackFloats( rx[sizeof(acc)+sizeof(gyro)], alpha, 3 );
+	unpackFloats( &rx[sizeof(acc)+sizeof(gyro)], alpha, 3 );
 
 	printf( "Acc: %3.3f\n     %3.3f\n     %3.3f\n",
 		acc[0], acc[1], acc[2] );
