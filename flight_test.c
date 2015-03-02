@@ -15,7 +15,7 @@ static uint32_t mode = 0;
 static uint8_t bits = 8;
 static uint32_t speed = 6000000;
 static uint16_t delay = 0;
-#define MESSAGE_LENGTH (8);
+#define MESSAGE_LENGTH  (16)
 
 static int gpioFd, spiFd;
 
@@ -119,10 +119,10 @@ int main( int argc, char *argv[] ) {
 		fdset.revents = 0;
 
 		char c;
-		lseek ( gpioFd, 0, SEEK_SET);
-		read( gpioFd, &c, 1);
 		// start polling for next interrupt
 		rc = poll( &fdset, 1, 500 );
+		lseek ( gpioFd, 0, SEEK_SET);
+		read( gpioFd, &c, 1);
 
 		if (rc < 0) {
 			perror("poll() failed!");
