@@ -92,8 +92,14 @@ int main( int argc, char *argv[] ) {
 		fdset.revents = 0;
 
 		// clear interrupt, by going to start of file and reading one byte
+			// Open gpio file and check for error
+		gpioFd = open( gpioDevice, O_RDONLY | O_NONBLOCK );
+		if ( gpioFd < 0 ) {
+			perror( "gpio file open" );
+			return EXIT_FAILURE;
+		}
 		char c;
-		lseek ( gpioFd, 0, SEEK_SET);
+		//lseek ( gpioFd, 0, SEEK_SET);
 		read( gpioFd, &c, 1);
 		// start polling for next interrupt
 		rc = poll( &fdset, 1, 500 );
@@ -104,7 +110,7 @@ int main( int argc, char *argv[] ) {
 		}
 
 		if (rc == 0) {
-			printf(".");
+			printf("%d\n", fdset.revents);
 		}
 
 		if (fdset.revents & POLLPRI) {
@@ -113,6 +119,7 @@ int main( int argc, char *argv[] ) {
 
 		fflush(stdout);
 
+		close( gpioFd );
 	}
 
 
