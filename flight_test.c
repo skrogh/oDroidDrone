@@ -39,18 +39,15 @@ void gpioIntHandler( void ) {
 	if ( ret < 1 )
 		perror( "can't send spi message" );
 
+	float acc[3] = {
+		(rx[0] << 0) | (rx[1] << 8) | (rx[2] << 16) | (rx[3] << 24),
+		(rx[4] << 0) | (rx[5] << 8) | (rx[6] << 16) | (rx[7] << 24),
+		(rx[8] << 0) | (rx[9] << 8) | (rx[10] << 16) | (rx[11] << 24)
+	};
+	}
+
 	printf("Acc: %3.3f\n     %3.3f\n     %3.3f\n",
-		*(float*)&le32toh( ((uint32_t*)rx)[0] ),
-		*(float*)&le32toh( ((uint32_t*)rx)[1] ),
-		*(float*)&le32toh( ((uint32_t*)rx)[2] ) );
-	printf("Gyro: %3.3f\n      %3.3f\n      %3.3f\n",
-		((float*)rx)[3],
-		((float*)rx)[4],
-		((float*)rx)[5] );
-	printf("Alpha: %3.3f\n       %3.3f\n       %3.3f\n",
-		((float*)rx)[6],
-		((float*)rx)[7],
-		((float*)rx)[8] );
+		acc[0], acc[1], acc[2] );
 	for ( ret = 0; ret < MESSAGE_LENGTH; ret++ ) {
 		if ( !( ret % 6 ) )
 			puts( "" );
