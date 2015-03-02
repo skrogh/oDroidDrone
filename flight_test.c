@@ -40,9 +40,9 @@ void gpioIntHandler( void ) {
 		perror( "can't send spi message" );
 
 	printf("Acc: %3.3f\n     %3.3f\n     %3.3f\n",
-		be32toh( ((float*)rx)[0] ),
-		be32toh( ((float*)rx)[1] ),
-		be32toh( ((float*)rx)[2] ) );
+		(float*)&le32toh( ((uint32_t*)rx)[0] ),
+		(float*)&le32toh( ((uint32_t*)rx)[1] ),
+		(float*)&le32toh( ((uint32_t*)rx)[2] ) );
 	printf("Gyro: %3.3f\n      %3.3f\n      %3.3f\n",
 		((float*)rx)[3],
 		((float*)rx)[4],
