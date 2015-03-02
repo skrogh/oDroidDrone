@@ -15,9 +15,36 @@ static uint32_t mode = 0;
 static uint8_t bits = 8;
 static uint32_t speed = 6000000;
 static uint16_t delay = 0;
+static uint32_t messageLength = 8;
+
+static int gpioFd, spiFd;
+
+void gpioIntHandler( void ) {
+	int ret;
+	uint8_t tx[messageLength] = { 0 };
+	uint8_t rx[messageLength] = { 0 };
+	struct spi_ioc_transfer tr = {
+		.tx_buf = (unsigned long)tx,
+		.rx_buf = (unsigned long)rx,
+		.len = messageLength,
+		.delay_usecs = delay,
+		.speed_hz = speed,
+		.bits_per_word = bits,
+	};
+
+	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
+	if ( ret < 1 )
+		perror( "can't send spi message" );
+
+	for ( ret = 0; ret < ARRAY_SIZE(tx); ret++ ) {
+		if ( !( ret % 6 ) )
+			puts( "" );
+		printf( "%.2X ", rx[ret] );
+	}
+	puts( "" );
+}
 
 int main( int argc, char *argv[] ) {
-	int gpioFd, spiFd;
 	int ret; // return conde for spi calls
 
 	// Open gpio file and check for error
@@ -108,6 +135,7 @@ int main( int argc, char *argv[] ) {
 
 		if (fdset.revents & POLLPRI) {
 			printf("poll() GPIO: interrupt occurred\n");
+			gpioIntHandler( );
 		}
 
 		fflush(stdout);
