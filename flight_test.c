@@ -18,6 +18,7 @@ static uint16_t delay = 0;
 
 int main( int argc, char *argv[] ) {
 	int gpioFd, spiFd;
+	int ret; // return conde for spi calls
 
 	// Open gpio file and check for error
 	gpioFd = open( gpioDevice, O_RDONLY | O_NONBLOCK );
