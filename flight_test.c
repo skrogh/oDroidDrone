@@ -110,6 +110,10 @@ int main( int argc, char *argv[] ) {
 	printf("bits per word: %d\n", bits);
 	printf("max speed: %d Hz (%d KHz)\n", speed, speed/1000);
 
+	// clear interrupt
+	char c;
+	lseek ( gpioFd, 0, SEEK_SET);
+	read( gpioFd, &c, 1);
 
 	while( 1 ) {
 		int rc; // return code
@@ -118,9 +122,10 @@ int main( int argc, char *argv[] ) {
 		fdset.events = POLLPRI;
 		fdset.revents = 0;
 
-		char c;
-		// start polling for next interrupt
+
+		// start waiting for next interrupt
 		rc = poll( &fdset, 1, 500 );
+		// clear interrupt
 		lseek ( gpioFd, 0, SEEK_SET);
 		read( gpioFd, &c, 1);
 
