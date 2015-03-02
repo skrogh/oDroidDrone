@@ -22,7 +22,7 @@ static uint16_t delay = 0;
 static int gpioFd, spiFd;
 
 
-void unpackFloat( uint8_t* from ) {
+float unpackFloat( uint8_t* from ) {
 	uint32_t tmp = (from[ 3] << 0) | (from[ 2] << 8) | (from[1] << 16) | (from[0] << 24);
 	return *(float*)&tmp;
 }
