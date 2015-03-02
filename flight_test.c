@@ -111,6 +111,8 @@ int main( int argc, char *argv[] ) {
 			printf("poll() GPIO: interrupt occurred\n");
 		}
 
+		fflush(stdout);
+
 	}
 
 
