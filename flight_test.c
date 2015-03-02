@@ -38,17 +38,17 @@ void gpioIntHandler( void ) {
 		perror( "can't send spi message" );
 
 	printf("Acc: %3.3f\n     %3.3f\n     %3.3f\n",
-		((float*)tr)[0],
-		((float*)tr)[1],
-		((float*)tr)[2] );
+		((float*)&tr)[0],
+		((float*)&tr)[1],
+		((float*)&tr)[2] );
 	printf("Gyro: %3.3f\n      %3.3f\n      %3.3f\n",
-		((float*)tr)[3],
-		((float*)tr)[4],
-		((float*)tr)[5] );
+		((float*)&tr)[3],
+		((float*)&tr)[4],
+		((float*)&tr)[5] );
 	printf("Alpha: %3.3f\n       %3.3f\n       %3.3f\n",
-		((float*)tr)[6],
-		((float*)tr)[7],
-		((float*)tr)[8] );
+		((float*)&tr)[6],
+		((float*)&tr)[7],
+		((float*)&tr)[8] );
 /*
 	for ( ret = 0; ret < MESSAGE_LENGTH; ret++ ) {
 		if ( !( ret % 6 ) )
