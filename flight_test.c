@@ -44,9 +44,8 @@ void gpioIntHandler( void ) {
 		(rx[4] << 0) | (rx[5] << 8) | (rx[6] << 16) | (rx[7] << 24),
 		(rx[8] << 0) | (rx[9] << 8) | (rx[10] << 16) | (rx[11] << 24)
 	};
-	}
 
-	printf("Acc: %3.3f\n     %3.3f\n     %3.3f\n",
+	printf( "Acc: %3.3f\n     %3.3f\n     %3.3f\n",
 		acc[0], acc[1], acc[2] );
 	for ( ret = 0; ret < MESSAGE_LENGTH; ret++ ) {
 		if ( !( ret % 6 ) )
