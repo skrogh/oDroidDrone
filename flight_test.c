@@ -13,13 +13,14 @@
 
 static const char *spiDevice = "/dev/spidev1.0";
 static const char *gpioDevice = "/sys/class/gpio/gpio199/value";
+static const char *logPath = "log.csv"
 static uint32_t mode = 0;
 static uint8_t bits = 8;
 static uint32_t speed = 6000000;
 static uint16_t delay = 0;
 #define MESSAGE_LENGTH  (18*2) // flight controller sends 16bit bytes
 
-static int gpioFd, spiFd;
+static int gpioFd, spiFd, logFd;
 
 
 float unpackFloat( uint8_t* from ) {
@@ -66,6 +67,11 @@ void gpioIntHandler( void ) {
 		gyro[0], gyro[1], gyro[2] );
 	printf( "Alpha: %3.3f\n       %3.3f\n       %3.3f\n",
 		alpha[0], alpha[1], alpha[2] );
+	dprintf( logFd, "%f, %f, %f,  %f, %f, %f,  %f, %f, %f\n",
+	 acc[0], acc[1], acc[2],
+	 gyro[0], gyro[1], gyro[2],
+	 alpha[0], alpha[1], alpha[2] );
+	dflush( logFd );
 	/*
 	for ( ret = 0; ret < MESSAGE_LENGTH; ret++ ) {
 		if ( !( ret % 6 ) )
@@ -80,6 +86,13 @@ int main( int argc, char *argv[] ) {
 	float tmp = 0.12584944;
 	printf( "0x%x\n",*(unsigned int*)(&tmp) );
 	int ret; // return conde for spi calls
+
+	// Open log file and check for error
+	logFd = open( logPath, O_WRONLY | O_CREAT );
+	if ( logFd < 0 ) {
+		perror( "log file open" );
+		return EXIT_FAILURE;
+	}
 
 	// Open gpio file and check for error
 	gpioFd = open( gpioDevice, O_RDONLY | O_NONBLOCK );
@@ -184,5 +197,6 @@ int main( int argc, char *argv[] ) {
 
 	close(gpioFd);
 	close(spiFd);
+	close (logFd);
 
 }
