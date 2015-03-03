@@ -13,7 +13,7 @@
 
 static const char *spiDevice = "/dev/spidev1.0";
 static const char *gpioDevice = "/sys/class/gpio/gpio199/value";
-static const char *logPath = "log.csv"
+static const char *logPath = "log.csv";
 static uint32_t mode = 0;
 static uint8_t bits = 8;
 static uint32_t speed = 6000000;
@@ -71,7 +71,6 @@ void gpioIntHandler( void ) {
 		acc[0], acc[1], acc[2],
 		gyro[0], gyro[1], gyro[2],
 		alpha[0], alpha[1], alpha[2] );
-	dflush( logFd );
 	/*
 	for ( ret = 0; ret < MESSAGE_LENGTH; ret++ ) {
 		if ( !( ret % 6 ) )
