@@ -7,6 +7,7 @@
 #include <fcntl.h>
 #include <poll.h>
 #include <sys/ioctl.h>
+#include <sys/time.h>
 #include <linux/types.h>
 #include <linux/spi/spidev.h>
 #include <endian.h>
@@ -69,7 +70,15 @@ void gpioIntHandler( void ) {
 	printf( "Alpha: %3.3f\n       %3.3f\n       %3.3f\n",
 		alpha[0], alpha[1], alpha[2] );
 	*/
-	dprintf( logFd, "%f, %f, %f,  %f, %f, %f,  %f, %f, %f\n",
+	struct timeval tv;
+		struct timezone tz = {
+		.tz_minuteswest = 0,
+		.tz_dsttime = 0
+	};
+	gettimeofday( &tv, &tz );
+
+	dprintf( logFd, "%ld.%ld,  %f, %f, %f,  %f, %f, %f,  %f, %f, %f\n",
+		tv.tv_sec, tv.tv_usec,
 		acc[0], acc[1], acc[2],
 		gyro[0], gyro[1], gyro[2],
 		alpha[0], alpha[1], alpha[2] );
