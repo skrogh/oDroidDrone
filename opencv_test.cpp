@@ -44,6 +44,10 @@ int main()
 
 	std::vector<KeyPoint> keypoints;
 
+	vector<int> compressionParams;
+	compressionParams.push_back( CV_IMWRITE_PNG_COMPRESSION );
+	compressionParams.push_back( 9 );
+	
 	while( 1 ) {
 		// get time
 		struct timeval tv;
@@ -54,23 +58,24 @@ int main()
 		gettimeofday( &tv, &tz );
 		char nameString[50];
 		sprintf( nameString, "opencv_test_images/img-s%ld.%06ld.png", tv.tv_sec, tv.tv_usec );
-		printf( "%s\n", nameString );
-		fflush(stdout);
+		// test print the filename
+		//printf( "%s\n", nameString );
+		//fflush(stdout);
 
 		// get new frame
 		cap >> frame;
 		// convert to mono
 		cvtColor( frame, edges, CV_RGB2GRAY );
 		// save image
-		imwrite( nameString, edges );
+		imwrite( nameString, edges, compressionParams );
 
 //		detector->detect( edges, keypoints );
 //		drawKeypoints( edges, keypoints, edges, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
 
 		// show image
 		imshow( "edges", edges );
-		// wait a while (gives CV time to show image)
-		if( waitKey( 1 ) >= 0 ) break;
+		// wait a while (gives CV time to show image, and desk to save image)
+		if( waitKey( 80 ) >= 0 ) break;
 	}
 	return 0;
 }

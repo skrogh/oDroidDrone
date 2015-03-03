@@ -197,7 +197,8 @@ int main( int argc, char *argv[] ) {
 		}
 
 		if (fdset.revents & POLLPRI) {
-			printf("poll() GPIO: interrupt occurred\n");
+			//this message has ben uncommented to spare the X server
+			//printf("poll() GPIO: interrupt occurred\n");
 			gpioIntHandler( );
 		}
 
