@@ -92,6 +92,7 @@ int main( int argc, char *argv[] ) {
 		perror( "log file open" );
 		return EXIT_FAILURE;
 	}
+	fchmod( logFd, 0666 );
 
 	// Open gpio file and check for error
 	gpioFd = open( gpioDevice, O_RDONLY | O_NONBLOCK );
