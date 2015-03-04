@@ -56,12 +56,14 @@ int main()
 			.tz_dsttime = 0
 		};
 
-		// get new frame
-		cap >> frame;
-		// get time
+		// Grab nex frame
+		cap.grab();
+		// get time of grab
 		gettimeofday( &tv, &tz );
 		char nameString[50];
 		sprintf( nameString, "opencv_test_images/img-s%ld.%06ld.png", tv.tv_sec, tv.tv_usec );
+		// decode frame
+		cap.retreive( frame, CV_RGB );
 
 		// convert to mono
 		cvtColor( frame, edges, CV_RGB2GRAY );
