@@ -55,15 +55,14 @@ int main()
 			.tz_minuteswest = 0,
 			.tz_dsttime = 0
 		};
-		gettimeofday( &tv, &tz );
-		char nameString[50];
-		sprintf( nameString, "opencv_test_images/img-s%ld.%06ld.png", tv.tv_sec, tv.tv_usec );
-		// test print the filename
-		//printf( "%s\n", nameString );
-		//fflush(stdout);
 
 		// get new frame
 		cap >> frame;
+		// get time
+		gettimeofday( &tv, &tz );
+		char nameString[50];
+		sprintf( nameString, "opencv_test_images/img-s%ld.%06ld.png", tv.tv_sec, tv.tv_usec );
+
 		// convert to mono
 		cvtColor( frame, edges, CV_RGB2GRAY );
 		// save image
