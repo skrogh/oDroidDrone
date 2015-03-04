@@ -19,10 +19,14 @@ static uint32_t mode = 0;
 static uint8_t bits = 8;
 static uint32_t speed = 6000000;
 static uint16_t delay = 0;
-#define MESSAGE_LENGTH  (18*2) // flight controller sends 16bit bytes
+#define MESSAGE_LENGTH  (20*2) // flight controller sends 16bit bytes
 
 static int gpioFd, spiFd, logFd;
 
+
+uint32_t unpackUint32( uint8_t* from ) {
+	return (from[ 3] << 0) | (from[ 2] << 8) | (from[1] << 16) | (from[0] << 24);
+}
 
 float unpackFloat( uint8_t* from ) {
 	uint32_t tmp = (from[ 3] << 0) | (from[ 2] << 8) | (from[1] << 16) | (from[0] << 24);
@@ -61,7 +65,7 @@ void gpioIntHandler( void ) {
 	unpackFloats( &rx[sizeof(acc)], gyro, 3 );
 	float alpha[3];
 	unpackFloats( &rx[sizeof(acc)+sizeof(gyro)], alpha, 3 );
-
+	uint32_t ping = unpackUint32( &rx[sizeof(acc)+sizeof(gyro)+sizeof(alpha)] );
 	/*
 	printf( "Acc: %3.3f\n     %3.3f\n     %3.3f\n",
 		acc[0], acc[1], acc[2] );
@@ -77,11 +81,12 @@ void gpioIntHandler( void ) {
 	};
 	gettimeofday( &tv, &tz );
 
-	dprintf( logFd, "%ld.%ld,  %f, %f, %f,  %f, %f, %f,  %f, %f, %f\n",
+	dprintf( logFd, "%ld.%ld,  %f, %f, %f,  %f, %f, %f,  %f, %f, %f,  %d\n",
 		tv.tv_sec, tv.tv_usec,
 		acc[0], acc[1], acc[2],
 		gyro[0], gyro[1], gyro[2],
-		alpha[0], alpha[1], alpha[2] );
+		alpha[0], alpha[1], alpha[2],
+		ping );
 	/*
 	for ( ret = 0; ret < MESSAGE_LENGTH; ret++ ) {
 		if ( !( ret % 6 ) )
