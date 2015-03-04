@@ -63,7 +63,7 @@ int main()
 		char nameString[50];
 		sprintf( nameString, "opencv_test_images/img-s%ld.%06ld.png", tv.tv_sec, tv.tv_usec );
 		// decode frame
-		cap.retreive( frame, 0 );
+		cap.retrieve( frame, 0 );
 
 		// convert to mono
 		cvtColor( frame, edges, CV_RGB2GRAY );
