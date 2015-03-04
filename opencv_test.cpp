@@ -58,6 +58,10 @@ int main()
 
 		// Grab nex frame
 		cap.grab();
+		cap.grab();
+		cap.grab();
+		cap.grab();
+		cap.grab();
 		// get time of grab
 		gettimeofday( &tv, &tz );
 		char nameString[50];
