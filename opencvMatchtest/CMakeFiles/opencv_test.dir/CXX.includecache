@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/odroid/oDroidDrone/opencv_test.cpp
+linux/videodev2.h
+-
+sys/time.h
+-
+sys/ioctl.h
+-
+fcntl.h
+-
+opencv2/opencv.hpp
+/home/odroid/oDroidDrone/opencv2/opencv.hpp
+opencv2/core/core.hpp
+/home/odroid/oDroidDrone/opencv2/core/core.hpp
+opencv2/features2d/features2d.hpp
+/home/odroid/oDroidDrone/opencv2/features2d/features2d.hpp
+opencv2/highgui/highgui.hpp
+/home/odroid/oDroidDrone/opencv2/highgui/highgui.hpp
+stdlib.h
+-
+stdio.h
+-
+
