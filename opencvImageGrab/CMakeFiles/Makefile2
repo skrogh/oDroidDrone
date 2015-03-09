@@ -47,10 +47,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/odroid/oDroidDrone
+CMAKE_SOURCE_DIR = /home/odroid/oDroidDrone/opencvImageGrab
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/odroid/oDroidDrone
+CMAKE_BINARY_DIR = /home/odroid/oDroidDrone/opencvImageGrab
 
 #=============================================================================
 # Target rules for target CMakeFiles/opencv_test.dir
@@ -59,7 +59,7 @@ CMAKE_BINARY_DIR = /home/odroid/oDroidDrone
 CMakeFiles/opencv_test.dir/all:
 	$(MAKE) -f CMakeFiles/opencv_test.dir/build.make CMakeFiles/opencv_test.dir/depend
 	$(MAKE) -f CMakeFiles/opencv_test.dir/build.make CMakeFiles/opencv_test.dir/build
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/odroid/oDroidDrone/CMakeFiles  1
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/odroid/oDroidDrone/opencvImageGrab/CMakeFiles  1
 	@echo "Built target opencv_test"
 .PHONY : CMakeFiles/opencv_test.dir/all
 
@@ -69,9 +69,9 @@ all: CMakeFiles/opencv_test.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/opencv_test.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/odroid/oDroidDrone/CMakeFiles 1
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/odroid/oDroidDrone/opencvImageGrab/CMakeFiles 1
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/opencv_test.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/odroid/oDroidDrone/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/odroid/oDroidDrone/opencvImageGrab/CMakeFiles 0
 .PHONY : CMakeFiles/opencv_test.dir/rule
 
 # Convenience name for target.
