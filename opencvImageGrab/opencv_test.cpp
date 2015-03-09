@@ -31,10 +31,10 @@ int main()
 
 	// set camera parameters:
 	// size
-	cap.set( CV_CAP_PROP_FRAME_WIDTH, 320 );
-	cap.set( CV_CAP_PROP_FRAME_HEIGHT, 240 );
+	cap.set( CV_CAP_PROP_FRAME_WIDTH, 640 );
+	cap.set( CV_CAP_PROP_FRAME_HEIGHT, 480 );
 	// framerate
-	system( "v4l2-ctl --set-parm=125" );
+	system( "v4l2-ctl --set-parm=30" );
 	// exposure, gain, etc.
 
 
