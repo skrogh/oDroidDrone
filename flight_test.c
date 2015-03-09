@@ -81,7 +81,7 @@ void gpioIntHandler( void ) {
 	};
 	gettimeofday( &tv, &tz );
 
-	dprintf( logFd, "%ld.%ld,  %f, %f, %f,  %f, %f, %f,  %f, %f, %f,  %d\n",
+	dprintf( logFd, "%ld.%06ld,  %f, %f, %f,  %f, %f, %f,  %f, %f, %f,  %d\n",
 		tv.tv_sec, tv.tv_usec,
 		acc[0], acc[1], acc[2],
 		gyro[0], gyro[1], gyro[2],
