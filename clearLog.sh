@@ -3,7 +3,7 @@
 echo "Clearing log files"
 #Clear images
 echo "Removing images:"
-[ "$(ls -A opencvImageGrab/opencv_test_images)" ] && rm opencvImageGrab/pencv_test_images/* || echo "No images to clear"
+[ "$(ls -A opencvImageGrab/opencv_test_images)" ] && rm opencvImageGrab/opencv_test_images/* || echo "No images to clear"
 
 #Clear log
 echo "Clearing log"
