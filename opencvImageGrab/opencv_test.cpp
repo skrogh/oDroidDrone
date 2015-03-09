@@ -70,8 +70,8 @@ int main()
 		};
 
 		// Grab nex frame
-		cap.grab();
-		cap.grab();
+//		cap.grab();
+//		cap.grab();
 		cap.grab();
 		cap.grab();
 //		ctrl.id = V4L2_CID_CHROMA_GAIN;
@@ -99,7 +99,7 @@ int main()
 		// show image
 		imshow( "edges", edges );
 		// wait a while (gives CV time to show image, and desk to save image)
-		if( waitKey( 60 ) >= 0 ) break;
+		if( waitKey( 1 ) >= 0 ) break;
 	}
 	return 0;
 }
