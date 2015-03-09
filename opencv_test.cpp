@@ -1,4 +1,7 @@
+#include <linux/videodev2.h>
 #include <sys/time.h>
+#include <sys/ioctl.h>
+#include <fcntl.h>
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
@@ -10,6 +13,16 @@ using namespace cv;
 
 int main()
 {
+	int  v4l2_device = open( "/dev/video0", O_RDWR );
+	if ( v4l2_device < 0 ) {
+		perror( "v4l2 device:" );
+		return -1;
+	}
+	struct v4l2_control ctrl;
+	ctrl.id = V4L2_CID_CHROMA_GAIN;
+	ctrl.value = 3;
+	ioctl( v4l2_device, VIDIOC_S_CTRL, &ctrl );
+
 	// Open camera
 	VideoCapture cap(0);
 	// check success
@@ -47,7 +60,7 @@ int main()
 	vector<int> compressionParams;
 	compressionParams.push_back( CV_IMWRITE_PNG_COMPRESSION );
 	compressionParams.push_back( 9 );
-	
+
 	while( 1 ) {
 		// get time
 		struct timeval tv;
@@ -61,6 +74,12 @@ int main()
 		cap.grab();
 		cap.grab();
 		cap.grab();
+//		ctrl.id = V4L2_CID_CHROMA_GAIN;
+//		ctrl.value = 2;
+//		ioctl( v4l2_device, VIDIOC_S_CTRL, &ctrl );
+//		ctrl.id = V4L2_CID_CHROMA_GAIN;
+//		ctrl.value = 1;
+//		ioctl( v4l2_device, VIDIOC_S_CTRL, &ctrl );
 		cap.grab();
 		// get time of grab
 		gettimeofday( &tv, &tz );
@@ -80,7 +99,7 @@ int main()
 		// show image
 		imshow( "edges", edges );
 		// wait a while (gives CV time to show image, and desk to save image)
-		if( waitKey( 80 ) >= 0 ) break;
+		if( waitKey( 60 ) >= 0 ) break;
 	}
 	return 0;
 }
