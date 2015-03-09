@@ -1,4 +1,4 @@
-# Install script for directory: /home/odroid/oDroidDrone
+# Install script for directory: /home/odroid/oDroidDrone/opencvMatchtest
 
 # Set the install prefix
 IF(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,7 +38,7 @@ ELSE(CMAKE_INSTALL_COMPONENT)
   SET(CMAKE_INSTALL_MANIFEST "install_manifest.txt")
 ENDIF(CMAKE_INSTALL_COMPONENT)
 
-FILE(WRITE "/home/odroid/oDroidDrone/${CMAKE_INSTALL_MANIFEST}" "")
+FILE(WRITE "/home/odroid/oDroidDrone/opencvMatchtest/${CMAKE_INSTALL_MANIFEST}" "")
 FOREACH(file ${CMAKE_INSTALL_MANIFEST_FILES})
-  FILE(APPEND "/home/odroid/oDroidDrone/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
+  FILE(APPEND "/home/odroid/oDroidDrone/opencvMatchtest/${CMAKE_INSTALL_MANIFEST}" "${file}\n")
 ENDFOREACH(file)

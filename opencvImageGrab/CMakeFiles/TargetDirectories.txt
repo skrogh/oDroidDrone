@@ -1,1 +1,1 @@
-/home/odroid/oDroidDrone/CMakeFiles/opencv_test.dir
+/home/odroid/oDroidDrone/opencvImageGrab/CMakeFiles/opencv_test.dir

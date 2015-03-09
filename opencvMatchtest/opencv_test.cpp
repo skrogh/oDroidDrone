@@ -1,105 +1,107 @@
 #include <linux/videodev2.h>
 #include <sys/time.h>
 #include <sys/ioctl.h>
+#include <sys/mman.h>
 #include <fcntl.h>
+#include <stdlib.h>
+#include <stdio.h>
 #include "opencv2/opencv.hpp"
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/highgui/highgui.hpp"
-#include <stdlib.h>
-#include <stdio.h>
+
 
 using namespace cv;
 
 int main()
 {
+	printf( "Started\n" );
+	// Open V4L2 device
 	int  v4l2_device = open( "/dev/video0", O_RDWR );
 	if ( v4l2_device < 0 ) {
-		perror( "v4l2 device:" );
+		perror( "Opening device:" );
 		return -1;
 	}
+
+	// Make control structure 
 	struct v4l2_control ctrl;
+	// and set some controls (more to be added here)
 	ctrl.id = V4L2_CID_CHROMA_GAIN;
 	ctrl.value = 3;
 	ioctl( v4l2_device, VIDIOC_S_CTRL, &ctrl );
 
-	// Open camera
-	VideoCapture cap(0);
-	// check success
-	if ( !cap.isOpened() )
-		return -1;
-
-	// set camera parameters:
-	// size
-	cap.set( CV_CAP_PROP_FRAME_WIDTH, 320 );
-	cap.set( CV_CAP_PROP_FRAME_HEIGHT, 240 );
-	// framerate
+	// alternatively set parameters like this:
+	system( "v4l2-ctl --set-fmt-video=width=380,height=240" );
 	system( "v4l2-ctl --set-parm=125" );
-	// exposure, gain, etc.
+
+	// get capabilities:
+	struct v4l2_capability v4l2_caps = {0};
+	if ( ioctl( v4l2_device, VIDIOC_QUERYCAP, &v4l2_caps ) < 0 ) {
+		perror( "Querying Capabilites:" );
+		return -1;
+	}
+
+	// set format (did that already)
+
+	// request buffer
+	struct v4l2_requestbuffers v4l2_req = {0};
+	v4l2_req.count = 1;
+	v4l2_req.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	v4l2_req.memory = V4L2_MEMORY_MMAP;
+	 
+	if ( ioctl( v4l2_device, VIDIOC_REQBUFS, &v4l2_req ) < 0 ) {
+		perror( "Requesting Buffer:" );
+		return -1;
+	}
+
+	// query buffer
+	struct v4l2_buffer v4l2_buf = {0};
+	v4l2_buf.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	v4l2_buf.memory = V4L2_MEMORY_MMAP;
+	v4l2_buf.index = 0;
+	v4l2_buf.type = V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE;
+	if( ioctl( v4l2_device, VIDIOC_QUERYBUF, &v4l2_buf ) < 0) {
+		perror( "Querying Buffer" );
+		return 1;
+	}
+
+	printf( "Type %d\n", v4l2_buf.type );
+
+	uint8_t *buffer = (uint8_t*)mmap ( NULL, v4l2_buf.length,
+		PROT_READ | PROT_WRITE, MAP_SHARED, v4l2_device, v4l2_buf.m.offset );
 
 
-	Mat edges;
 	Mat frame;
 
-/*
-	Ptr<FeatureDetector> detector(
-		new GridAdaptedFeatureDetector(
-		new DynamicAdaptedFeatureDetector(
-		new FastAdjuster( 20, true ), 1, 3, 10 ),
-		200, 8, 6 )
-	);
-*/
-	Ptr<FeatureDetector> detector(
-		new GridAdaptedFeatureDetector(
-		new FastFeatureDetector( 20 ), 500, 8, 6
-	) );
-
-
-	std::vector<KeyPoint> keypoints;
-
-	vector<int> compressionParams;
-	compressionParams.push_back( CV_IMWRITE_PNG_COMPRESSION );
-	compressionParams.push_back( 9 );
+	// start capture
+	if( ioctl( v4l2_device, VIDIOC_STREAMON, &v4l2_buf.type ) < 0 ) {
+		perror( "Start Capture:" );
+		return -1;
+	}
 
 	while( 1 ) {
-		// get time
-		struct timeval tv;
-		struct timezone tz = {
-			.tz_minuteswest = 0,
-			.tz_dsttime = 0
-		};
-
-		// Grab nex frame
-		cap.grab();
-		cap.grab();
-		cap.grab();
-		cap.grab();
-//		ctrl.id = V4L2_CID_CHROMA_GAIN;
-//		ctrl.value = 2;
-//		ioctl( v4l2_device, VIDIOC_S_CTRL, &ctrl );
-//		ctrl.id = V4L2_CID_CHROMA_GAIN;
-//		ctrl.value = 1;
-//		ioctl( v4l2_device, VIDIOC_S_CTRL, &ctrl );
-		cap.grab();
-		// get time of grab
-		gettimeofday( &tv, &tz );
-		char nameString[50];
-		sprintf( nameString, "opencv_test_images/img-s%ld.%06ld.png", tv.tv_sec, tv.tv_usec );
-		// decode frame
-		cap.retrieve( frame, 0 );
-
-		// convert to mono
-		cvtColor( frame, edges, CV_RGB2GRAY );
-		// save image
-		imwrite( nameString, edges, compressionParams );
-
-//		detector->detect( edges, keypoints );
-//		drawKeypoints( edges, keypoints, edges, Scalar::all(-1), DrawMatchesFlags::DEFAULT );
+		// wait for frame
+		fd_set fds;
+		FD_ZERO( &fds );
+		FD_SET( v4l2_device, &fds );
+		struct timeval timeout = {0};
+		timeout.tv_sec = 2;
+		int r = select( v4l2_device+1, &fds, NULL, NULL, &timeout );
+		if( r < 1 ) {
+			perror( "Waiting for Frame:" );
+			return -1;
+		}
+		// Grab it
+		if( ioctl( v4l2_device, VIDIOC_DQBUF, &v4l2_buf ) < 0) {
+			perror( "Retrieving Frame:" );
+			return -1;
+		}
 
 		// show image
-		imshow( "edges", edges );
+		imshow( "edges", frame );
 		// wait a while (gives CV time to show image, and desk to save image)
 		if( waitKey( 60 ) >= 0 ) break;
 	}
 	return 0;
 }
+

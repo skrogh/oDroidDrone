@@ -35,10 +35,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/odroid/oDroidDrone
+CMAKE_SOURCE_DIR = /home/odroid/oDroidDrone/opencvImageGrab
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/odroid/oDroidDrone
+CMAKE_BINARY_DIR = /home/odroid/oDroidDrone/opencvImageGrab
 
 # Include any dependencies generated for this target.
 include CMakeFiles/opencv_test.dir/depend.make
@@ -51,17 +51,17 @@ include CMakeFiles/opencv_test.dir/flags.make
 
 CMakeFiles/opencv_test.dir/opencv_test.cpp.o: CMakeFiles/opencv_test.dir/flags.make
 CMakeFiles/opencv_test.dir/opencv_test.cpp.o: opencv_test.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/odroid/oDroidDrone/CMakeFiles $(CMAKE_PROGRESS_1)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/odroid/oDroidDrone/opencvImageGrab/CMakeFiles $(CMAKE_PROGRESS_1)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object CMakeFiles/opencv_test.dir/opencv_test.cpp.o"
-	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/opencv_test.dir/opencv_test.cpp.o -c /home/odroid/oDroidDrone/opencv_test.cpp
+	/usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/opencv_test.dir/opencv_test.cpp.o -c /home/odroid/oDroidDrone/opencvImageGrab/opencv_test.cpp
 
 CMakeFiles/opencv_test.dir/opencv_test.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/opencv_test.dir/opencv_test.cpp.i"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/odroid/oDroidDrone/opencv_test.cpp > CMakeFiles/opencv_test.dir/opencv_test.cpp.i
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/odroid/oDroidDrone/opencvImageGrab/opencv_test.cpp > CMakeFiles/opencv_test.dir/opencv_test.cpp.i
 
 CMakeFiles/opencv_test.dir/opencv_test.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/opencv_test.dir/opencv_test.cpp.s"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/odroid/oDroidDrone/opencv_test.cpp -o CMakeFiles/opencv_test.dir/opencv_test.cpp.s
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/odroid/oDroidDrone/opencvImageGrab/opencv_test.cpp -o CMakeFiles/opencv_test.dir/opencv_test.cpp.s
 
 CMakeFiles/opencv_test.dir/opencv_test.cpp.o.requires:
 .PHONY : CMakeFiles/opencv_test.dir/opencv_test.cpp.o.requires
@@ -126,6 +126,6 @@ CMakeFiles/opencv_test.dir/clean:
 .PHONY : CMakeFiles/opencv_test.dir/clean
 
 CMakeFiles/opencv_test.dir/depend:
-	cd /home/odroid/oDroidDrone && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/odroid/oDroidDrone /home/odroid/oDroidDrone /home/odroid/oDroidDrone /home/odroid/oDroidDrone /home/odroid/oDroidDrone/CMakeFiles/opencv_test.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/odroid/oDroidDrone/opencvImageGrab && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/odroid/oDroidDrone/opencvImageGrab /home/odroid/oDroidDrone/opencvImageGrab /home/odroid/oDroidDrone/opencvImageGrab /home/odroid/oDroidDrone/opencvImageGrab /home/odroid/oDroidDrone/opencvImageGrab/CMakeFiles/opencv_test.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/opencv_test.dir/depend
 
