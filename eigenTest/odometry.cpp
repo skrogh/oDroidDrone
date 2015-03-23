@@ -37,7 +37,7 @@ Calib::Calib( ) {
 	k1 = 0; k2 = 0;     // radial distortion parameters [n/u,n/u]
 	t1 = 0; t2 = 0;     // tangential distortion parameters [n/u,n/u]
 	/* Position */
-	CI_q[4] = Quaternion<double>( 1, 0, 0, 0 ); // Rotation from intertial to camera coordinates. [unit quaternion]
+	CI_q = Quaternion<double>( 1, 0, 0, 0 ); // Rotation from intertial to camera coordinates. [unit quaternion]
 	C_p_I = Vector3d( 0, 0, 0 );                // Position of inertial frame in camera coordinates [m,m,m]
 	//
 	// Physical properties

@@ -18,7 +18,7 @@ public:
 			k1, k2,   // radial distortion parameters [n/u,n/u]
 			t1, t2;   // tangential distortion parameters [n/u,n/u]
 	/* Position */
-	Quaternion<double> CI_q[4]; // Rotation from intertial to camera coordinates. [unit quaternion]
+	Quaternion<double> CI_q; // Rotation from intertial to camera coordinates. [unit quaternion]
 	Vector3d C_p_I;              // Position of inertial frame in camera coordinates [m,m,m]
 	//
 	// Physical properties
