@@ -67,7 +67,7 @@ std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
 	"f_x: " << calib.f_x << " f_y: " << calib.f_y << "\n" <<
 	"k1: " << calib.k1 << " k2: " << calib.k2 << "\n" <<
 	"t1: " << calib.t1 << " t2: " << calib.t2 << "\n" <<
-	"CI_q: " << (calib.CI_q).coeffs() << " C_p_I: " << calib.C_p_I << "\n" <<
+	"CI_q: " << (calib.CI_q).Quaternion<doulbe>::coeffs() << " C_p_I: " << calib.C_p_I << "\n" <<
 	"g: " << calib.g << "\n" <<
 	"delta_t: " << calib.delta_t << "\n" <<
 	"imageOffset: " << calib.imageOffset << "\n" <<
@@ -123,15 +123,15 @@ void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
 	** Calibrate
 	*/
 	// Accelerometer
-	I_a = I_a_m - b_a;
+	Vector3d I_a = I_a_m - b_a;
 	// Gyro
-	I_g = I_g_m - b_g;
+	Vector3d I_g = I_g_m - b_g;
 
 	/*
 	** Propagate IMU
 	*/
 	// Rotation
-	Vector4d q = Vector4d( 0, 0, 0, 1 );
+	Vector4d q0 = Vector4d( 0, 0, 0, 1 );
 	Vector4d k1 = Omega( I_g_dly ) * q0 / 2.0;
 	Vector4d k2 = Omega( ( I_g_dly + I_g ) / 2.0 ) * ( q0 + calib.delta_t/2.0 * k1 ) / 2.0;
 	Vector4d k3 = Omega( ( I_g_dly + I_g ) / 2.0 ) * ( q0 + calib.delta_t/2.0 * k2 ) / 2.0;
