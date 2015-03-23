@@ -86,7 +86,7 @@ MSCKF::MSCKF( Calib* cal ) {
 	// init quaternion
 	x.segment<4>(0) = Quaternion<double>( 1, 0, 0, 0 ).coeffs();
 	// init state to known
-	sigma = MatrixXd(15).Zero();
+	sigma = MatrixXd(15,15).Zero();
 
 	// init delayed measurements
 	I_a_dly = Vector3d( 0, 0, 0 );
