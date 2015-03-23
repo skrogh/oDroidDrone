@@ -213,11 +213,11 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	Matrix<double,15,15> Q_d;
 	Matrix<double,15,1> N_c_diag;
 	N_c_diag <<
-			calib->sigma_gc*calib->sigma_gc << calib->sigma_gc*calib->sigma_gc << calib->sigma_gc*calib->sigma_gc <<
-			0 << 0 << 0 <<
-			calib->sigma_ac*calib->sigma_ac << calib->sigma_ac*calib->sigma_ac << calib->sigma_ac*calib->sigma_ac <<
-			calib->sigma_wgc*calib->sigma_wgc << calib->sigma_wgc*calib->sigma_wgc << calib->sigma_wgc*calib->sigma_wgc <<
-			calib->sigma_wac*calib->sigma_wac << calib->sigma_wac*calib->sigma_wac << calib->sigma_wac*calib->sigma_wac;
+			calib->sigma_gc*calib->sigma_gc*Vector3d(1,1,1),
+			Vector3d(0,0,0),
+			calib->sigma_ac*calib->sigma_ac*Vector3d(1,1,1),
+			calib->sigma_wgc*calib->sigma_wgc*Vector3d(1,1,1),
+			calib->sigma_wac*calib->sigma_wac*Vector3d(1,1,1);
 	N_c = N_c_diag.asDiagonal();
 	Q_d = calib->delta_t * Phi_I * N_c * Phi_I.transpose() + N_c;
 
