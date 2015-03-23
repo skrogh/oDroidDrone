@@ -1,8 +1,8 @@
 CXX = g++
 CFLAGS = -I
 
-DEPS =
-OBJ = test.o
+DEPS = odometry.hpp
+OBJ = test.o odometry.o
 
 %.o: %.x $(DEPS)
 	$(CXX) -c -o $@ $< $(CFLAGS)

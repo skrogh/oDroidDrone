@@ -72,6 +72,23 @@ MSCKF::MSCKF( Calib& cal ) {
 	I_g_dly = Vector3d( 0, 0, 0 );
 }
 
+std::ostream& operator<<(std::ostream& out, const Calib& calib){
+   return out << 
+	"o_x: " << calib.o_x, << " o_y: " << calib.o_y << "\n" <<
+	"f_x: " << calib.f_x, << " f_y: " << calib.f_y << "\n" <<
+	"k1: " << calib.k1, << " k2: " << calib.k2 << "\n" <<
+	"t1: " << calib.t1, << " t2: " << calib.t2 << "\n" <<
+	"CI_q: " << calib.CI_q.coeffs() << " C_p_I: " << calib.C_p_I << "\n" <<
+	"g: " << calib.g << "\n" <<
+	"delta_t: " << calib.delta_t << "\n" <<
+	"imageOffset: " << calib.imageOffset << "\n" <<
+	"sigma_gc: " << calib.sigma_gc << " sigma_ac: " << calib.sigma_ac << "\n" <<
+	"sigma_wgc: " << calib.sigma_wgc << " sigma_wac: " << calib.sigma_wac << "\n" <<
+	"sigma_Im: " << calib.sigma_Im << "\n" <<
+	"sigma_dc: " << calib.sigma_dc << "\n" <<
+	"maxFrame: " << calib.maxFrame ;
+}
+
 void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
 	/*
 	** Convert inputs
