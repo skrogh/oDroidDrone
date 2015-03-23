@@ -27,6 +27,7 @@ int main()
   Quaternion<double> I1I_q = Quaternion<double>( 1, 0, 0, 0 );
   std::cout << I1I_q.coeffs() << std::endl;
   I1I_q.coeffs() += Quaternion<double>( 1, 0, 0, 0 ).coeffs();
+  I1I_q.coeffs().segment<2>(2) = Vector2d( 5.0, 6.0 );
   std::cout << I1I_q.coeffs() << std::endl;
 
 }

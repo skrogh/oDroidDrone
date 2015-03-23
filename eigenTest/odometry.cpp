@@ -33,6 +33,11 @@ void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
 	Map<Vector3d> I_g_m( g_m, 3 );
 
 	/*
+	** Reusable constants:
+	*/
+	Vector3d G_g( 0, 0, -calib.g );
+
+	/*
 	** unpack state:
 	*/
 	// Rotation from global to inertial coordinates
@@ -73,6 +78,14 @@ void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
 	Quaternion<double> I1G_q = I1I_q * IG_q;
 
 	// Translation
-	Vector3d G_a = 
+	Vector3d G_a = I1G_q.transformVector( I_a ) + G_g;
 
+	Vector3d s = calib.delta_t/2.0 * (
+			I1G_q.conjugate().transformVector( I_a ) + I_a_dly
+	);
+	Vector3d y = calib.delta_t/2.0 * s;
+
+	Vector3d G_v1 = G_v + IG_q.conjugate().transformVector( s ) + G_g * calib.delta_t;
+
+	
 }
