@@ -40,13 +40,16 @@ public:
 	// Options
 	//
 	unsigned int maxFrame; // Maximum frames in FIFO
+
+	public:
+	Calib( );
 }
 
 class MSCKF {
 	//
 	// Calibration object
 	//
-	Calib calib;
+	Calib* calib;
 	//
 	// State
 	//
@@ -58,10 +61,11 @@ class MSCKF {
 	//
 	// Local variables for integration
 	//
-protected:
+	Vector3d I_a_dly, I_g_dly;
 
 public:
 	// init
+	MSCKF( Calib& cal );
 	// propagate
 	// 	Propagate state
 	// 	Propagate sigma
