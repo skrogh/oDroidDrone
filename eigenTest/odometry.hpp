@@ -50,7 +50,7 @@ class MSCKF {
 	//
 	// Calibration object
 	//
-	Calib& calib;
+	Calib* calib;
 	//
 	// State
 	//

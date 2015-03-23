@@ -79,7 +79,7 @@ std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
 }
 
 
-MSCKF::MSCKF( Calib& cal ) {
+MSCKF::MSCKF( Calib* cal ) {
 	calib = cal;
 	// init all states to 0;
 	x = VectorXd(16).Zero();
@@ -103,7 +103,7 @@ void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
 	/*
 	** Reusable constants:
 	*/
-	Vector3d G_g( 0, 0, -calib.g );
+	Vector3d G_g( 0, 0, -calib->g );
 
 	/*
 	** unpack state:
@@ -133,13 +133,13 @@ void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
 	// Rotation
 	Vector4d q0 = Vector4d( 0, 0, 0, 1 );
 	Vector4d k1 = Omega( I_g_dly ) * q0 / 2.0;
-	Vector4d k2 = Omega( ( I_g_dly + I_g ) / 2.0 ) * ( q0 + calib.delta_t/2.0 * k1 ) / 2.0;
-	Vector4d k3 = Omega( ( I_g_dly + I_g ) / 2.0 ) * ( q0 + calib.delta_t/2.0 * k2 ) / 2.0;
-	Vector4d k4 = Omega( I_g ) * ( q0 + calib.delta_t * k3 ) / 2.0;
+	Vector4d k2 = Omega( ( I_g_dly + I_g ) / 2.0 ) * ( q0 + calib->delta_t/2.0 * k1 ) / 2.0;
+	Vector4d k3 = Omega( ( I_g_dly + I_g ) / 2.0 ) * ( q0 + calib->delta_t/2.0 * k2 ) / 2.0;
+	Vector4d k4 = Omega( I_g ) * ( q0 + calib->delta_t * k3 ) / 2.0;
 
 	Quaternion<double> I1I_q(
 			Vector4d( 0, 0, 0, 1 )
-			+ calib.delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 )
+			+ calib->delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 )
 	);
 	I1I_q.normalize();
 
@@ -148,16 +148,16 @@ void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
 	// Translation
 	Vector3d G_a = I1G_q._transformVector( I_a ) + G_g;
 
-	Vector3d s = calib.delta_t/2.0 * (
+	Vector3d s = calib->delta_t/2.0 * (
 			I1G_q.conjugate()._transformVector( I_a ) + I_a_dly
 	);
-	Vector3d y = calib.delta_t/2.0 * s;
+	Vector3d y = calib->delta_t/2.0 * s;
 
-	Vector3d G_v1 = G_v + IG_q.conjugate()._transformVector( s ) + G_g * calib.delta_t;
+	Vector3d G_v1 = G_v + IG_q.conjugate()._transformVector( s ) + G_g * calib->delta_t;
 
-	Vector3d G_p1 = G_p + G_v * calib.delta_t
+	Vector3d G_p1 = G_p + G_v * calib->delta_t
 			+ IG_q.conjugate()._transformVector( y )
-			+ G_g * calib.delta_t * calib.delta_t / 2.0;
+			+ G_g * calib->delta_t * calib->delta_t / 2.0;
 
 	/*
 	** Repack state

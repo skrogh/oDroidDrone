@@ -9,5 +9,5 @@ int main()
 	calib.o_x = 10;
 	calib.o_y = 10;
 	std::cout << calib << std::endl;
-	MSCKF msckf( calib );
+	MSCKF msckf( &calib );
 }
