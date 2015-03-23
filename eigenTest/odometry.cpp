@@ -72,7 +72,7 @@ MSCKF::MSCKF( Calib& cal ) {
 	I_g_dly = Vector3d( 0, 0, 0 );
 }
 
-std::ostream& operator<<(std::ostream& out, const Calib& calib){
+std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
    return out << 
 	"o_x: " << calib.o_x, << " o_y: " << calib.o_y << "\n" <<
 	"f_x: " << calib.f_x, << " f_y: " << calib.f_y << "\n" <<

@@ -41,9 +41,10 @@ public:
 	//
 	unsigned int maxFrame; // Maximum frames in FIFO
 
-	public:
 	Calib( );
+	friend std::ostream& operator<<( std::ostream& out, const Calib& calib );
 };
+
 
 class MSCKF {
 	//
