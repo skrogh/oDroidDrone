@@ -211,7 +211,7 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 
 	Matrix<double,15,15> N_c;
 	Matrix<double,15,15> Q_d;
-	Vector<double,15> N_c_diag;
+	Matrix<double,15,1> N_c_diag;
 	N_c_diag <<
 			calib->sigma_gc*calib->sigma_gc*Vector3d(1,1,1) <<
 			Vector3d(0,0,0) <<
