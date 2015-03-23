@@ -224,7 +224,7 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	// do the update
 	sigma.block<15,15>(0,0) = Phi_I * sigma.block<15,15>(0,0) * Phi_I.transpose() + Q_d;
 
-	std::cout << Phi_I << "\n*" << sigma.block(15,sigma.cols()-15,0,15) << std::endl;
+	std::cout << Phi_I << "\n*" << sigma.block(0,15,15,sigma.cols()-15) << std::endl;
 
 	//sigma.block(15,sigma.cols()-15,0,15) = Phi_I * sigma.block(15,sigma.cols()-15,0,15);
 	//sigma.block(sigma.rows()-15,15,15,0) = sigma.block(15,sigma.cols()-15,0,15).transpose();
