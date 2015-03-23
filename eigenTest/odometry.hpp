@@ -3,7 +3,7 @@
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
-#include <stdbool>
+#include <stdbool.h>
 
 using namespace Eigen;
 
