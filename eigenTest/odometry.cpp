@@ -229,6 +229,6 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	/*
 	** update delayed variables
 	*/
-	I_a_dly = I_a_dly;
-	I_g_dly = I_g_dly;
+	I_a_dly = I_a;
+	I_g_dly = I_g;
 }
