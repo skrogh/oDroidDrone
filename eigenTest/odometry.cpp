@@ -156,7 +156,6 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 
 	// Translation
 	Vector3d G_a = I1G_q._transformVector( I_a ) + G_g;
-	std::cout << "G_a: " << G_a << std::endl;
 
 	Vector3d s = calib->delta_t/2.0 * (
 			I1G_q.conjugate()._transformVector( I_a ) + I_a_dly
