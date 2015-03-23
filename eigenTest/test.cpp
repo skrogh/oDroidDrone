@@ -42,7 +42,7 @@ int main()
 	double g_m[3] = { 0, 0, 0 };
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
-	for( int i = 0; i < 4000; i++ ) {
+	for( int i = 0; i < 400*600; i++ ) {
 		msckf.propagate( a_m, g_m );
 	}
 	std::cout << "msckf is:\n" << msckf << std::endl;
