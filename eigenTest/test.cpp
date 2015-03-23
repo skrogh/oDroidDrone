@@ -26,8 +26,8 @@ int main()
 
   Quaternion<double> I1I_q;
   I1I_q = Quaternion<double>( 1, 0, 0, 0 );
-  std::cout << Vector4d(I1I_q) << std::endl;
+  std::cout << I1I_q.w << std::endl;
     I1I_q += Quaternion<double>( 1, 0, 0, 0 );
-  std::cout << Vector4d(I1I_q) << std::endl;
+  std::cout << I1I_q.w << std::endl;
 
 }
