@@ -66,7 +66,7 @@ class MSCKF {
 
 public:
 	// init
-	MSCKF( Calib& cal );
+	MSCKF( Calib* cal );
 	// propagate
 	// 	Propagate state
 	void propagateState( double a_m[3], double g_m[3] );
