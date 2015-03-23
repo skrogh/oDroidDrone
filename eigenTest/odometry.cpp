@@ -32,7 +32,7 @@ Calib::Calib( ) {
 	// Camera calibration
 	//
 	/* Projection */
-	o_x = 0; o_y = 0;,  // principal point [px,px]
+	o_x = 0; o_y = 0;  // principal point [px,px]
 	f_x = 1; f_y = 1;   // focal length [px,px]
 	k1 = 0; k2 = 0;     // radial distortion parameters [n/u,n/u]
 	t1 = 0; t2 = 0;     // tangential distortion parameters [n/u,n/u]
@@ -64,11 +64,11 @@ Calib::Calib( ) {
 MSCKF::MSCKF( Calib& cal ) {
 	calib = &cal;
 	// init all states to 0;
-	x = VectorXd(16).zero();
+	x = VectorXd(16).Zero();
 	// init quaternion
 	x.segment<4>(0) = Quaternion<double>( 1, 0, 0, 0 ).coeffs();
 	// init state to known
-	sigma = MatrixXd(15).zero();
+	sigma = MatrixXd(15).Zero();
 
 	// init delayed measurements
 	I_a_dly = Vector3d( 0, 0, 0 );
