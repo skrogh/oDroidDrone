@@ -36,7 +36,7 @@ int main()
 	std::cout << "calib is:\n" << calib << std::endl;
 	MSCKF msckf( &calib );
 
-	double a_m[3] = { 0, 0, 8.82 };
+	double a_m[3] = { 0, 0, 9.82 };
 	double g_m[3] = { 0, 0, 0 };
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
