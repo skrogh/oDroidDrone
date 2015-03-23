@@ -17,4 +17,4 @@ int main()
 	std::cout << "msckf is:\n" << msckf << std::endl;
 	msckf.propagateState( a_m, g_m );
 	std::cout << "msckf is:\n" << msckf << std::endl;
-}1
+}
