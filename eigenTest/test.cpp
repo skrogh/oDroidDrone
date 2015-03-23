@@ -11,5 +11,5 @@ int main()
   std::cout << m << std::endl;
 
   Vector3d v(1,2,3);
-  sdt::cout << v << " " << v.adjoint() << std::endl;
+  std::cout << v << " " << v.adjoint() << std::endl;
 }
