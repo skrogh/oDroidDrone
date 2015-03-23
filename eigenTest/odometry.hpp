@@ -70,8 +70,8 @@ public:
 	// init
 	MSCKF( Calib* cal );
 	// propagate
+	void propagate( double a_m[3], double g_m[3] );
 	// 	Propagate state
-	void propagateState( double a_m[3], double g_m[3] );
 	// 	Propagate sigma
 	// updateCamera
 	// 	triangluate

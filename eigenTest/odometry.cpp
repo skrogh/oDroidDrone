@@ -102,7 +102,7 @@ std::ostream& operator<<( std::ostream& out, const MSCKF& msckf ) {
 	"b_a: " << msckf.x.segment<3>(0+4+3+3+3).transpose();
 }
 
-void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
+void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	/*
 	** Convert inputs
 	*/
@@ -178,4 +178,54 @@ void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
 	// Velocity (of inertial frame) in global coordinates
 	x.segment<3>(0+4+3) = G_v1;
 	// No change to biases
+
+	/*
+	** Propagate error
+	*/
+
+	// aliases
+	Matrix3d R = IG_q.toRotationMatrix();
+	Matrix3d R1 = I1G_q.toRotationMatrix();
+	Matrix3d R_ = R.transpose();
+	Matrix3d R1_ = R1.transpose();
+
+	Matrix3d Phi_qq = Matrix3d::Identity();
+	Matrix3d Phi_pq = -crossMat( R_ * y );
+	Matrix3d Phi_vq = -crossMat( R_ * s );
+
+	Matrix3d Phi_qbg = -calib->delta_t * ( R1_ + R_ ) / 2.0;
+	Matrix3d Phi_vbg = calib->delta_t * calib->delta_t * crossMat( G_a - G_g ) * ( R1_ + R_ ) / 4.0;
+	Matrix3d Phi_pbg = calib->delta_t * Phi_vbg / 2.0;
+
+	Matrix3d Phi_qba = Matrix3d::Zero(); // assuming no gravitational effect on gyro
+	Matrix3d Phi_vba = -calib->delta_t * ( R1_ + R_ ) / 2.0;
+	Matrix3d Phi_pba = calib->delta_t * Phi_vba / 2.0;
+
+	Matrix<double,15,15> Phi_I;
+	{
+		using Eigen::Matrix3d; // I'm lazy
+		Phi_I <<
+				Phi_qq,     Zero(),                      Zero(),    Phi_qgb,    Phi_qba,
+				Phi_pq, Identity(), calib->delta_t * Identity(),    Phi_pbg,    Phi_pba,
+				Phi_vq,     Zero(),                  Identity(),    Phi_vbg,    Phi_vba,
+				Zero(),     Zero(),                      Zero(), Identity(),     Zero(),
+				Zero(),     Zero(),                      Zero(),     Zero(), Identity();
+	}
+
+	Matrix<double,15,15> N_c;
+	Matrix<double,15,15> Q_d;
+	Vector<double,15> N_c_diag;
+	N_c_diag <<
+			calib->sigma_gc*calib->sigma_gc*Vector3d(1,1,1) <<
+			Vector3d(0,0,0) <<
+			calib->sigma_ac*calib->sigma_ac*Vector3d(1,1,1) <<
+			calib->sigma_wgc*calib->sigma_wgc*Vector3d(1,1,1) <<
+			calib->sigma_wac*calib->sigma_wac*Vector3d(1,1,1);
+	N_c = N_c_diag.asDiagonal();
+	Q_d = calib->delta_t * Phi_I * N_c * Phi_I.transpose() + N_c;
+
+	// do the update
+	sigma.block<15,15>(0,0) = Phi_I * sigma.block<15,15>(0,0) * Phi_I.transpose() + Q_d;
+	sigma.block(15,sigma.cols-15,0,15) = Phi_I * sigma.block(15,sigma.cols-15,0,15);
+	sigma.block(sigma.rows-15,15,15,0) = sigma.block(15,sigma.cols-15,0,15).transpose;
 }
