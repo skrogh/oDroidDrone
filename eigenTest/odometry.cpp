@@ -61,20 +61,6 @@ Calib::Calib( ) {
 	maxFrame = 0;                  // Maximum frames in FIFO
 }
 
-MSCKF::MSCKF( Calib& cal ) {
-	calib = &cal;
-	// init all states to 0;
-	x = VectorXd(16).Zero();
-	// init quaternion
-	x.segment<4>(0) = Quaternion<double>( 1, 0, 0, 0 ).coeffs();
-	// init state to known
-	sigma = MatrixXd(15).Zero();
-
-	// init delayed measurements
-	I_a_dly = Vector3d( 0, 0, 0 );
-	I_g_dly = Vector3d( 0, 0, 0 );
-}
-
 std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
    return out << 
 	"o_x: " << calib.o_x << " o_y: " << calib.o_y << "\n" <<
@@ -90,6 +76,21 @@ std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
 	"sigma_Im: " << calib.sigma_Im << "\n" <<
 	"sigma_dc: " << calib.sigma_dc << "\n" <<
 	"maxFrame: " << calib.maxFrame ;
+}
+
+
+MSCKF::MSCKF( Calib& cal ) {
+	calib = cal;
+	// init all states to 0;
+	x = VectorXd(16).Zero();
+	// init quaternion
+	x.segment<4>(0) = Quaternion<double>( 1, 0, 0, 0 ).coeffs();
+	// init state to known
+	sigma = MatrixXd(15).Zero();
+
+	// init delayed measurements
+	I_a_dly = Vector3d( 0, 0, 0 );
+	I_g_dly = Vector3d( 0, 0, 0 );
 }
 
 void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
