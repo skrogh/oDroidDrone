@@ -203,7 +203,7 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 
 	Matrix<double,15,15> Phi_I;
 	{
-		using Eigen::Matrix3d; // I'm lazy
+		using namespace Eigen::Matrix3d; // I'm lazy
 		Phi_I <<
 				Phi_qq,     Zero(),                      Zero(),    Phi_qgb,    Phi_qba,
 				Phi_pq, Identity(), calib->delta_t * Identity(),    Phi_pbg,    Phi_pba,
