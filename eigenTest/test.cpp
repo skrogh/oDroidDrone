@@ -17,4 +17,19 @@ int main()
 	std::cout << "msckf is:\n" << msckf << std::endl;
 	msckf.propagateState( a_m, g_m );
 	std::cout << "msckf is:\n" << msckf << std::endl;
+
+	Matrix3d m1;
+	MatrixXd m2;
+	MatrixXd m3;
+
+	m1 << 1, 2, 3,
+	      4, 5, 6,
+	      7, 8, 9;
+	m3 << m1, m1;
+	m2 << m1,
+	      m1;
+
+	std::cout << m1 << std::endl;
+	std::cout << m2 << std::endl;
+	std::cout << m3 << std::endl;
 }
