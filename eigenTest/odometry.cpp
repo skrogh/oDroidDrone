@@ -146,17 +146,17 @@ void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
 	Quaternion<double> I1G_q = I1I_q * IG_q;
 
 	// Translation
-	Vector3d G_a = I1G_q.transformVector( I_a ) + G_g;
+	Vector3d G_a = I1G_q._transformVector( I_a ) + G_g;
 
 	Vector3d s = calib.delta_t/2.0 * (
-			I1G_q.conjugate().transformVector( I_a ) + I_a_dly
+			I1G_q.conjugate()._transformVector( I_a ) + I_a_dly
 	);
 	Vector3d y = calib.delta_t/2.0 * s;
 
-	Vector3d G_v1 = G_v + IG_q.conjugate().transformVector( s ) + G_g * calib.delta_t;
+	Vector3d G_v1 = G_v + IG_q.conjugate()._transformVector( s ) + G_g * calib.delta_t;
 
 	Vector3d G_p1 = G_p + G_v * calib.delta_t
-			+ IG_q.conjugate().transformVector( y )
+			+ IG_q.conjugate()._transformVector( y )
 			+ G_g * calib.delta_t * calib.delta_t / 2.0;
 
 	/*
