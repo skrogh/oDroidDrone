@@ -73,6 +73,8 @@ public:
 	void propagate( double a_m[3], double g_m[3] );
 	// 	Propagate state
 	// 	Propagate sigma
+	// augment state
+	// remove n old states
 	// updateCamera
 	// 	triangluate
 	// -marginalize

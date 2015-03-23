@@ -1,5 +1,3 @@
-#define NDEBUG
-
 #include <iostream>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
