@@ -11,7 +11,7 @@ int main()
 	std::cout << "calib is:\n" << calib << std::endl;
 	MSCKF msckf( &calib );
 
-	double a_m[3] = { 0, 0, 0 };
+	double a_m[3] = { 0, 0, 1 };
 	double g_m[3] = { 0, 0, 0 };
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
