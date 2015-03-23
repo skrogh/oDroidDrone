@@ -65,6 +65,8 @@ class MSCKF {
 	Vector3d I_a_dly, I_g_dly;
 
 public:
+	// print
+	friend std::ostream& operator<<( std::ostream& out, const MSCKF& msckf );
 	// init
 	MSCKF( Calib* cal );
 	// propagate

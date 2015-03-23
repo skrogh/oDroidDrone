@@ -8,6 +8,13 @@ int main()
 	Calib calib;
 	calib.o_x = 10;
 	calib.o_y = 10;
-	std::cout << calib << std::endl;
+	std::cout << "calib is:\n" << calib << std::endl;
 	MSCKF msckf( &calib );
-}
+
+	double a_m[3] = { 0, 0, 0 };
+	double g_m[3] = { 0, 0, 0 };
+
+	std::cout << "msckf is:\n" << msckf << std::endl;
+	msckf.propagateState( a_m, g_m );
+	std::cout << "msckf is:\n" << msckf << std::endl;
+}1
