@@ -1,11 +1,11 @@
 CXX = g++
-CFLAGS = -I
+CFLAGS = -g
 
 DEPS = odometry.hpp
 OBJ = test.o odometry.o
 
 %.o: %.x $(DEPS)
-	$(CXX) -c -o $@ $< $(CFLAGS)
+	$(CXX) $(CFLAGS) -c -o $@ $<
 
 test: $(OBJ)
-	$(CXX) -o $@ $^ $(CFLAGSs)
+	$(CXX) $(CFLAGS) -o $@ $^
