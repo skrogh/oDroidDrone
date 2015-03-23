@@ -203,7 +203,7 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 
 	Matrix<double,15,15> Phi_I;
 	Phi_I <<
-			          Phi_qq,     Matrix3d::Zero(),                      Matrix3d::Zero(),              Phi_qgb,              Phi_qba,
+			          Phi_qq,     Matrix3d::Zero(),                      Matrix3d::Zero(),              Phi_qbg,              Phi_qba,
 			          Phi_pq, Matrix3d::Identity(), calib->delta_t * Matrix3d::Identity(),              Phi_pbg,              Phi_pba,
 			          Phi_vq,     Matrix3d::Zero(),                  Matrix3d::Identity(),              Phi_vbg,              Phi_vba,
 			Matrix3d::Zero(),     Matrix3d::Zero(),                      Matrix3d::Zero(), Matrix3d::Identity(),     Matrix3d::Zero(),
