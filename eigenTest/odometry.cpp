@@ -225,4 +225,10 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	sigma.block<15,15>(0,0) = Phi_I * sigma.block<15,15>(0,0) * Phi_I.transpose() + Q_d;
 	sigma.block(0,15,15,sigma.cols()-15) = Phi_I * sigma.block(0,15,15,sigma.cols()-15);
 	sigma.block(15,0,sigma.rows()-15,15) = sigma.block(0,15,15,sigma.cols()-15).transpose();
+
+	/*
+	** update delayed variables
+	*/
+	I_a_dly = I_a_dly;
+	I_g_dly = I_g_dly;
 }
