@@ -43,7 +43,7 @@ public:
 
 	public:
 	Calib( );
-}
+};
 
 class MSCKF {
 	//
@@ -74,7 +74,7 @@ public:
 	// -marginalize
 	//  ETC
 	// updateDist
-}
+};
 
 
 #endif //_ODOMETRY_H_
