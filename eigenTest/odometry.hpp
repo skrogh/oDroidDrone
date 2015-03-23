@@ -69,6 +69,7 @@ public:
 	MSCKF( Calib& cal );
 	// propagate
 	// 	Propagate state
+	propagateState( double a_m[3], double g_m[3] );
 	// 	Propagate sigma
 	// updateCamera
 	// 	triangluate

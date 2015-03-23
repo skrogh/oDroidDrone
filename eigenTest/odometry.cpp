@@ -81,7 +81,7 @@ std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
 	"f_x: " << calib.f_x << " f_y: " << calib.f_y << "\n" <<
 	"k1: " << calib.k1 << " k2: " << calib.k2 << "\n" <<
 	"t1: " << calib.t1 << " t2: " << calib.t2 << "\n" <<
-	"CI_q: " << calib.CI_q.coeffs() << " C_p_I: " << calib.C_p_I << "\n" <<
+	"CI_q: " << (calib.CI_q).coeffs() << " C_p_I: " << calib.C_p_I << "\n" <<
 	"g: " << calib.g << "\n" <<
 	"delta_t: " << calib.delta_t << "\n" <<
 	"imageOffset: " << calib.imageOffset << "\n" <<
