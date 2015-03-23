@@ -1,5 +1,6 @@
 #include <iostream>
 #include <Eigen/Dense>
+#include <Eigen/Geometry>
 using namespace Eigen;
 
 Matrix3d crossMat( const Vector3d& v ){
@@ -22,4 +23,11 @@ int main()
   Vector3d v(1.0, 2.0, 3.0);
   std::cout << v << " -> " << v.adjoint() << std::endl;
   std::cout << v << " -> " << crossMat(v) << std::endl;
+
+  Quaternion<double> I1I_q;
+  I1I_q = Quaternion( 1, 0, 0, 0 );
+  std::cout << I1I_q << std::endl;
+    I1I_q += Quaternion( 1, 0, 0, 0 );
+  std::cout << I1I_q << std::endl;
+
 }

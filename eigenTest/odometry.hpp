@@ -1,8 +1,11 @@
 #ifndef _ODOMETRY_H_
 #define _ODOMETRY_H_
 
+#include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <stdbool>
+
+using namespace Eigen;
 
 class Calib {
 public:
@@ -15,8 +18,8 @@ public:
 			k1, k2,   // radial distortion parameters [n/u,n/u]
 			t1, t2;   // tangential distortion parameters [n/u,n/u]
 	/* Position */
-	Eigen::Quaternion<double> CI_q[4]; // Rotation from intertial to camera coordinates. [unit quaternion]
-	Eigen::Vector3d C_p_I;              // Position of inertial frame in camera coordinates [m,m,m]
+	Quaternion<double> CI_q[4]; // Rotation from intertial to camera coordinates. [unit quaternion]
+	Vector3d C_p_I;              // Position of inertial frame in camera coordinates [m,m,m]
 	//
 	// Physical properties
 	//
@@ -47,11 +50,11 @@ class MSCKF {
 	//
 	// State
 	//
-	Eigen::VectorXd x;
+	VectorXd x;
 	//
 	// Covariance
 	//
-	Eigen::MatrixXd sigma;
+	MatrixXd sigma;
 	//
 	// Local variables for integration
 	//
