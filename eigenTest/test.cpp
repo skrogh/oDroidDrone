@@ -9,4 +9,7 @@ int main()
   m(0,1) = -1;
   m(1,1) = m(1,0) + m(0,1);
   std::cout << m << std::endl;
+
+  Vector3d v(1,2,3);
+  sdt::cout << v << " " << v.adjoint() << std::endl;
 }
