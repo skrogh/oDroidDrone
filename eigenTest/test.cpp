@@ -44,5 +44,7 @@ int main()
 		msckf.propagate( a_m, g_m );
 	std::cout << "msckf is:\n" << msckf << std::endl;
 
+	std::cout << Eigen::Quaternion<double>(
+			Eigen::Vector4d( 0, 0, 0, 1 ) ).coeffs() << std::endl;
 
 }
