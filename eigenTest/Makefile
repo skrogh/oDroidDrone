@@ -1,4 +1,4 @@
-CXX = g++ -O3
+CXX = g++ -O0 -g
 CFLAGS =
 
 DEPS = odometry.hpp
