@@ -26,8 +26,8 @@ int main()
 
   Quaternion<double> I1I_q;
   I1I_q = Quaternion<double>( 1, 0, 0, 0 );
-  std::cout << I1I_q.w << std::endl;
-    I1I_q += Quaternion<double>( 1, 0, 0, 0 );
-  std::cout << I1I_q.w << std::endl;
+  std::cout << I1I_q.w() << std::endl;
+  I1I_q.coeffs() += Quaternion<double>( 1, 0, 0, 0 ).coeffs();
+  std::cout << I1I_q.coeffs() << std::endl;
 
 }
