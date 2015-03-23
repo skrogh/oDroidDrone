@@ -5,7 +5,7 @@ DEPS = odometry.hpp
 OBJ = test.o odometry.o
 
 %.o: %.x $(DEPS)
-	$(CXX) $(CFLAGS) -c -o $@ $<
+	$(CXX) -O3 -c -o $@ $<
 
 test: $(OBJ)
 	$(CXX) $(CFLAGS) -o $@ $^
