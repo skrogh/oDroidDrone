@@ -1,6 +1,9 @@
 #include <iostream>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
+
+#include "odometry.hpp"
+
 using namespace Eigen;
 
 Matrix3d crossMat( const Vector3d& v ){
