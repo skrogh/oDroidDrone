@@ -11,6 +11,19 @@ Matrix3d crossMat( const Vector3d& v ){
 	return m;
 }
 
+//
+// Omega( v ) = -[v] v
+//               -v  0
+//
+Matrix4d Omega( const Vector3d& v ){
+	Matrix4d m;
+	m <<     0,  v(2), -v(1),  v(0),
+	     -v(2),     0,  v(0),  v(1),
+	      v(1), -v(0),     0,  v(2),
+	     -v(0), -v(1), -v(2),     0;
+	return m;
+}
+
 
 void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
 	/*
@@ -45,8 +58,21 @@ void MSCKF::propagateState( double a_m[3], double g_m[3] ) {
 	** Propagate IMU
 	*/
 	// Rotation
-	Quaternion<double> I1I_q;
-	I1I_q = 
+	Vector4d q = Vector4d( 0, 0, 0, 1 );
+	Vector4d k1 = Omega( I_g_dly ) * q0 / 2.0;
+	Vector4d k2 = Omega( ( I_g_dly + I_g ) / 2.0 ) * ( q0 + calib.delta_t/2.0 * k1 ) / 2.0;
+	Vector4d k3 = Omega( ( I_g_dly + I_g ) / 2.0 ) * ( q0 + calib.delta_t/2.0 * k2 ) / 2.0;
+	Vector4d k4 = Omega( I_g ) * ( q0 + calib.delta_t * k3 ) / 2.0;
+
+	Quaternion<double> I1I_q(
+			Vector4d( 0, 0, 0, 1 )
+			+ calib.delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 )
+	);
+	I1I_q.normalize();
+
+	Quaternion<double> I1G_q = I1I_q * IG_q;
+
 	// Translation
+	Vector3d G_a = 
 
 }
