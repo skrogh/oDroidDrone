@@ -1,5 +1,5 @@
 CXX = g++
-CFLAGS = -I
+CFLAGS = -I -g
 
 DEPS = odometry.hpp
 OBJ = test.o odometry.o
