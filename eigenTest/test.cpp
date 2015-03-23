@@ -25,9 +25,9 @@ int main()
   std::cout << v << " -> " << crossMat(v) << std::endl;
 
   Quaternion<double> I1I_q;
-  I1I_q = Quaternion( 1, 0, 0, 0 );
+  I1I_q = Quaternion<double>( 1, 0, 0, 0 );
   std::cout << I1I_q << std::endl;
-    I1I_q += Quaternion( 1, 0, 0, 0 );
+    I1I_q += Quaternion<double>( 1, 0, 0, 0 );
   std::cout << I1I_q << std::endl;
 
 }
