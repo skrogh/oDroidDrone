@@ -20,7 +20,7 @@ int main()
 
 	Matrix3d m1;
 	MatrixXd m2( 3, 6 );
-	MatrixXd m3( 3, 6 );
+	MatrixXd m3( 6, 3 );
 
 	m1 << 1, 2, 3,
 	      4, 5, 6,
