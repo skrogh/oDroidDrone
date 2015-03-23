@@ -10,6 +10,6 @@ int main()
   m(1,1) = m(1,0) + m(0,1);
   std::cout << m << std::endl;
 
-  Vector3d v(1,2,3);
+  Vector3d v(1.0, 2.0, 3.0);
   std::cout << v << " " << v.adjoint() << std::endl;
 }
