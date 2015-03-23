@@ -1,10 +1,11 @@
-# "all" is name of the default target, running "make" without params would use it
-all: Test
+CXX = g++
+CFLAGS = -I
 
-# for C++, replace CC (c compiler) with CXX (c++ compiler) which is used as default linker
-CC=$(CXX)
+DEPS =
+OBJ = test.o
 
-# tell which files should be used, .cpp -> .o make would do automatically
-# MSCKFTest: file1.o file2.o
+%.o: %.x $(DEPS)
+	$(CXX) -c -o $@ $< $(CFLAGS)
 
-Test: test.o
+test: $(OBJ)
+	$(CXX) -o test $@ $^ $(CFLAGSs)
