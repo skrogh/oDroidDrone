@@ -46,9 +46,9 @@ int main()
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
 
-	std::cout << "Sigma is:\n" << msckf.sigma << std::endl;
-	std::cout << "State is:\n" << msckf.x << std::endl;
+	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
+	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
 	msckf.augmentState();
-	std::cout << "Sigma is:\n" << msckf.sigma << std::endl;
-	std::cout << "State is:\n" << msckf.x << std::endl;
+	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
+	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
 }
