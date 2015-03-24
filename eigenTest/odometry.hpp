@@ -65,11 +65,13 @@ public:
 	//
 	// State
 	//
-	Matrix<double,Dynamic,1,0,ODO_STATE_MAX_SIZE,1> x;
+	/*Matrix<double,Dynamic,1,0,ODO_STATE_MAX_SIZE,1> x;*/
+	Matrix<double,Dynamic,1> x;
 	//
 	// Covariance
 	//
-	Matrix<double,Dynamic,Dynamic,0,ODO_SIGMA_MAX_SIZE,ODO_SIGMA_MAX_SIZE> sigma;
+	/*Matrix<double,Dynamic,Dynamic,0,ODO_SIGMA_MAX_SIZE,ODO_SIGMA_MAX_SIZE> sigma;*/
+	Matrix<double,Dynamic,Dynamic> sigma;
 	//
 	// Local variables for integration
 	//
