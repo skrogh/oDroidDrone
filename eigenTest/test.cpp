@@ -44,10 +44,8 @@ int main()
 	for( int i = 0; i < 400; i++ ) {
 		msckf.propagate( a_m, g_m );
 	}
-	std::cout << 3.14159123456789 << std::endl;
 	std::cout << std::fixed;
-	std::cout << std::setprecision(3);
-	std::cout << 3.14159123456789 << std::endl;
+	std::cout << std::setprecision(2);
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
 	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
