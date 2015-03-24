@@ -58,7 +58,7 @@ Calib::Calib( ) {
 	//
 	// Options
 	//
-	maxFrame = 0;                  // Maximum frames in FIFO
+	maxFrame = ODO_MAX_FRAMES;                  // Maximum frames in FIFO
 }
 
 std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
@@ -231,4 +231,49 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	*/
 	I_a_dly = I_a;
 	I_g_dly = I_g;
+}
+
+void MSCKF::augmentState( void ) {
+	/*
+	** Resize state and sigma, so new data can fit
+	*/
+
+	// State
+	x.conservativeResize( x.rows() + ODO_STATE_FRAME_SIZE, NoChange_t );
+	x.block<ODO_STATE_FRAME_SIZE,1>( x.rows() - ODO_STATE_FRAME_SIZE, 0 ) =
+			x.block<ODO_STATE_FRAME_SIZE,1>( 0, 0 ); 
+
+	// Covariance
+	sigma.conservativeResize( sigma.rows() + ODO_SIGMA_FRAME_SIZE,
+			sigma.cols() + ODO_SIGMA_FRAME_SIZE
+	);
+	/*
+	** Fast way of doing:
+	** J = [ I_9, 0_(9,6), 0_(9,n*9) ]
+	** where the frame size in sigma is 9 and n is the previous number of frames
+	** Then do:
+	** Sigma = [ Sigma, Sigma*J', J*Sigma, J*Sigma*J']
+	** Since J is the identitymatrix and a lot of zeros, this is straight-up copying:
+	*/
+	sigma.block<ODO_SIGMA_FRAME_SIZE,ODO_SIGMA_FRAME_SIZE>( sigma.rows() - ODO_SIGMA_FRAME_SIZE, sigma.cols() - ODO_SIGMA_FRAME_SIZE ) =
+			sigma.block<ODO_SIGMA_FRAME_SIZE,ODO_SIGMA_FRAME_SIZE>( 0, 0 );
+	sigma.block( 0, sigma.cols() - ODO_SIGMA_FRAME_SIZE, sigma.rows() - ODO_SIGMA_FRAME_SIZE, ODO_SIGMA_FRAME_SIZE ) =
+			sigma.block( 0, 0, sigma.rows() - ODO_SIGMA_FRAME_SIZE, ODO_SIGMA_FRAME_SIZE );
+	sigma.block( sigma.rows() - ODO_SIGMA_FRAME_SIZE, 0, ODO_SIGMA_FRAME_SIZE, sigma.cols() - ODO_SIGMA_FRAME_SIZE) =
+			sigma.block( 0, 0, ODO_SIGMA_FRAME_SIZE, sigma.cols() - ODO_SIGMA_FRAME_SIZE);
+}
+
+void MSCKF::removeOldStates( unsigned int n ) {
+	/*
+	** Remove the n oldest frames from the state and covariance
+	*/
+	x.block( ODO_STATE_SIZE, 0, x.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE, 1 ) =
+			x.block( ODO_STATE_SIZE + n * ODO_STATE_FRAME_SIZE, 0, x.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE, 1 );
+	x.conservativeResize( x.rows() - n * ODO_STATE_FRAME_SIZE, NoChange_t );
+
+	sigma.block( ODO_STATE_SIZE, 0, sigma.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE, sigma.cols() ) =
+			sigma.block( ODO_STATE_SIZE + n * ODO_STATE_FRAME_SIZE, 0, sigma.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE, sigma.cols() );
+	sigma.block( 0, ODO_STATE_SIZE, sigma.rows(), sigma.cols() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE ) =
+			sigma.block( 0, ODO_STATE_SIZE + n * ODO_STATE_FRAME_SIZE, sigma.rows(), sigma.cols() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE );
+	sigma.conservativeResize( sigma.rows() - n * ODO_STATE_FRAME_SIZE, sigma.cols() - n * ODO_STATE_FRAME_SIZE );
 }

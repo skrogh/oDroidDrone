@@ -21,7 +21,7 @@ int main()
 			0.382683432365090,
 			-0.923879532511287
 	);
-	calib.C_p_I = Eigen::Vector3d( 0, 0.0, -0.056 );
+	calib.C_p_I = Eigen::Vector3d( 0.0, 0.0, -0.056 );
 	calib.g = 9.82;
 	calib.delta_t = 0.0025;
 	calib.imageOffset = 0.033;
@@ -31,7 +31,6 @@ int main()
 	calib.sigma_wac = 0.1;
 	calib.sigma_Im = 40;
 	calib.sigma_dc = 0.05;
-	calib.maxFrame = 10;
 
 	std::cout << "calib is:\n" << calib << std::endl;
 	MSCKF msckf( &calib );
@@ -40,8 +39,16 @@ int main()
 	double g_m[3] = { 0, 0, 0 };
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
-	for( int i = 0; i < 400*10; i++ ) {
+
+	for( int i = 0; i < 400; i++ ) {
 		msckf.propagate( a_m, g_m );
 	}
+
 	std::cout << "msckf is:\n" << msckf << std::endl;
+
+	std::cout << "Sigma is:\n" << msckf.sigma << std::endl;
+	std::cout << "State is:\n" << msckf.x << std::endl;
+	msckf.augmentState();
+	std::cout << "Sigma is:\n" << msckf.sigma << std::endl;
+	std::cout << "State is:\n" << msckf.x << std::endl;
 }

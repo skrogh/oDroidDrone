@@ -1,6 +1,16 @@
 #ifndef _ODOMETRY_H_
 #define _ODOMETRY_H_
 
+
+#define ODO_MAX_FRAMES (10) // used for static allocation of state and sigma
+#define ODO_STATE_SIZE (16)
+#define ODO_STATE_FRAME_SIZE (10)
+#define ODO_STATE_MAX_SIZE ( ODO_STATE_SIZE + ODO_STATE_FRAME_SIZE * ( ODO_MAX_FRAMES + 1 ) )
+#define ODO_SIGMA_SIZE (15)
+#define ODO_SIGMA_FRAME_SIZE (9)
+#define ODO_SIGMA_MAX_SIZE ( ODO_SIGMA_SIZE + ODO_SIGMA_FRAME_SIZE * ( ODO_MAX_FRAMES + 1 ) )
+
+
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <stdbool.h>
@@ -54,11 +64,11 @@ class MSCKF {
 	//
 	// State
 	//
-	VectorXd x;
+	Matrix<double,ODO_STATE_SIZE,1,0,ODO_STATE_MAX_SIZE,1> x;
 	//
 	// Covariance
 	//
-	MatrixXd sigma;
+	Matrix<double,ODO_SIGMA_SIZE,ODO_SIGMA_SIZE,0,ODO_SIGMA_MAX_SIZE,ODO_SIGMA_MAX_SIZE> sigma;
 	//
 	// Local variables for integration
 	//
@@ -74,7 +84,9 @@ public:
 	// 	Propagate state
 	// 	Propagate sigma
 	// augment state
+	void augmentState( void );
 	// remove n old states
+	void removeOldStates( unsigned int n );
 	// updateCamera
 	// 	triangluate
 	// -marginalize
