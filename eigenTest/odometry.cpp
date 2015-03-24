@@ -82,11 +82,11 @@ std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
 MSCKF::MSCKF( Calib* cal ) {
 	calib = cal;
 	// init all states to 0;
-	x = VectorXd(16).Zero(16);
+	x = VectorXd::Zero(16);
 	// init quaternion
 	x.segment<4>(0) = Quaternion<double>( 1, 0, 0, 0 ).coeffs();
 	// init state to known
-	sigma = MatrixXd(15,15).Zero(15,15);
+	sigma = MatrixXd::Zero(15,15);
 
 	// init delayed measurements
 	I_a_dly = Vector3d( 0, 0, 0 );
