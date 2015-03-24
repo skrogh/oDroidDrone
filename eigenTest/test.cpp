@@ -33,7 +33,7 @@ int main()
 	calib.sigma_dc = 0.05;
 
 	std::cout << "calib is:\n" << calib << std::endl;
-	friend MSCKF msckf( &calib );
+	MSCKF msckf( &calib );
 
 	double a_m[3] = { 0, 0, 9.82 };
 	double g_m[3] = { 0, 0, 0 };

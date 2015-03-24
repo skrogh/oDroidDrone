@@ -57,6 +57,7 @@ public:
 
 
 class MSCKF {
+public:
 	//
 	// Calibration object
 	//
@@ -74,7 +75,7 @@ class MSCKF {
 	//
 	Vector3d I_a_dly, I_g_dly;
 
-public:
+//public:
 	// print
 	friend std::ostream& operator<<( std::ostream& out, const MSCKF& msckf );
 	// init
