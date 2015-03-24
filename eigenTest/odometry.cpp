@@ -239,7 +239,7 @@ void MSCKF::augmentState( void ) {
 	*/
 
 	// State
-	x.conservativeResize( x.rows() + ODO_STATE_FRAME_SIZE, NoChange_t );
+	x.conservativeResize( x.rows() + ODO_STATE_FRAME_SIZE, NoChange );
 	x.block<ODO_STATE_FRAME_SIZE,1>( x.rows() - ODO_STATE_FRAME_SIZE, 0 ) =
 			x.block<ODO_STATE_FRAME_SIZE,1>( 0, 0 ); 
 
@@ -269,7 +269,7 @@ void MSCKF::removeOldStates( unsigned int n ) {
 	*/
 	x.block( ODO_STATE_SIZE, 0, x.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE, 1 ) =
 			x.block( ODO_STATE_SIZE + n * ODO_STATE_FRAME_SIZE, 0, x.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE, 1 );
-	x.conservativeResize( x.rows() - n * ODO_STATE_FRAME_SIZE, NoChange_t );
+	x.conservativeResize( x.rows() - n * ODO_STATE_FRAME_SIZE, NoChange );
 
 	sigma.block( ODO_STATE_SIZE, 0, sigma.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE, sigma.cols() ) =
 			sigma.block( ODO_STATE_SIZE + n * ODO_STATE_FRAME_SIZE, 0, sigma.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE, sigma.cols() );
