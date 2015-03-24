@@ -53,4 +53,7 @@ int main()
 	msckf.augmentState();
 	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
 	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
+	msckf.removeOldStates( 1 );
+	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
+	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
 }
