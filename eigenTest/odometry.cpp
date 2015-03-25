@@ -1,10 +1,21 @@
 #include <iostream>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
+#include <cmath>
 
 #include "odometry.hpp"
 
 using namespace Eigen;
+
+//
+// calculates a to the power of i. i is a positive, non zero, integer
+//
+inline double iPow( double a, unsigned int i ) {
+	for( i=i; i>1; i-- )
+		a *= a;
+	return a;
+}
+
 
 Matrix3d crossMat( const Vector3d& v ){
 	Matrix3d m;
@@ -25,6 +36,85 @@ Matrix4d Omega( const Vector3d& v ){
 	      v(1), -v(0),     0,  v(2),
 	     -v(0), -v(1), -v(2),     0;
 	return m;
+}
+
+
+//
+//
+//
+Vector2d cameraProject( double X, double Y, double Z, Calib* calib ) {
+	double& o_x = calib->o_x;
+	double& o_y = calib->o_y;
+	double& f_x = calib->f_x;
+	double& f_y = calib->f_y;
+	double& k1 = calib->k1;
+	double& k2 = calib->k2;
+	double& t1 = calib->t1;
+	double& t2 = calib->t2;
+
+	double u = X/Z;
+	double v = Y/Z;
+	double r = u*u + v*v;
+	double dr = 1 + k1*r + k2*r*r;
+	Vector2d dt( 2*u*v*t1 + ( r + 2*u*u ) * t2, 2*u*v*t2 + ( r + 2*v*v ) * t1 );
+
+	return Vector2d( o_x + f_x * ( dr * u + dt ), o_y + f_y * ( dr * v + dt ) );
+}
+
+//
+// Jacobian of h (camera model)
+//
+Matrix<double,2,3> jacobianH( double X, double Y, double Z, Calib* calib ) {
+	double& o_x = calib->o_x;
+	double& o_y = calib->o_y;
+	double& f_x = calib->f_x;
+	double& f_y = calib->f_y;
+	double& k1 = calib->k1;
+	double& k2 = calib->k2;
+	double& t1 = calib->t1;
+	double& t2 = calib->t2;
+
+
+	Matrix<double,2,3> m;
+	m <<
+	f_x*( 
+		( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2 ) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1)/Z
+		+ ( X*( ( 2*X*k1 )/iPow(Z,2) + ( 4*X*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) )/iPow(Z,2) ) )/Z
+		+ ( 6*X*t2 )/iPow(Z,2)
+		+ ( 2*Y*t1 )/iPow(Z,2)
+	),
+	f_x*( 
+		( X*( ( 2*Y*k1 )/iPow(Z,2) + ( 4*Y*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) )/iPow(Z,2) ) )/Z
+		+ ( 2*X*t1 )/iPow(Z,2)
+		+ ( 2*Y*t2 )/iPow(Z,2)
+	),
+	-f_x*(
+		t2*( ( 6*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) )
+		+ ( X*( k1*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) + 2*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) )*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) ) )/Z
+		+ ( X*( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1 ) )/iPow(Z,2)
+		+ ( 4*X*Y*t1 )/iPow(Z,3)
+	),
+
+	f_y*(
+		( Y*( ( 2*X*k1 )/iPow(Z,2) + ( 4*X*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) )/iPow(Z,2) ) )/Z
+		+ ( 2*X*t1 )/iPow(Z,2)
+		+ ( 2*Y*t2 )/iPow(Z,2)
+	)
+
+	f_y*(
+		( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2 ) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1 )/Z
+		+ ( Y*( ( 2*Y*k1 )/iPow(Z,2) + ( 4*Y*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) )/iPow(Z,2) ) )/Z
+		+ ( 2*X*t2 )/iPow(Z,2)
+		+ ( 6*Y*t1 )/iPow(Z,2)
+	)
+
+	-f_y*(
+		t1*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 6*iPow(Y,2) )/iPow(Z,3) )
+		+ ( Y*( k1*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) + 2*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) )*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) ) )/Z
+		+ ( Y*( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2 ) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1 ) )/iPow(Z,2)
+		+ ( 4*X*Y*t2 )/iPow(Z,3)
+	)
+	return
 }
 
 Calib::Calib( ) {
@@ -279,4 +369,119 @@ void MSCKF::removeOldStates( unsigned int n ) {
 			sigma.block( 0, ODO_SIGMA_SIZE + n * ODO_SIGMA_FRAME_SIZE, sigma.rows(), sigma.cols() - ODO_SIGMA_SIZE - n * ODO_SIGMA_FRAME_SIZE );
 	sigma.conservativeResize( sigma.rows() - n * ODO_SIGMA_FRAME_SIZE, sigma.cols() - n * ODO_SIGMA_FRAME_SIZE );
 	
+}
+
+
+//
+// get the most likely 3d position of a feature
+// 
+// z is the observations of a feature
+//
+Vector3d MSCKF::triangluate( MatrixX2d z ) {
+	unsigned int itterations = 3;
+
+	//
+	// Get estimate of world feature for each measurement
+	//
+	MatrixX3d G_p_fi( z.rows(), 3 );
+	bool clearOutlier = false;
+	for( int i = 0; i < z.rows(); i ++ ) {
+		//
+		// undistort r to get beta = (u,v)
+		//
+		// initial guess:
+		Vector2d beta( 
+			( z( i, 0 ) - calib->o_x ) / calib->f_x,
+			( z( i, 1 ) - calib->o_y ) / calib->f_y
+		);
+
+		// itterate:
+		for( int j = 0; j < itterations; j++ ) {
+			// Residual
+			Vector2d r = z.row( i ).transpose() - cameraProject( beta(0), beta(1), 1, calib );
+			// Jacobian
+			Matrix2d Jf = jacobianH( beta(0), beta(1), 1, calib ).block<2,2>(0,0);
+			// New estimate
+			beta = beta + (Jf.transpose()*Jf).inverse() * Jf.transpose() * r;
+		}
+
+		//
+		// calculate camera position:
+		//
+		// Get index of start of this frame in state
+		unsigned int frameStart = x.rows() - ODO_STATE_FRAME_SIZE*( z.rows() - i + 1 );
+		// Get inertial frame state at that time:	
+		Quaternion<double> IiG_q( x.block<4,1>( frameStart + 0, 0 ) );
+		Quaternion<double> CiG_q = calib->CI_q * IiG_q;
+		// Calculate camera state
+		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 )
+		Vector3d G_p_Ci = G_P_Ii - calib->C_p_I._transformVector( CiG_q.conjugate() );
+
+		// Calculate feature position estimate
+		Vector3d Ci_theta_i( beta(0), beta(1), 1 );
+		Vector3d G_theta_i = Ci_theta_i._transformVector( CiG_q );
+		double t_i = G_p_Ci( 2 ) / G_theta_i( 2 );
+		G_p_fi.row( i ) = ( t_i * G_theta_i + G_p_Ci ).transpose();
+
+		// Check if feature position is estimated behind camera
+		if ( t_i<= 0 )
+			clearOutlier = true;
+	}
+
+	//
+	// Average estimates
+	//
+	Vector3d G_p_f( G_p_fi.col(0).mean(), G_p_fi.col(1).mean(), G_p_fi.col(2).mean() );
+
+	//
+	// Signal no solution
+	//
+	if ( !std::isfinite(G_p_f(0)) || !std::isfinite(G_p_f(0)) || !std::isfinite(G_p_f(0)) || clearOutlier )
+		G_p_f = Vector3d( NaN, NaN, NaN );
+
+	return G_p_f;
+}
+
+//
+// Marginalize
+// From a list of feature measurements z, and the estimated feature position G_p_f
+// calculate the residuals (r0) and state jacobian (H0) marginalizing out the feature error
+// A block matrix can be parsed to r0 and H0, if this is of the correct size
+//
+void marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 ) {
+	//
+	// calculate residuals and 
+	//
+	VectorXd r( z.rows()*2 );
+	MatrixX3d H_f( z.rows()*2 ,3 );
+	MatrixXd H_x = MatrixXd::Zero( z.rows()*2, sigma.cols() );
+
+	for( int i = 0; i < z.rows(); i ++ ) {
+		//
+		// calculate camera position:
+		//
+		// Get index of start of this frame in state
+		unsigned int frameStart = x.rows() - ODO_STATE_FRAME_SIZE*( z.rows() - i + 1 );
+		// Get inertial frame state at that time:	
+		Quaternion<double> IiG_q( x.block<4,1>( frameStart + 0, 0 ) );
+		Quaternion<double> CiG_q = calib->CI_q * IiG_q;
+		// Calculate camera state
+		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 )
+		Vector3d G_p_Ci = G_P_Ii - calib->C_p_I._transformVector( CiG_q.conjugate() );
+
+		// Calculate feature position in camera frame
+		Vector3d C_p_f = ( G_p_f - G_p_Ci )._transformVector( CiG_q );
+
+		r.block<2,1>( i*2, 0 ) = z.row( i ).transpose() - cameraProject( C_p_f(0), C_p_f(1), C_p_f(2) );
+		H_f.block<2,3>( i*2,0 ) = jacobianH( C_p_f(0), C_p_f(1), C_p_f(2), calib ) * CiG_q.toRotationMatrix();
+		H_x.block<3,9>( i*2, H_x.cols() - ODO_SIGMA_FRAME_SIZE*( z.rows() - i + 1 ) ) <<
+				H_f.block<2,3>( i*2,0 )*crossMat( G_p_f - G_p_Ii ), -H_f.block<2,3>( i*2,0 ), Matrix3d::zero(),
+	}
+
+	// Find left null-space
+	Eigen::FullPivLU<Matrix5x3> A( H_f.transpose() );
+
+	// Marginalize
+	r0 = A.kernel().transpose() * r;
+	H0 = A.kernel().transpose() * H_x;
 }
