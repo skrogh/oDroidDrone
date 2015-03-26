@@ -17,7 +17,7 @@
 #
 
 # Toolchain path
-TCPATH = arm-linux-gnueabi-
+TCPATH = 
 KERNELHEADERS = /home/kamil/praca/w1-party/kernel/headers/include
 
 CC = ${TCPATH}gcc
