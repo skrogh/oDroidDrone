@@ -266,13 +266,14 @@ int v4l_copy_fmt(struct io_dev *src, enum io_dir sdir,
 		return -1;
 	}
 
-	dfmt = sfmt;
+	memzero(dfmt);
 	dfmt.type = io_dir_to_type(ddir);
-	ret = ioctl(dst->fd, VIDIOC_S_FMT, &dfmt);
+	ret = ioctl(dst->fd, VIDIOC_G_FMT, &dfmt);
 	if (ret != 0) {
-		err("Failed to set format");
+		err("Failed to get format %d", errno);
 		return -1;
 	}
+
 
 	err("sfmt(type=%d,size=%dx%d,fmt=%.4s,npl=%d,sizes=%d,%d,bpls=%d,%d)",
 	    sfmt.type, sfmt.fmt.pix_mp.width, sfmt.fmt.pix_mp.height,
@@ -281,6 +282,7 @@ int v4l_copy_fmt(struct io_dev *src, enum io_dir sdir,
 	    sfmt.fmt.pix_mp.plane_fmt[1].sizeimage,
 	    sfmt.fmt.pix_mp.plane_fmt[0].bytesperline,
 	    sfmt.fmt.pix_mp.plane_fmt[1].bytesperline);
+
 	err("dfmt(type=%d,size=%dx%d,fmt=%.4s,npl=%d,sizes=%d,%d,bpls=%d,%d)",
 	    dfmt.type, dfmt.fmt.pix_mp.width, dfmt.fmt.pix_mp.height,
 	    (char *)&dfmt.fmt.pix_mp.pixelformat, dfmt.fmt.pix_mp.num_planes,
@@ -288,6 +290,17 @@ int v4l_copy_fmt(struct io_dev *src, enum io_dir sdir,
 	    dfmt.fmt.pix_mp.plane_fmt[1].sizeimage,
 	    dfmt.fmt.pix_mp.plane_fmt[0].bytesperline,
 	    dfmt.fmt.pix_mp.plane_fmt[1].bytesperline);
+
+	dfmt = sfmt;
+	dfmt.type = io_dir_to_type(ddir);
+	dfmt.fmt.pix_mp.pixelformat = V4L2_PIX_FMT_YUV420;
+
+
+	ret = ioctl(dst->fd, VIDIOC_S_FMT, &dfmt);
+	if (ret != 0) {
+		err("Failed to set format %d", errno);
+		return -1;
+	}
 
 	return 0;
 }
