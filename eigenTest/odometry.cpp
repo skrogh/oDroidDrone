@@ -485,3 +485,35 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 	r0 = A * r;
 	H0 = A * H_x;
 }
+
+void MSCKF::updateCamera( std::list<CameraMeas_t> meas ) {
+	// initialize H0 and r0
+	VectorXd r0j( 0 );
+	MatrixXd H0j( 0, sigma.cols() );
+	for ( std::list<CameraMeas_t>::iterator meas_j = meas.begin(); meas_j != meas.end(); ) {
+		if ( meas_j->isLost ) {
+			// If more that, or 3 points, use for update
+			if ( meas_j->z.rows() >= 3 ) {
+				Vector3d G_p_fj = msckf.triangluate( meas_j->z );
+				// If not a clear outlier:
+				if ( std::isfinite(G_p_fj(0)) && std::isfinite(G_p_fj(1)) && std::isfinite(G_p_fj(2)) ) {
+					// Marignalize:
+					VectorXd r0j( meas_j->z.rows()*2 );
+					MatrixXd H0j( z.rows()*2, sigma.cols() );
+					msckf.marginalize( meas_j->z, G_p_fj, r0j, H0j );
+					// TODO: Check if inlier
+					// Add to huge H0 and r0 matrix
+					H0.conservativeResize( H0j.rows(), NoChange );
+					r0.conservativeResize( r0j.rows(), NoChange );
+					H0.bottomRows( H0j.rows() ) = H0j;
+					r0.bottomRows( r0j.rows() ) = r0j;
+				}
+			}
+			// in any case, remove it and advance
+			meas_j = meas.erase(meas_j);
+		} else {
+			// Skip and advance
+			++meas_j
+		}
+	}
+}
