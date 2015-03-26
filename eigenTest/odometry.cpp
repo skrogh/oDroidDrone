@@ -482,6 +482,6 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 	Eigen::FullPivLU<MatrixXd> A( H_f.transpose() );
 
 	// Marginalize
-	r0 = A.kernel().transpose() * r;
-	H0 = A.kernel().transpose() * H_x;
+	r0 = A.kernel().transposeInPlace() * r;
+	H0 = A.kernel().transposeInPlace() * H_x;
 }
