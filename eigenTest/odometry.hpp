@@ -57,7 +57,8 @@ public:
 
 typedef struct{
 	MatrixX2d z; // length is stored as number of elements in z
-	bool isLost; 
+	bool isLost; // Set if it is no longer tracked in current frame
+	// TODO: add feature description here?
 } CameraMeas_t;
 
 class MSCKF {
@@ -95,7 +96,7 @@ public:
 	// remove n old states
 	void removeOldStates( unsigned int n );
 	// updateCamera
-	void updateCamera( std::list<CameraMeas_t> meas );
+	void updateCamera( std::list<CameraMeas_t>& meas );
 	// 	triangluate
 	Vector3d triangluate( MatrixX2d z );
 	// -marginalize

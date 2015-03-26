@@ -486,10 +486,13 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 	H0 = A * H_x;
 }
 
-void MSCKF::updateCamera( std::list<CameraMeas_t> meas ) {
+void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 	// initialize H0 and r0
 	VectorXd r0( 0 );
 	MatrixXd H0( 0, sigma.cols() );
+	//
+	// Get r0 and H0
+	//
 	for ( std::list<CameraMeas_t>::iterator meas_j = meas.begin(); meas_j != meas.end(); ) {
 		if ( meas_j->isLost ) {
 			// If more that, or 3 points, use for update
@@ -516,4 +519,65 @@ void MSCKF::updateCamera( std::list<CameraMeas_t> meas ) {
 			++meas_j;
 		}
 	}
+	//
+	// TODO: QR decomposition (skipped for now)
+	//
+
+	//
+	// Calculate kalmangain and apply update
+	//
+	// Only if we have measurements
+	if ( r0.rows() > 0 ) {
+		// Image noise
+		MatrixXd R_q = MatrixXd::Identity( r0.rows(), r0.rows() ) * calib->sigma_Im;
+
+		// Kalman gain
+		MatrixXd K = sigma * H0.transpose() * ( H0 * sigma * H0.transpose() + R_q ).inverse();
+
+		// Update to be appled to state
+		VectorXd delta_x = K * r0;
+
+		// Update covariance
+		MatrixXd A = MatrixXd::Identity( K.rows(), H0.cols() ) - K * H0 );
+		sigma = A * sigma * a.transpose() + K * R_q * K.transpose();
+
+		//
+		// apply feedback
+		//
+
+		// To inertial state
+		// IG_q
+		Quaternion<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
+		x.block<4,1>( 0, 0 ) = ( Quaternion<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q ).normalize().coeffs();
+		// G_p
+		x.block<3,1>( 0+4, 0 ) += delta_x.block<3,1>( 0+3, 0 );
+		// G_v
+		x.block<3,1>( 0+4+3, 0 ) += delta_x.block<3,1>( 0+3+3, 0 );
+		// b_g
+		x.block<3,1>( 0+4+3+3, 0 ) += delta_x.block<3,1>( 0+3+3+3, 0 );
+		// b_a
+		x.block<3,1>( 0+4+3+3+3, 0 ) += delta_x.block<3,1>( 0+3+3+3+3, 0 );
+
+		// to all the frames
+		for ( int i = 0; i < ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE; i++ ) {
+			unsigned int frameStart = ODO_STATE_SIZE + i * ODO_STATE_FRAME_SIZE;
+			unsigned int delta_frameStart = ODO_SIGMA_SIZE + i * ODO_SIGMA_FRAME_SIZE;
+			Quaternion<double> delta_IG_q( 1,
+					delta_x( delta_frameStart + 0 ),
+					delta_x( delta_frameStart + 1 ),
+					delta_x( delta_frameStart + 2 )
+			);
+			x.block<4,1>( frameStart + 0, 0 ) = ( Quaternion<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IG_q ).normalize().coeffs();
+			// G_p
+			x.block<3,1>( frameStart + 0+4, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3, 0 );
+			// G_v
+			x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
+			// b_g
+			x.block<3,1>( frameStart + 0+4+3+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3+3, 0 );
+			// b_a
+			x.block<3,1>( frameStart + 0+4+3+3+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3+3+3, 0 );
+		}
+
+	}
+
 }
