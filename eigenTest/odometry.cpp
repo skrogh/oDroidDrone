@@ -479,11 +479,11 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 	}
 
 	// Find left null-space
-	Eigen::FullPivLU<MatrixXd> A( H_f.transposeInPlace() );
+	Eigen::FullPivLU<MatrixXd> A( H_f.transpose() );
 
 	// Marginalize
 	//r0 = A.kernel().transpose() * r;
 	r0 = r.transpose() * r;
 	//H0 = A.kernel().transpose() * H_x;
-	H0 = A.kernel().transpose() * H_x;
+	A.kernel().transpose() * H_x;
 }
