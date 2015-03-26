@@ -57,5 +57,13 @@ int main()
 	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
 	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
 
+	for( int i = 0; i < 400; i++ ) {
+		msckf.propagate( a_m, g_m );
+	}
+
+	std::cout << "msckf is:\n" << msckf << std::endl;
+	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
+	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
+
 
 }

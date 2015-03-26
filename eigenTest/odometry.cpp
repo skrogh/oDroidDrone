@@ -583,7 +583,9 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 }
 
 void MSCKF::updateHeight( double height ) {
-
+	//
+	// TODO: check if outlier
+	//
 
 	// Sensor noise
 	Matrix<double,1,1> R;
