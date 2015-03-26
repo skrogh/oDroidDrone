@@ -13,6 +13,7 @@
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
+#include <list>
 
 using namespace Eigen;
 
@@ -54,6 +55,10 @@ public:
 	friend std::ostream& operator<<( std::ostream& out, const Calib& calib );
 };
 
+typedef struct{
+	MatrixX2d z; // length is stored as number of elements in z
+	bool isLost; 
+} CameraMeas_t;
 
 class MSCKF {
 public:
@@ -90,13 +95,14 @@ public:
 	// remove n old states
 	void removeOldStates( unsigned int n );
 	// updateCamera
+	void updateCamera( list<CameraMeas_t> meas )
 	// 	triangluate
 	Vector3d triangluate( MatrixX2d z );
 	// -marginalize
 	void marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 );
 	// -isInlinerCamera
-	// updateDist
-	// -isInlierDist
+	// updateDistance
+	// -isInlierDistance
 };
 
 

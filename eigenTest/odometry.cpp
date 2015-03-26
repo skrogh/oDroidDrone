@@ -58,7 +58,7 @@ Vector2d cameraProject( double X, double Y, double Z, Calib* calib ) {
 	double dr = 1 + k1*r + k2*r*r;
 	Vector2d dt( 2*u*v*t1 + ( r + 2*u*u ) * t2, 2*u*v*t2 + ( r + 2*v*v ) * t1 );
 
-	return Vector2d( o_x + f_x * ( dr * u + dt ), o_y + f_y * ( dr * v + dt ) );
+	return Vector2d( o_x + f_x * ( dr * u + dt(0) ), o_y + f_y * ( dr * v + dt(1) ) );
 }
 
 //
