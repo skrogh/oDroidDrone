@@ -538,8 +538,8 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 		VectorXd delta_x = K * r0;
 
 		// Update covariance
-		MatrixXd A = MatrixXd::Identity( K.rows(), H0.cols() ) - K * H0 );
-		sigma = A * sigma * a.transpose() + K * R_q * K.transpose();
+		MatrixXd A = MatrixXd::Identity( K.rows(), H0.cols() ) - K * H0;
+		sigma = A * sigma * A.transpose() + K * R_q * K.transpose();
 
 		//
 		// apply feedback
@@ -548,7 +548,8 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 		// To inertial state
 		// IG_q
 		Quaternion<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
-		x.block<4,1>( 0, 0 ) = ( Quaternion<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q ).normalize().coeffs();
+		Quaternion<double> IG_q = ( Quaternion<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q ).normalize();
+		x.block<4,1>( 0, 0 ) = IG_q.coeffs();
 		// G_p
 		x.block<3,1>( 0+4, 0 ) += delta_x.block<3,1>( 0+3, 0 );
 		// G_v
@@ -562,20 +563,17 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 		for ( int i = 0; i < ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE; i++ ) {
 			unsigned int frameStart = ODO_STATE_SIZE + i * ODO_STATE_FRAME_SIZE;
 			unsigned int delta_frameStart = ODO_SIGMA_SIZE + i * ODO_SIGMA_FRAME_SIZE;
-			Quaternion<double> delta_IG_q( 1,
+			Quaternion<double> delta_IiG_q( 1,
 					delta_x( delta_frameStart + 0 ),
 					delta_x( delta_frameStart + 1 ),
 					delta_x( delta_frameStart + 2 )
 			);
-			x.block<4,1>( frameStart + 0, 0 ) = ( Quaternion<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IG_q ).normalize().coeffs();
-			// G_p
+			Quaternion<double> IiG_q = ( Quaternion<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q ).normalize();
+			x.block<4,1>( frameStart + 0, 0 ) = IiG_q.coeffs();
+			// G_p_i
 			x.block<3,1>( frameStart + 0+4, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3, 0 );
-			// G_v
+			// G_v_i
 			x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
-			// b_g
-			x.block<3,1>( frameStart + 0+4+3+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3+3, 0 );
-			// b_a
-			x.block<3,1>( frameStart + 0+4+3+3+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3+3+3, 0 );
 		}
 
 	}
