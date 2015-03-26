@@ -95,7 +95,7 @@ public:
 	// remove n old states
 	void removeOldStates( unsigned int n );
 	// updateCamera
-	void updateCamera( list<CameraMeas_t> meas )
+	void updateCamera( std::list<CameraMeas_t> meas )
 	// 	triangluate
 	Vector3d triangluate( MatrixX2d z );
 	// -marginalize
