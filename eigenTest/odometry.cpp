@@ -415,7 +415,7 @@ Vector3d MSCKF::triangluate( MatrixX2d z ) {
 		Quaternion<double> CiG_q = calib->CI_q * IiG_q;
 		// Calculate camera state
 		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 );
-		Vector3d G_p_Ci = G_p_Ii - calib->CiG_q.conjugate()._transformVector( C_p_I );
+		Vector3d G_p_Ci = G_p_Ii - CiG_q.conjugate()._transformVector( calib->C_p_I );
 
 		// Calculate feature position estimate
 		Vector3d Ci_theta_i( beta(0), beta(1), 1 );
@@ -467,7 +467,7 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 		Quaternion<double> CiG_q = calib->CI_q * IiG_q;
 		// Calculate camera state
 		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 )
-		Vector3d G_p_Ci = G_p_Ii - calib->CiG_q.conjugate()._transformVector( C_p_I );
+		Vector3d G_p_Ci = G_p_Ii - CiG_q.conjugate()._transformVector( calib->C_p_I );
 
 		// Calculate feature position in camera frame
 		Vector3d C_p_f = CiG_q._transformVector( G_p_f - G_p_Ci );
@@ -479,7 +479,7 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 	}
 
 	// Find left null-space
-	Eigen::FullPivLU<Matrix5x3> A( H_f.transpose() );
+	Eigen::FullPivLU<MatrixXd> A( H_f.transpose() );
 
 	// Marginalize
 	r0 = A.kernel().transpose() * r;
