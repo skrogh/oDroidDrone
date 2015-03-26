@@ -13,7 +13,6 @@
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
-#include <stdbool.h>
 
 using namespace Eigen;
 
@@ -84,17 +83,20 @@ public:
 	MSCKF( Calib* cal );
 	// propagate
 	void propagate( double a_m[3], double g_m[3] );
-	// 	Propagate state
-	// 	Propagate sigma
+	// 	Propagate state <- used for pure prediction
+	// 	Propagate sigma <- no use for this
 	// augment state
 	void augmentState( void );
 	// remove n old states
 	void removeOldStates( unsigned int n );
 	// updateCamera
 	// 	triangluate
+	Vector3d triangluate( MatrixX2d z );
 	// -marginalize
-	//  ETC
+	void marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 );
+	// -isInlinerCamera
 	// updateDist
+	// -isInlierDist
 };
 
 
