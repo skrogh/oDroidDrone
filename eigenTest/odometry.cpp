@@ -513,7 +513,7 @@ void MSCKF::updateCamera( std::list<CameraMeas_t> meas ) {
 			meas_j = meas.erase(meas_j);
 		} else {
 			// Skip and advance
-			++meas_j
+			++meas_j;
 		}
 	}
 }
