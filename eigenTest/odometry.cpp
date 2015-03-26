@@ -586,7 +586,7 @@ void MSCKF::updateHeight( double height ) {
 
 
 	// Sensor noise
-	Vector<double,1,1> R(calib->sigma_hc); // cause we need to add this to another one
+	Matrix<double,1,1> R(calib->sigma_hc); // cause we need to add this to another one
 	// Sensor residual
 	double r = height - x(0+4+2); // x(0+4+3) is G_p(2)
 	// Sensor model
