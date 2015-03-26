@@ -164,7 +164,7 @@ std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
 	"sigma_gc: " << calib.sigma_gc << " sigma_ac: " << calib.sigma_ac << "\n" <<
 	"sigma_wgc: " << calib.sigma_wgc << " sigma_wac: " << calib.sigma_wac << "\n" <<
 	"sigma_Im: " << calib.sigma_Im << "\n" <<
-	"sigma_dc: " << calib.sigma_dc << "\n" <<
+	"sigma_hc: " << calib.sigma_hc << "\n" <<
 	"maxFrame: " << calib.maxFrame ;
 }
 
