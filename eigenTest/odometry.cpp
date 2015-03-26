@@ -484,6 +484,6 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 	// Marginalize
 	r0 = A.kernel().transpose() * r;
 	//H0 = A.kernel().transpose() * H_x;
-	MatrixXd test = A.kernel().transpose() * H_x;
+	MatrixXd test = A.kernel().transpose();// * H_x;
 	H0 = H_x;
 }
