@@ -448,7 +448,7 @@ Vector3d MSCKF::triangluate( MatrixX2d z ) {
 // calculate the residuals (r0) and state jacobian (H0) marginalizing out the feature error
 // A block matrix can be parsed to r0 and H0, if this is of the correct size
 //
-void marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 ) {
+void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 ) {
 	//
 	// calculate residuals and 
 	//
