@@ -89,8 +89,8 @@ public:
 	MSCKF( Calib* cal );
 	// propagate
 	void propagate( double a_m[3], double g_m[3] );
-	// 	Propagate state <- used for pure prediction
-	// 	Propagate sigma <- no use for this
+	// TODO: -Propagate state <- used for pure prediction
+	// TODO: -Propagate sigma <- no use for this
 	// augment state
 	void augmentState( void );
 	// remove n old states
@@ -101,10 +101,10 @@ public:
 	Vector3d triangluate( MatrixX2d z );
 	// -marginalize
 	void marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 );
-	// -isInlinerCamera
+	// TODO: -isInlinerCamera
 	// updateHeight
 	void updateHeight( double height );
-	// -isInlierHeight
+	// TODO: -isInlierHeight
 };
 
 
