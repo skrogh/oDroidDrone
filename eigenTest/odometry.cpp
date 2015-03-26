@@ -99,21 +99,21 @@ Matrix<double,2,3> jacobianH( double X, double Y, double Z, Calib* calib ) {
 		( Y*( ( 2*X*k1 )/iPow(Z,2) + ( 4*X*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) )/iPow(Z,2) ) )/Z
 		+ ( 2*X*t1 )/iPow(Z,2)
 		+ ( 2*Y*t2 )/iPow(Z,2)
-	)
+	),
 
 	f_y*(
 		( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2 ) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1 )/Z
 		+ ( Y*( ( 2*Y*k1 )/iPow(Z,2) + ( 4*Y*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) )/iPow(Z,2) ) )/Z
 		+ ( 2*X*t2 )/iPow(Z,2)
 		+ ( 6*Y*t1 )/iPow(Z,2)
-	)
+	),
 
 	-f_y*(
 		t1*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 6*iPow(Y,2) )/iPow(Z,3) )
 		+ ( Y*( k1*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) + 2*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) )*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) ) )/Z
 		+ ( Y*( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2 ) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1 ) )/iPow(Z,2)
 		+ ( 4*X*Y*t2 )/iPow(Z,3)
-	)
+	);
 	return
 }
 
