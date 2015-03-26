@@ -44,8 +44,8 @@ public:
 			sigma_wgc, sigma_wac; // Standard deviation of IMU random walk noise [rad/s, m/s^2]
 	/* Camera */
 	double sigma_Im; // Image noise
-	/* distance sensor */
-	double sigma_dc; // Standard deviation of distance sensor noise [m]
+	/* height sensor */
+	double sigma_hc; // Standard deviation of height sensor noise [m]
 	//
 	// Options
 	//
@@ -102,8 +102,9 @@ public:
 	// -marginalize
 	void marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 );
 	// -isInlinerCamera
-	// updateDistance
-	// -isInlierDistance
+	// updateHeight
+	void updateHeight( double height );
+	// -isInlierHeight
 };
 
 

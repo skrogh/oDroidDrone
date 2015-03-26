@@ -143,8 +143,8 @@ Calib::Calib( ) {
 	sigma_wgc = 0; sigma_wac = 0;  // Standard deviation of IMU random walk noise [rad/s, m/s^2]
 	/* Camera */
 	sigma_Im = 0;                  // Image noise
-	/* distance sensor */
-	sigma_dc = 0;                  // Standard deviation of distance sensor noise [m]
+	/* height sensor */
+	sigma_hc = 0;                  // Standard deviation of height sensor noise [m]
 	//
 	// Options
 	//
@@ -578,6 +578,65 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 			x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
 		}
 
+	}
+
+}
+
+void updateHeight( double height ) {
+
+
+	// Sensor noise
+	double& R = calib->sigma_hc;
+	// Sensor residual
+	double r = height - x(0+4+2); // x(0+4+3) is G_p(2)
+	// Sensor model
+	MatrixXd H << MatrixXd::Zero( 1, 5 ), 1, MatrixXd::Zero( 1, sigma.cols() - 6 );
+
+	// Kalman gain
+	MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
+
+	// Update to be appled to sf4ate
+	VectorXd delta_x = K * r;
+
+	// Update covariance
+	MatrixXd A = MatrixXd::Identity( K.rows(), H.cols() ) - K * H;
+	sigma = A * sigma * A.transpose() + K * R * K.transpose();
+
+	//
+	// apply feedback
+	//
+
+	// To inertial state
+	// IG_q
+	Quaternion<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
+	Quaternion<double> IG_q = ( Quaternion<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q );
+	IG_q.normalize();
+	x.block<4,1>( 0, 0 ) = IG_q.coeffs();
+	// G_p
+	x.block<3,1>( 0+4, 0 ) += delta_x.block<3,1>( 0+3, 0 );
+	// G_v
+	x.block<3,1>( 0+4+3, 0 ) += delta_x.block<3,1>( 0+3+3, 0 );
+	// b_g
+	x.block<3,1>( 0+4+3+3, 0 ) += delta_x.block<3,1>( 0+3+3+3, 0 );
+	// b_a
+	x.block<3,1>( 0+4+3+3+3, 0 ) += delta_x.block<3,1>( 0+3+3+3+3, 0 );
+
+	// to all the frames
+	for ( int i = 0; i < ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE; i++ ) {
+		unsigned int frameStart = ODO_STATE_SIZE + i * ODO_STATE_FRAME_SIZE;
+		unsigned int delta_frameStart = ODO_SIGMA_SIZE + i * ODO_SIGMA_FRAME_SIZE;
+		Quaternion<double> delta_IiG_q( 1,
+				delta_x( delta_frameStart + 0 ),
+				delta_x( delta_frameStart + 1 ),
+				delta_x( delta_frameStart + 2 )
+		);
+		Quaternion<double> IiG_q = ( Quaternion<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q );
+		IiG_q.normalize();
+		x.block<4,1>( frameStart + 0, 0 ) = IiG_q.coeffs();
+		// G_p_i
+		x.block<3,1>( frameStart + 0+4, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3, 0 );
+		// G_v_i
+		x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
 	}
 
 }

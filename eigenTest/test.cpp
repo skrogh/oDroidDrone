@@ -31,7 +31,7 @@ int main()
 	calib.sigma_wgc = 0.05;
 	calib.sigma_wac = 0.1;
 	calib.sigma_Im = 40;
-	calib.sigma_dc = 0.05;
+	calib.sigma_hc = 0.05;
 
 	std::cout << "calib is:\n" << calib << std::endl;
 	MSCKF msckf( &calib );
@@ -50,5 +50,12 @@ int main()
 	std::cout << "msckf is:\n" << msckf << std::endl;
 	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
 	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
+
+	msckf.updateHeight( 1 );
+
+	std::cout << "msckf is:\n" << msckf << std::endl;
+	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
+	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
+
 
 }
