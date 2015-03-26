@@ -466,7 +466,7 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 		Quaternion<double> IiG_q( x.block<4,1>( frameStart + 0, 0 ) );
 		Quaternion<double> CiG_q = calib->CI_q * IiG_q;
 		// Calculate camera state
-		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 )
+		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 );
 		Vector3d G_p_Ci = G_p_Ii - CiG_q.conjugate()._transformVector( calib->C_p_I );
 
 		// Calculate feature position in camera frame
