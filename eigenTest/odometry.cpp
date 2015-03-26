@@ -414,7 +414,7 @@ Vector3d MSCKF::triangluate( MatrixX2d z ) {
 		Quaternion<double> IiG_q( x.block<4,1>( frameStart + 0, 0 ) );
 		Quaternion<double> CiG_q = calib->CI_q * IiG_q;
 		// Calculate camera state
-		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 )
+		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 );
 		Vector3d G_p_Ci = G_P_Ii - calib->CiG_q.conjugate()._transformVector( C_p_I );
 
 		// Calculate feature position estimate
@@ -437,7 +437,7 @@ Vector3d MSCKF::triangluate( MatrixX2d z ) {
 	// Signal no solution
 	//
 	if ( !std::isfinite(G_p_f(0)) || !std::isfinite(G_p_f(0)) || !std::isfinite(G_p_f(0)) || clearOutlier )
-		G_p_f = Vector3d( NaN, NaN, NaN );
+		G_p_f = Vector3d( NAN, NAN, NAN );
 
 	return G_p_f;
 }
