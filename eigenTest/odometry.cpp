@@ -474,8 +474,8 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 
 		r.block<2,1>( i*2, 0 ) = z.row( i ).transpose() - cameraProject( C_p_f(0), C_p_f(1), C_p_f(2), calib );
 		H_f.block<2,3>( i*2,0 ) = jacobianH( C_p_f(0), C_p_f(1), C_p_f(2), calib ) * CiG_q.toRotationMatrix();
-		H_x.block<3,9>( i*2, H_x.cols() - ODO_SIGMA_FRAME_SIZE*( z.rows() - i + 1 ) ) <<
-				H_f.block<2,3>( i*2,0 )*crossMat( G_p_f - G_p_Ii ), -H_f.block<2,3>( i*2,0 ), Matrix3d::Zero();
+		H_x.block<2,9>( i*2, H_x.cols() - ODO_SIGMA_FRAME_SIZE*( z.rows() - i + 1 ) ) <<
+				H_f.block<2,3>( i*2,0 )*crossMat( G_p_f - G_p_Ii ), -H_f.block<2,3>( i*2,0 ), Matrix<double,2,3>::Zero();
 	}
 
 	// Find left null-space
