@@ -499,7 +499,7 @@ void MSCKF::updateCamera( std::list<CameraMeas_t> meas ) {
 				if ( std::isfinite(G_p_fj(0)) && std::isfinite(G_p_fj(1)) && std::isfinite(G_p_fj(2)) ) {
 					// Marignalize:
 					VectorXd r0j( meas_j->z.rows()*2 );
-					MatrixXd H0j( z.rows()*2, sigma.cols() );
+					MatrixXd H0j( meas_j->z.rows()*2, sigma.cols() );
 					msckf.marginalize( meas_j->z, G_p_fj, r0j, H0j );
 					// TODO: Check if inlier
 					// Add to huge H0 and r0 matrix
