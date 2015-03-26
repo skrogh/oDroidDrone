@@ -548,7 +548,8 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 		// To inertial state
 		// IG_q
 		Quaternion<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
-		Quaternion<double> IG_q = ( Quaternion<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q ).normalize();
+		Quaternion<double> IG_q = ( Quaternion<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q );
+		IG_q.normalize();
 		x.block<4,1>( 0, 0 ) = IG_q.coeffs();
 		// G_p
 		x.block<3,1>( 0+4, 0 ) += delta_x.block<3,1>( 0+3, 0 );
@@ -568,7 +569,8 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 					delta_x( delta_frameStart + 1 ),
 					delta_x( delta_frameStart + 2 )
 			);
-			Quaternion<double> IiG_q = ( Quaternion<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q ).normalize();
+			Quaternion<double> IiG_q = ( Quaternion<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q );
+			IiG_q.normalize();
 			x.block<4,1>( frameStart + 0, 0 ) = IiG_q.coeffs();
 			// G_p_i
 			x.block<3,1>( frameStart + 0+4, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3, 0 );
