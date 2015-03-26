@@ -488,8 +488,8 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 
 void MSCKF::updateCamera( std::list<CameraMeas_t> meas ) {
 	// initialize H0 and r0
-	VectorXd r0j( 0 );
-	MatrixXd H0j( 0, sigma.cols() );
+	VectorXd r0( 0 );
+	MatrixXd H0( 0, sigma.cols() );
 	for ( std::list<CameraMeas_t>::iterator meas_j = meas.begin(); meas_j != meas.end(); ) {
 		if ( meas_j->isLost ) {
 			// If more that, or 3 points, use for update
