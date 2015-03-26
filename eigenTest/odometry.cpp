@@ -114,7 +114,7 @@ Matrix<double,2,3> jacobianH( double X, double Y, double Z, Calib* calib ) {
 		+ ( Y*( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2 ) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1 ) )/iPow(Z,2)
 		+ ( 4*X*Y*t2 )/iPow(Z,3)
 	);
-	return
+	return m;
 }
 
 Calib::Calib( ) {
@@ -415,11 +415,11 @@ Vector3d MSCKF::triangluate( MatrixX2d z ) {
 		Quaternion<double> CiG_q = calib->CI_q * IiG_q;
 		// Calculate camera state
 		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 )
-		Vector3d G_p_Ci = G_P_Ii - calib->C_p_I._transformVector( CiG_q.conjugate() );
+		Vector3d G_p_Ci = G_P_Ii - calib->CiG_q.conjugate()._transformVector( C_p_I );
 
 		// Calculate feature position estimate
 		Vector3d Ci_theta_i( beta(0), beta(1), 1 );
-		Vector3d G_theta_i = Ci_theta_i._transformVector( CiG_q );
+		Vector3d G_theta_i = CiG_q._transformVector( Ci_theta_i );
 		double t_i = G_p_Ci( 2 ) / G_theta_i( 2 );
 		G_p_fi.row( i ) = ( t_i * G_theta_i + G_p_Ci ).transpose();
 
@@ -467,10 +467,10 @@ void marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H
 		Quaternion<double> CiG_q = calib->CI_q * IiG_q;
 		// Calculate camera state
 		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 )
-		Vector3d G_p_Ci = G_P_Ii - calib->C_p_I._transformVector( CiG_q.conjugate() );
+		Vector3d G_p_Ci = G_P_Ii - calib->CiG_q.conjugate()._transformVector( C_p_I );
 
 		// Calculate feature position in camera frame
-		Vector3d C_p_f = ( G_p_f - G_p_Ci )._transformVector( CiG_q );
+		Vector3d C_p_f = CiG_q._transformVector( G_p_f - G_p_Ci );
 
 		r.block<2,1>( i*2, 0 ) = z.row( i ).transpose() - cameraProject( C_p_f(0), C_p_f(1), C_p_f(2) );
 		H_f.block<2,3>( i*2,0 ) = jacobianH( C_p_f(0), C_p_f(1), C_p_f(2), calib ) * CiG_q.toRotationMatrix();
