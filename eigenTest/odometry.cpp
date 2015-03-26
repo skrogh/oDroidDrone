@@ -590,7 +590,8 @@ void MSCKF::updateHeight( double height ) {
 	// Sensor residual
 	double r = height - x(0+4+2); // x(0+4+3) is G_p(2)
 	// Sensor model
-	MatrixXd H << MatrixXd::Zero( 1, 5 ), 1, MatrixXd::Zero( 1, sigma.cols() - 6 );
+	MatrixXd H( 1, sigma.cols() );
+	H << MatrixXd::Zero( 1, 5 ), 1, MatrixXd::Zero( 1, sigma.cols() - 6 );
 
 	// Kalman gain
 	MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
