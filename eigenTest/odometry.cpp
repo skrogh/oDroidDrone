@@ -582,7 +582,7 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 
 }
 
-void updateHeight( double height ) {
+void MSCKF::updateHeight( double height ) {
 
 
 	// Sensor noise
