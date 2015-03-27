@@ -65,14 +65,9 @@ int main( int argc, char** argv )
 	bool useHarrisDetector = false;
 	double k = 0.04;
 
-	Ptr<FeatureDetector> detector = FeatureDetector::create( "GFTT" );
+	Ptr<FeatureDetector> detector = GoodFeaturesToTrackDetector( maxCorners, qualityLevel,
+			minDistance, blockSize,´useHarrisDetector, k );
 	printParams( detector );
-	//detector->set( "maxCorners", maxCorners );
-	detector->set( "qualityLevel", qualityLevel );
-	detector->set( "minDistance", minDistance );
-	detector->set( "blockSize", blockSize );
-	detector->set( "useHarrisDetector", useHarrisDetector );
-	detector->set( "k", k );
 
 
 	std::vector<KeyPoint> keypoints_1, keypoints_2;
