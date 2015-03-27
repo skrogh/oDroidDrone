@@ -1,6 +1,6 @@
 CXX = g++ -O0 -g
-CFLAGS = `pkg-config --cflags opencv`
-LIBS = `pkg-config --libs opencv`
+CFLAGS = $(shell pkg-config --cflags opencv )
+LIBS = $(shell pkg-config --libs opencv )
 
 
 DEPS = 
@@ -11,10 +11,10 @@ OBJ = test.o
 all: test
 
 %.o: %.x $(DEPS)
-	$(CXX) $(CFLAGS) $(LIBS) -c -o $@ $<
+	$(CXX) $(CFLAGS) -c -o $@ $< $(LIBS)
 
 test: $(OBJ)
-	$(CXX) $(CFLAGS) $(LIBS) -o $@ $^
+	$(CXX) $(CFLAGS) -o $@ $^ $(LIBS)
 
 clean: 
 	$(RM) test *.o
