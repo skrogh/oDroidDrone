@@ -1,6 +1,6 @@
 CXX = g++ -O0 -g
-CFLAGS = $SHELL(pkg-config --cflags opencv)
-LIBS = $SHELL(pkg-config --libs opencv)
+CFLAGS = 'pkg-config --cflags opencv'
+LIBS = 'pkg-config --libs opencv'
 
 
 DEPS =
