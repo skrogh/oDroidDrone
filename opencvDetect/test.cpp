@@ -84,9 +84,9 @@ int main( int argc, char** argv )
 	extractor->compute( img_2, keypoints_2, descriptors_2 );
 
 	//-- Step 3: Matching descriptor vectors with a brute force matcher
-	Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("BruteForce");
-	std::vector< std::vector< DMatch > > matches;
-	matcher->knnMatch( descriptors_1, descriptors_2, matches, 1 );
+	BFMatcher matcher(NORM_HAMMING);
+	std::vector< DMatch > matches;
+	matcher.radiusMatch( descriptors_1, descriptors_2, matches, 10 );
 
 	//-- Draw matches
 	Mat img_matches;
