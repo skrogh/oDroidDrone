@@ -60,7 +60,7 @@ int main( int argc, char** argv )
 	//-- Step 1: Detect the keypoints using GFTT Detector
 	int maxCorners = 500;
 	double qualityLevel = 0.02;
-	double minDistance = 10;
+	double minDistance = 5;
 	int blockSize = 3;
 	bool useHarrisDetector = false;
 	double k = 0.04;
@@ -84,9 +84,9 @@ int main( int argc, char** argv )
 	extractor->compute( img_2, keypoints_2, descriptors_2 );
 
 	//-- Step 3: Matching descriptor vectors with a brute force matcher
-	BFMatcher matcher(NORM_HAMMING);
-	std::vector< std::vector< DMatch > > matches;
-	matcher.radiusMatch( descriptors_1, descriptors_2, matches, 10 );
+	BFMatcher matcher(NORM_HAMMING, true);
+	std::vector< DMatch > matches;
+	matcher.match( descriptors_1, descriptors_2, matches);
 
 	//-- Draw matches
 	Mat img_matches;
