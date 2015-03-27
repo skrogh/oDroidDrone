@@ -86,7 +86,7 @@ int main( int argc, char** argv )
 	//-- Step 3: Matching descriptor vectors with a brute force matcher
 	Ptr<DescriptorMatcher> matcher = DescriptorMatcher::create("BruteForce");
 	std::vector< std::vector< DMatch > > matches;
-	matcher->knnMatch( descriptors_1, descriptors_2, matches, 50 );
+	matcher->knnMatch( descriptors_1, descriptors_2, matches, 1 );
 
 	//-- Draw matches
 	Mat img_matches;
