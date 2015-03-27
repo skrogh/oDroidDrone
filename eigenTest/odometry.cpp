@@ -487,12 +487,18 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 }
 
 void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
+	//
+	// Append current state to frame FIFO
+	//
+	this->augmentState( );
+
 	// initialize H0 and r0
 	VectorXd r0( 0 );
 	MatrixXd H0( 0, sigma.cols() );
 	//
-	// Get r0 and H0
+	// Get max length of "living" feature r0 and H0
 	//
+	unsigned int longestLiving = 0;
 	for ( std::list<CameraMeas_t>::iterator meas_j = meas.begin(); meas_j != meas.end(); ) {
 		if ( meas_j->isLost ) {
 			// If more that, or 3 points, use for update
@@ -515,6 +521,8 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 			// in any case, remove it and advance
 			meas_j = meas.erase(meas_j);
 		} else {
+			// Set longest living
+			longestLiving = (meas_j->z.rows()>longestLiving)?meas_j->z.rows():longestLiving;
 			// Skip and advance
 			++meas_j;
 		}
@@ -577,14 +585,22 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 			// G_v_i
 			x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
 		}
-
 	}
+
+	//
+	// Remove all old and unused frames
+	//
+	this->removeOldStates( ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE - longestLiving );
 
 }
 
 void MSCKF::updateHeight( double height ) {
 	//
 	// TODO: check if outlier
+	//
+
+	//
+	// TODO: Optimize since H is very sparse (only one element)
 	//
 
 	// Sensor noise
