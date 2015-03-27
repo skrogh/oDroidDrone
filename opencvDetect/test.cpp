@@ -67,8 +67,6 @@ int main( int argc, char** argv )
 
 	GoodFeaturesToTrackDetector detector( maxCorners, qualityLevel,
 			minDistance, blockSize, useHarrisDetector, k );
-	printParams( detector );
-
 
 	std::vector<KeyPoint> keypoints_1, keypoints_2;
 
