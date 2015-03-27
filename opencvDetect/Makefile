@@ -10,8 +10,8 @@ OBJ = test.o
 
 all: test
 
-%.o: %.x $(DEPS)
-	$(CXX) $(CFLAGS) $(LIBS) -c -o $@ $<
+# %.o: %.x $(DEPS)
+#	$(CXX) $(CFLAGS) $(LIBS) -c -o $@ $<
 
 test: $(OBJ)
 	$(CXX) $(CFLAGS) $(LIBS) -o $@ $^
