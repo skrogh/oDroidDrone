@@ -67,7 +67,7 @@ int main( int argc, char** argv )
 
 	Ptr<FeatureDetector> detector = FeatureDetector::create( "GFTT" );
 	printParams( detector );
-	detector->set( "maxCorners", maxCorners );
+	//detector->set( "maxCorners", maxCorners );
 	detector->set( "qualityLevel", qualityLevel );
 	detector->set( "maxCorners", maxCorners );
 	detector->set( "minDistance", minDistance );
