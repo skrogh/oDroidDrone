@@ -85,7 +85,7 @@ int main( int argc, char** argv )
 
 	//-- Step 3: Matching descriptor vectors with a brute force matcher
 	BFMatcher matcher(NORM_HAMMING);
-	std::vector< DMatch > matches;
+	std::vector< std::vector< DMatch > > matches;
 	matcher.radiusMatch( descriptors_1, descriptors_2, matches, 10 );
 
 	//-- Draw matches
