@@ -65,15 +65,15 @@ int main( int argc, char** argv )
 	bool useHarrisDetector = false;
 	double k = 0.04;
 
-	Ptr<FeatureDetector> detector = GoodFeaturesToTrackDetector( maxCorners, qualityLevel,
+	GoodFeaturesToTrackDetector detector( maxCorners, qualityLevel,
 			minDistance, blockSize, useHarrisDetector, k );
 	printParams( detector );
 
 
 	std::vector<KeyPoint> keypoints_1, keypoints_2;
 
-	detector->detect( img_1, keypoints_1 );
-	detector->detect( img_2, keypoints_2 );
+	detector.detect( img_1, keypoints_1 );
+	detector.detect( img_2, keypoints_2 );
 
 
 	//-- Step 2: Calculate descriptors (feature vectors)
