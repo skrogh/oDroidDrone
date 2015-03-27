@@ -78,8 +78,8 @@ int main( int argc, char** argv )
 
 	std::vector<KeyPoint> keypoints_1, keypoints_2;
 
-	detector.detect( img_1, keypoints_1 );
-	detector.detect( img_2, keypoints_2 );
+	detector->detect( img_1, keypoints_1 );
+	detector->detect( img_2, keypoints_2 );
 
 	//-- Step 2: Calculate descriptors (feature vectors)
 	Ptr<DescriptorExtractor> extractor = DescriptorExtractor::create( "ORB" );
@@ -87,8 +87,8 @@ int main( int argc, char** argv )
 
 	Mat descriptors_1, descriptors_2;
 
-	extractor.compute( img_1, keypoints_1, descriptors_1 );
-	extractor.compute( img_2, keypoints_2, descriptors_2 );
+	extractor->compute( img_1, keypoints_1, descriptors_1 );
+	extractor->compute( img_2, keypoints_2, descriptors_2 );
 
 	//-- Step 3: Matching descriptor vectors with a brute force matcher
 	BFMatcher matcher(NORM_L2);
