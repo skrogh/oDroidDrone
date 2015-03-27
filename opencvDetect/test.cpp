@@ -63,7 +63,7 @@ int main( int argc, char** argv )
 	double minDistance = 10;
 	int blockSize = 3;
 	bool useHarrisDetector = false;
-	double k = 0.04
+	double k = 0.04;
 
 	Ptr<FeatureDetector> detector = FeatureDetector::create( "GFTT" );
 	printParams( detector );
