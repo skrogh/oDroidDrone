@@ -65,7 +65,8 @@ int main( int argc, char** argv )
 	bool useHarrisDetector = false;
 	double k = 0.04;
 
-	Ptr<FeatureDetector> detector = GoodFeaturesToTrackDetector();
+	Ptr<FeatureDetector> detector = GoodFeaturesToTrackDetector( maxCorners, qualityLevel,
+			minDistance, blockSize, useHarrisDetector, k );
 	printParams( detector );
 
 
