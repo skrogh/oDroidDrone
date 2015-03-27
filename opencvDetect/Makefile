@@ -3,8 +3,8 @@ CFLAGS = $SHELL(pkg-config --cflags opencv)
 LIBS = $SHELL(pkg-config --libs opencv)
 
 
-DEPS = odometry.hpp
-OBJ = test.o odometry.o
+DEPS =
+OBJ = test.o
 
 
 
