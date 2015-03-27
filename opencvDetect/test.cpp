@@ -69,7 +69,6 @@ int main( int argc, char** argv )
 	printParams( detector );
 	//detector->set( "maxCorners", maxCorners );
 	detector->set( "qualityLevel", qualityLevel );
-	detector->set( "maxCorners", maxCorners );
 	detector->set( "minDistance", minDistance );
 	detector->set( "blockSize", blockSize );
 	detector->set( "useHarrisDetector", useHarrisDetector );
