@@ -32,6 +32,7 @@ int main()
 	calib.sigma_wac = 0.1;
 	calib.sigma_Im = 40;
 	calib.sigma_hc = 0.05;
+	calib.minFrame = 1;
 
 	std::cout << "calib is:\n" << calib << std::endl;
 	MSCKF msckf( &calib );

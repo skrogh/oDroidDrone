@@ -149,6 +149,7 @@ Calib::Calib( ) {
 	// Options
 	//
 	maxFrame = ODO_MAX_FRAMES;                  // Maximum frames in FIFO
+	minFrame = 0;
 }
 
 std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
@@ -165,7 +166,8 @@ std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
 	"sigma_wgc: " << calib.sigma_wgc << " sigma_wac: " << calib.sigma_wac << "\n" <<
 	"sigma_Im: " << calib.sigma_Im << "\n" <<
 	"sigma_hc: " << calib.sigma_hc << "\n" <<
-	"maxFrame: " << calib.maxFrame ;
+	"maxFrame: " << calib.maxFrame << "\n" <<
+	"minFrame: " << calib.minFrame ;
 }
 
 
@@ -353,7 +355,14 @@ void MSCKF::augmentState( void ) {
 			sigma.block( 0, 0, ODO_SIGMA_FRAME_SIZE, sigma.cols() - ODO_SIGMA_FRAME_SIZE);
 }
 
-void MSCKF::removeOldStates( unsigned int n ) {
+void MSCKF::removeOldStates( int n ) {
+	//
+	// Skip if n < 1
+	//
+	if ( n < 1 )
+		return;
+
+
 	/*
 	** Remove the n oldest frames from the state and covariance
 	*/
@@ -590,6 +599,12 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 	//
 	// Remove all old and unused frames
 	//
+
+	//
+	// Make sure that we let atleast "minFrame" frames live
+	//
+	if ( longestLiving < calib->minFrame )
+		longestLiving = calib->minFrame;
 	this->removeOldStates( ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE - longestLiving );
 
 }

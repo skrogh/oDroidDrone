@@ -6,40 +6,40 @@
 
 
 void printParams( cv::Algorithm* algorithm ) {
-    std::vector<std::string> parameters;
-    algorithm->getParams(parameters);
+	std::vector<std::string> parameters;
+	algorithm->getParams(parameters);
 
-    for (int i = 0; i < (int) parameters.size(); i++) {
-        std::string param = parameters[i];
-        int type = algorithm->paramType(param);
-        std::string helpText = algorithm->paramHelp(param);
-        std::string typeText;
+	for (int i = 0; i < (int) parameters.size(); i++) {
+		std::string param = parameters[i];
+		int type = algorithm->paramType(param);
+		std::string helpText = algorithm->paramHelp(param);
+		std::string typeText;
 
-        switch (type) {
-        case cv::Param::BOOLEAN:
-            typeText = "bool";
-            break;
-        case cv::Param::INT:
-            typeText = "int";
-            break;
-        case cv::Param::REAL:
-            typeText = "real (double)";
-            break;
-        case cv::Param::STRING:
-            typeText = "string";
-            break;
-        case cv::Param::MAT:
-            typeText = "Mat";
-            break;
-        case cv::Param::ALGORITHM:
-            typeText = "Algorithm";
-            break;
-        case cv::Param::MAT_VECTOR:
-            typeText = "Mat vector";
-            break;
-        }
-        std::cout << "Parameter '" << param << "' type=" << typeText << " help=" << helpText << std::endl;
-    }
+		switch (type) {
+		case cv::Param::BOOLEAN:
+			typeText = "bool";
+			break;
+		case cv::Param::INT:
+			typeText = "int";
+			break;
+		case cv::Param::REAL:
+			typeText = "real (double)";
+			break;
+		case cv::Param::STRING:
+			typeText = "string";
+			break;
+		case cv::Param::MAT:
+			typeText = "Mat";
+			break;
+		case cv::Param::ALGORITHM:
+			typeText = "Algorithm";
+			break;
+		case cv::Param::MAT_VECTOR:
+			typeText = "Mat vector";
+			break;
+		}
+		std::cout << "Parameter '" << param << "' type=" << typeText << " help=" << helpText << std::endl;
+	}
 }
 
 using namespace cv;

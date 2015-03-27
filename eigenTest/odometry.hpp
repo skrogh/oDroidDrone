@@ -50,6 +50,7 @@ public:
 	// Options
 	//
 	unsigned int maxFrame; // Maximum frames in FIFO
+	unsigned int minFrame; // Minimun frames in FIFO (is smaller before the first minFrames). Is used if features are only added when there is a match
 
 	Calib( );
 	friend std::ostream& operator<<( std::ostream& out, const Calib& calib );
@@ -94,7 +95,7 @@ public:
 	// augment state
 	void augmentState( void );
 	// remove n old states
-	void removeOldStates( unsigned int n );
+	void removeOldStates( int n );
 	// updateCamera
 	void updateCamera( std::list<CameraMeas_t>& meas );
 	// 	triangluate
