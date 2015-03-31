@@ -6,7 +6,7 @@
 
 using namespace cv;
 
-FeatureDetector::FeatureDetector( void ) {
+CameraFeatures::CameraFeatures( void ) {
 	int maxCorners = 500;
 	double qualityLevel = 0.02;
 	double minDistance = 5;
@@ -22,7 +22,7 @@ FeatureDetector::FeatureDetector( void ) {
 	matcher = BFMatcher(NORM_HAMMING, true);
 }
 
-void FeatureDetector::detectFeatures( void ) {
+void CameraFeatures::detectFeatures( void ) {
 	Mat image;
 
 	std::vector<KeyPoint> keypointsNew;
