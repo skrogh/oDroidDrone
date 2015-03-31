@@ -2,6 +2,8 @@
 #include <iostream>
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
+#include <Eigen/Dense>
+#include "feature.hpp"
 #ifndef _FEATURE_H_
 #define _FEATURE_H_
 
@@ -24,12 +26,14 @@ private:
 	//
 	std::vector<KeyPoint> keypointsOld;
 	Mat descriptorsOld;
-	std::vector< DMatch > matches;
+	// iterators pointing to CameraMeas of keypointOld
+	std::vector< std::list<CameraMeas_t>::iterator > linksOld;
+
 public:
 	// Constructor. TODO: add parameters
 	CameraFeatures( void );
 	// detect features and add to feature vector
-	void detectFeatures( void );
+	void detectFeatures( const Mat& image, std::list<CameraMeas_t>& meas );
 };
 
 #endif
