@@ -6,7 +6,7 @@
 #include <Eigen/Dense>
 
 typedef struct{
-	MatrixX2d z; // length is stored as number of elements in z
+	Eigen::MatrixX2d z; // length is stored as number of elements in z
 	bool isLost; // Set if it is no longer tracked in current frame
 	// TODO: add feature description here?
 	int linkLink;
@@ -21,7 +21,7 @@ public:
 	std::vector< std::list<CameraMeas_t>::iterator > link;
 
 	void addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, const std::vector<cv::KeyPoint> &keypointsNew,
-		const std::vector< DMatch >& matches );
+		const std::vector<cv::DMatch>& matches );
 	void linkBack( std::list<CameraMeas_t>::iterator& feature, int linkLink );
 	void addToFeature( std::list<CameraMeas_t>::iterator& feature, double x, double y );
 	std::list<CameraMeas_t>::iterator addFeature( );
