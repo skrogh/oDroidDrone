@@ -4,9 +4,9 @@
 #include "opencv2/features2d/features2d.hpp"
 #include "feature.hpp"
 
-FeatureDetector::FeatureDetector( void ) {
-	using namespace cv;
+using namespace cv;
 
+FeatureDetector::FeatureDetector( void ) {
 	int maxCorners = 500;
 	double qualityLevel = 0.02;
 	double minDistance = 5;
@@ -23,8 +23,6 @@ FeatureDetector::FeatureDetector( void ) {
 }
 
 void FeatureDetector::detectFeatures( void ) {
-	using namespace cv;
-
 	Mat image;
 
 	std::vector<KeyPoint> keypointsNew;
