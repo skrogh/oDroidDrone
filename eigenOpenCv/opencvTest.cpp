@@ -25,6 +25,16 @@ int main( int argc, char** argv )
 		cap.grab();
 		cap.retrieve( image );
 
+
+
+		for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
+			if ( meas_j->z.rows() > 2 ) {
+				meas_j = removeFeature( meas_j );
+			} else {
+				++meas_j;
+			}
+		}
+
 		cameraDetector.detectFeatures( image, cameraMeasurements );
 		std::cout << cameraMeasurements.meas.size() << " Total features" << std::endl;
 		// Iterate over meas and draw all non lost elements:
