@@ -28,4 +28,4 @@ public:
 	std::list<CameraMeas_t>::iterator removeFeature( std::list<CameraMeas_t>::iterator& feature );
 };
 
-#endif
+#endif //_COMMON_H_
