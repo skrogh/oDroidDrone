@@ -26,7 +26,7 @@ int main( int argc, char** argv )
 		cap.grab();
 		cap.retrieve( image );
 
-		detectFeatures( image, meas );
+		cameraFeatures.detectFeatures( image, meas );
 		cv::imshow("Matches", image );
 	}
 
