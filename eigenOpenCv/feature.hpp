@@ -27,7 +27,7 @@ private:
 	std::vector<KeyPoint> keypointsOld;
 	Mat descriptorsOld;
 	// iterators pointing to CameraMeas of keypointOld
-	std::vector< std::list<CameraMeas_t>::iterator > linksOld;
+	std::vector< std::list<CameraMeas_t>::iterator > linkOld;
 
 public:
 	// Constructor. TODO: add parameters
