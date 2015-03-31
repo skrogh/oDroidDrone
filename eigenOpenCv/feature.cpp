@@ -28,12 +28,19 @@ void CameraDetector::detectFeatures( const Mat& image, CameraMeasurements& camer
 	std::vector<KeyPoint> keypointsNew;
 	detector.detect( image, keypointsNew );
 
+	std::cout << keypointsNew.size() << " Keypoints" << std::endl;
+
 	Mat descriptorsNew;
 	extractor->compute( image, keypointsNew, descriptorsNew );
 
 	std::vector< DMatch > matches;
 	matcher.match( descriptorsOld, descriptorsNew, matches );
 
+	std::cout << matches.size() << " Matches" << std::endl;
+
 	cameraMeasurements.addFeatures( keypointsOld, keypointsNew,
 		matches );
+
+	keypointsOld = keypointsNew;
+	descriptorsOld = descriptorsNew;
 }
