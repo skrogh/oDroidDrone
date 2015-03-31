@@ -46,7 +46,7 @@ void CameraFeatures::detectFeatures( const Mat& image, std::list<CameraMeas_t>& 
 	linksNew.assign( keypointsNew.size(), meas.end() );
 
 	// Go through all features with a match, add them at the correct place
-	for ( int i = 0; i < matches.size(), i++ ) {
+	for ( int i = 0; i < matches.size(); i++ ) {
 		// Check if this feature is in meas
 		if ( linkOld[matches[i].queryIdx] != meas.end() ) {
 			//
