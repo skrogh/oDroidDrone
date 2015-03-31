@@ -31,7 +31,7 @@ int main( int argc, char** argv )
 		// Iterate over meas and draw all non lost elements:
 		for ( std::list<CameraMeas_t>::iterator meas_j = meas.begin(); meas_j != meas.end(); ++meas_j ) {
 			if ( !meas_j->isLost ) {
-				Eigen::MatrixXd& z = meas_j->z;
+				Eigen::MatrixX2d& z = meas_j->z;
 				cv::Point pt = Point( z( z.rows()-1, 0 ), z( z.rows()-1, 0 ) );
 				cv::circle( image, pt, 4, Scalar( 255, 0, 0 ) );
 			}
