@@ -6,7 +6,7 @@
 #include "common.hpp"
 
 void CameraMeasurements::addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, const std::vector<cv::KeyPoint> &keypointsNew,
-		const std::vector< DMatch >& matches ) {
+		const std::vector< cv::DMatch >& matches ) {
 	linkOld = link;
 
 
