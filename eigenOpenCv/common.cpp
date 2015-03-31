@@ -1,3 +1,9 @@
+#include <stdio.h>
+#include <iostream>
+#include "opencv2/core/core.hpp"
+#include <Eigen/Dense>
+#include "common.hpp"
+
 void CameraMeasurements::addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, const std::vector<cv::KeyPoint> &keypointsNew,
 		const std::vector< DMatch >& matches ) {
 	linkOld = link;
