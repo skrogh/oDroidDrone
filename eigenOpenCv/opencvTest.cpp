@@ -17,7 +17,7 @@ int main( int argc, char** argv )
 	cv::namedWindow( "Matches" );
 
 	int key;
-	while( ( key = cv::waitKey(0) ) != 27 ) {
+	while( ( key = cv::waitKey(1) ) != 27 ) {
 		cap.grab();
 		cap.grab();
 		cap.grab();
@@ -36,7 +36,7 @@ int main( int argc, char** argv )
 			}
 		}
 
-		if( key != '\n' ) {
+		if( key == '\n' ) {
 			for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
 				meas_j = cameraMeasurements.removeFeature( meas_j );
 			}
