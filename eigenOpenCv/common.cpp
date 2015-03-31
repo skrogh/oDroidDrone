@@ -59,8 +59,8 @@ void CameraMeasurements::linkBack( std::list<CameraMeas_t>::iterator& feature, i
 void CameraMeasurements::addToFeature( std::list<CameraMeas_t>::iterator& feature,
 		double x, double y ) {
 	// Add feature TODO: consider if theis matrix should be made a vector
-	Eignen::MatrixX2d& z = feature->z;
-	z.conservativeResize ( z.rows() + 1, Eignen::NoChange );
+	Eigen::MatrixX2d& z = feature->z;
+	z.conservativeResize ( z.rows() + 1, Eigen::NoChange );
 	z.block<1,2>( z.rows()-1, 0 ) <<
 			x,
 			y;
@@ -86,5 +86,5 @@ std::list<CameraMeas_t>::iterator CameraMeasurements::removeFeature( std::list<C
 	if( feature->linkLink >= 0 ) {
 		link[ feature->linkLink ] = meas.end();
 	}
-	return erase( feature );
+	return meas.erase( feature );
 }
