@@ -2,6 +2,7 @@
 #include <iostream>
 #include "opencv2/core/core.hpp"
 #include <Eigen/Dense>
+#include <list>
 #include "common.hpp"
 
 void CameraMeasurements::addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, const std::vector<cv::KeyPoint> &keypointsNew,

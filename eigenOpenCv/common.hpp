@@ -4,6 +4,7 @@
 #include <iostream>
 #include "opencv2/core/core.hpp"
 #include <Eigen/Dense>
+#include <list>
 
 typedef struct{
 	Eigen::MatrixX2d z; // length is stored as number of elements in z
