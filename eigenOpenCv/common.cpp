@@ -1,4 +1,4 @@
-CameraMeasurements::addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, const std::vector<cv::KeyPoint> &keypointsNew,
+void CameraMeasurements::addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, const std::vector<cv::KeyPoint> &keypointsNew,
 		const std::vector< DMatch >& matches ) {
 	linkOld = link;
 
@@ -42,9 +42,7 @@ CameraMeasurements::addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, 
 			this->linkBack( link[matches[i].trainIdx], matches[i].trainIdx );
 		}
 	}
-
 }
-
 
 
 void CameraMeasurements::linkBack( std::list<CameraMeas_t>::iterator& feature, int linkLink ) {
