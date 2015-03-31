@@ -28,7 +28,7 @@ public:
 	// Constructor. TODO: add parameters
 	CameraDetector( void );
 	// detect features and add to feature vector
-	void detectFeatures( const Mat& image, std::list<CameraMeas_t>& meas );
+	void detectFeatures( const Mat& image, CameraMeasurements& cameraMeasurements );
 };
 
 #endif
