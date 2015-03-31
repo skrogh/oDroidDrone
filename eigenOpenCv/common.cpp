@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include "opencv2/core/core.hpp"
+#include "opencv2/core/types.hpp"
 #include <Eigen/Dense>
 #include <list>
 #include "common.hpp"
@@ -60,7 +61,7 @@ void CameraMeasurements::addToFeature( std::list<CameraMeas_t>::iterator& featur
 		double x, double y ) {
 	// Add feature TODO: consider if theis matrix should be made a vector
 	MatrixX2d& z = feature->z;
-	z.conservativeResize ( z.rows() + 1, NoChange );
+	z.conservativeResize ( z.rows() + 1, Eignen::NoChange );
 	z.block<1,2>( z.rows()-1, 0 ) <<
 			x,
 			y;
