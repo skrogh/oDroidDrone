@@ -29,7 +29,7 @@ void CameraMeasurements::addFeatures( const std::vector<cv::KeyPoint> &keypoints
 			link[matches[i].trainIdx] = linkOld[matches[i].queryIdx];
 			// Add to feature
 			this->addToFeature( link[matches[i].trainIdx],
-					keypointsNew[matches[i].trainIdx].pt.x, keypointsNew[matches[i].trainIdx].pt.x );
+					keypointsNew[matches[i].trainIdx].pt.x, keypointsNew[matches[i].trainIdx].pt.y );
 			// Add link back
 			this->linkBack( link[matches[i].trainIdx], matches[i].trainIdx );
 
