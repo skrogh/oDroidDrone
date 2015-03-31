@@ -25,7 +25,7 @@ FeatureDetector::FeatureDetector( void ) {
 void FeatureDetector::detectFeatures( void ) {
 	using namespace cv;
 
-	Mat image = /*load some image*/;
+	Mat image;
 
 	std::vector<KeyPoint> keypointsNew;
 	detector.detect( image, keypointsNew );
