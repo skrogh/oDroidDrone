@@ -1,11 +1,11 @@
+#ifndef _FEATURE_H_
+#define _FEATURE_H_
 #include <stdio.h>
 #include <iostream>
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
 #include <Eigen/Dense>
-#include "feature.hpp"
-#ifndef _FEATURE_H_
-#define _FEATURE_H_
+#include "odometry.hpp"
 
 using namespace cv;
 
