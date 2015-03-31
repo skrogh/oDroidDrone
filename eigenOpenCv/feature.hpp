@@ -1,7 +1,12 @@
+#include <stdio.h>
+#include <iostream>
+#include "opencv2/core/core.hpp"
+#include "opencv2/features2d/features2d.hpp"
 #ifndef _FEATURE_H_
 #define _FEATURE_H_
 
 class FeatureDetector {
+	using namespace cv;
 private:
 	//
 	// Interfaces for detection, extraction and matching
