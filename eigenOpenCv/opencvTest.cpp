@@ -18,12 +18,16 @@ int main( int argc, char** argv )
 
 	int key;
 	while( ( key = cv::waitKey(1) ) != 27 ) {
+		/*
 		cap.grab();
 		cap.grab();
 		cap.grab();
 		cap.grab();
 		cap.grab();
 		cap.retrieve( image );
+		*/
+
+		cap.read( image );
 
 
 		cameraDetector.detectFeatures( image, cameraMeasurements );
