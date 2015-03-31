@@ -5,8 +5,9 @@
 #ifndef _FEATURE_H_
 #define _FEATURE_H_
 
+using namespace cv;
+
 class FeatureDetector {
-	using namespace cv;
 private:
 	//
 	// Interfaces for detection, extraction and matching
