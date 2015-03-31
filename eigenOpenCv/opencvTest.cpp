@@ -29,7 +29,7 @@ int main( int argc, char** argv )
 
 		for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
 			if ( meas_j->z.rows() > 2 ) {
-				meas_j = removeFeature( meas_j );
+				meas_j = cameraMeasurements.removeFeature( meas_j );
 			} else {
 				++meas_j;
 			}
