@@ -14,6 +14,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <list>
+#include "common.h"
 
 using namespace Eigen;
 
@@ -103,4 +104,4 @@ public:
 };
 
 
-#endif //_ODOMETRY_H_
+#endif _ODOMETRY_H_

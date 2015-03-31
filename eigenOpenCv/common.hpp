@@ -20,7 +20,7 @@ public:
 	//
 	std::vector< std::list<CameraMeas_t>::iterator > link;
 
-	addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, const std::vector<cv::KeyPoint> &keypointsNew,
+	void addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, const std::vector<cv::KeyPoint> &keypointsNew,
 		const std::vector< DMatch >& matches );
 	void linkBack( std::list<CameraMeas_t>::iterator& feature, int linkLink );
 	void addToFeature( std::list<CameraMeas_t>::iterator& feature, double x, double y );
