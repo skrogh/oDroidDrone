@@ -16,8 +16,9 @@ int main( int argc, char** argv )
 
 	cv::namedWindow( "Matches" );
 
-	int key;
-	while( ( key = cv::waitKey(1) ) != 27 ) {
+	int key == 0;
+	/*while( ( key = cv::waitKey(1) ) != 27 ) {*/
+	while( key++ < 20 {
 		/*
 		cap.grab();
 		cap.grab();
@@ -40,11 +41,13 @@ int main( int argc, char** argv )
 			}
 		}
 
+/*
 		if( key == '\n' ) {
 			for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
 				meas_j = cameraMeasurements.removeFeature( meas_j );
 			}
 		}
+*/
 
 		std::cout << cameraMeasurements.meas.size() << " Total features" << std::endl;
 		// Iterate over meas and draw all non lost elements:
@@ -63,7 +66,7 @@ int main( int argc, char** argv )
 			}
 		}*/
 
-		cv::imshow("Matches", image );
+		//cv::imshow("Matches", image );
 	}
 
 
