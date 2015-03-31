@@ -1,5 +1,5 @@
 CXX = g++ -O0 -g
-CPPFLAGS = $(shell pkg-config --CPPFLAGS opencv )
+CPPFLAGS = $(shell pkg-config --cflags opencv )
 LIBS = $(shell pkg-config --libs opencv )
 
 
