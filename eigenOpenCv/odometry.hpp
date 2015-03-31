@@ -14,7 +14,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <list>
-#include "common.h"
+#include "common.hpp"
 
 using namespace Eigen;
 
