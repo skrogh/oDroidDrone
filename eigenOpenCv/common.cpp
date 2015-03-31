@@ -19,7 +19,7 @@ void CameraMeasurements::addFeatures( const std::vector<cv::KeyPoint> &keypoints
 	link.assign( keypointsNew.size(), meas.end() );
 
 	// Go through all features with a match, add them at the correct place
-	for ( int i = 0; i < matches.size(); i++ ) {
+	for ( int i = 0; i < matches.size(); i++ ) if ( matches[i].distance < 20 ) {
 		// Check if this feature is in meas
 		if ( linkOld[matches[i].queryIdx] != meas.end() ) {
 			//
