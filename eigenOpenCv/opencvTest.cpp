@@ -16,7 +16,7 @@ int main( int argc, char** argv )
 
 	cv::namedWindow( "Matches" );
 
-	int key == 0;
+	int key = 0;
 	/*while( ( key = cv::waitKey(1) ) != 27 ) {*/
 	while( key++ < 20 ) {
 		/*
