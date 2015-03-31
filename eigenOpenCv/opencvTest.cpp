@@ -13,7 +13,7 @@ int main( int argc, char** argv )
 	cv::Mat image;
 	std::list<CameraMeas_t>::iterator meas;
 
-	CameraFeatures cameraFeatures( );
+	CameraFeatures cameraFeatures = CameraFeatures( );
 
 
 	cv::namedWindow( "Matches" );
