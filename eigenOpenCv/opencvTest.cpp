@@ -26,7 +26,7 @@ int main( int argc, char** argv )
 		cap.retrieve( image );
 
 		cameraDetector.detectFeatures( image, cameraMeasurements );
-		std::cout << cameraMeasurements.meas.size() << std::lend;
+		std::cout << cameraMeasurements.meas.size() << std::endl;
 		// Iterate over meas and draw all non lost elements:
 		for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ++meas_j ) {
 			if ( !meas_j->isLost ) {
