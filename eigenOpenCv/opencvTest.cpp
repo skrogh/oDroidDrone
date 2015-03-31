@@ -29,7 +29,7 @@ int main( int argc, char** argv )
 		cameraDetector.detectFeatures( image, cameraMeasurements );
 
 		for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
-			if ( meas_j->z.rows() > 2 ) {
+			if ( meas_j->z.rows() > 5 ) {
 				meas_j = cameraMeasurements.removeFeature( meas_j );
 			} else {
 				++meas_j;
