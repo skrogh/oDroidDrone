@@ -26,6 +26,7 @@ int main( int argc, char** argv )
 		cap.retrieve( image );
 
 
+		cameraDetector.detectFeatures( image, cameraMeasurements );
 
 		for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
 			if ( meas_j->z.rows() > 2 ) {
@@ -35,7 +36,12 @@ int main( int argc, char** argv )
 			}
 		}
 
-		cameraDetector.detectFeatures( image, cameraMeasurements );
+		if( key != '\n' ) {
+			for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
+				meas_j = cameraMeasurements.removeFeature( meas_j );
+			}
+		}
+
 		std::cout << cameraMeasurements.meas.size() << " Total features" << std::endl;
 		// Iterate over meas and draw all non lost elements:
 		for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ++meas_j ) {
