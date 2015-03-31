@@ -29,7 +29,7 @@ void CameraFeatures::detectFeatures( void ) {
 	detector.detect( image, keypointsNew );
 
 	Mat descriptorsNew;
-	extractor->compute( imgage, keypointsNew, descriptorsNew );
+	extractor->compute( image, keypointsNew, descriptorsNew );
 
 	matcher.match( descriptorsOld, descriptorsNew, matches );
 
