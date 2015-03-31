@@ -44,6 +44,7 @@ int main( int argc, char** argv )
 
 		std::cout << cameraMeasurements.meas.size() << " Total features" << std::endl;
 		// Iterate over meas and draw all non lost elements:
+		/*
 		for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ++meas_j ) {
 			if ( !meas_j->isLost ) {
 				Eigen::MatrixX2d& z = meas_j->z;
@@ -56,7 +57,7 @@ int main( int argc, char** argv )
 				}
 
 			}
-		}
+		}*/
 
 		cv::imshow("Matches", image );
 	}
