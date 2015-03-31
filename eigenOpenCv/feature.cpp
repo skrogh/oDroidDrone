@@ -71,8 +71,8 @@ void CameraFeatures::detectFeatures( const Mat& image, std::list<CameraMeas_t>& 
 			// Add a new entry
 			CameraMeas_t z;
 			std::list<CameraMeas_t>::iterator newFeature = meas.insert( meas.begin(), z );
-			newFeatur->z = Eigen::MatrixX2d( 2, 2 );
-			newFeatur->z << 
+			newFeature->z = Eigen::MatrixX2d( 2, 2 );
+			newFeature->z << 
 					keypointsOld[matches[i].queryIdx].pt.x, keypointsOld[matches[i].queryIdx].pt.y,
 					keypointsNew[matches[i].trainIdx].pt.x, keypointsNew[matches[i].trainIdx].pt.y;
 			// not lost (we just got it duh)
