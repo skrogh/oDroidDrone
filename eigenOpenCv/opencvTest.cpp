@@ -18,7 +18,7 @@ int main( int argc, char** argv )
 
 	int key = 0;
 	/*while( ( key = cv::waitKey(1) ) != 27 ) {*/
-	while( key++ < 20 ) {
+	while( key++ < 20/4*60 ) {
 		/*
 		cap.grab();
 		cap.grab();
