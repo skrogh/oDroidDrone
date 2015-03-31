@@ -68,7 +68,7 @@ void CameraFeatures::detectFeatures( const Mat& image, std::list<CameraMeas_t>& 
 			// Feature is new. In this case both old and new is to be added
 			//
 			CameraMeas_t z;
-			std::list<CameraMeas_t>::iterator newFeatur = meas.insert( meas.begin(), z );
+			std::list<CameraMeas_t>::iterator newFeature = meas.insert( meas.begin(), z );
 			newFeatur->z = Eigen::MatrixX2d( 2, 2 );
 			newFeatur->z << 
 					keypointsOld[matches[i].queryIdx].pt.x, keypointsOld[matches[i].queryIdx].pt.y,
