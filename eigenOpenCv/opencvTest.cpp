@@ -11,7 +11,7 @@ int main( int argc, char** argv )
 {
 	cv::VideoCapture cap(0);
 	cv::Mat image;
-	std::list<CameraMeas_t>::iterator meas;
+	std::list<CameraMeas_t> meas;
 
 	CameraFeatures cameraFeatures = CameraFeatures( );
 
@@ -27,6 +27,10 @@ int main( int argc, char** argv )
 		cap.retrieve( image );
 
 		cameraFeatures.detectFeatures( image, meas );
+
+		// Iterate over meas and draw all non lost elements:
+
+
 		cv::imshow("Matches", image );
 	}
 
