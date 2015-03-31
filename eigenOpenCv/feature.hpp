@@ -7,7 +7,7 @@
 
 using namespace cv;
 
-class FeatureDetector {
+class CameraFeatures {
 private:
 	//
 	// Interfaces for detection, extraction and matching
@@ -27,7 +27,7 @@ private:
 	std::vector< DMatch > matches;
 public:
 	// Constructor. TODO: add parameters
-	FeatureDetector( void );
+	CameraFeatures( void );
 	// detect features and add to feature vector
 	void detectFeatures( void );
 };
