@@ -56,12 +56,6 @@ public:
 	friend std::ostream& operator<<( std::ostream& out, const Calib& calib );
 };
 
-typedef struct{
-	MatrixX2d z; // length is stored as number of elements in z
-	bool isLost; // Set if it is no longer tracked in current frame
-	// TODO: add feature description here?
-} CameraMeas_t;
-
 class MSCKF {
 public:
 	//

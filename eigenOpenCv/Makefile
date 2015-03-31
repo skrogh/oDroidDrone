@@ -3,8 +3,8 @@ CPPFLAGS = $(shell pkg-config --cflags opencv )
 LIBS = $(shell pkg-config --libs opencv )
 
 
-DEPS = feature.hpp odometry.hpp
-OBJ = feature.o odometry.o
+DEPS = feature.hpp odometry.hpp common.hpp
+OBJ = feature.o odometry.o common.o
 
 
 

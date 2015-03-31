@@ -4,11 +4,11 @@
 #include "opencv2/features2d/features2d.hpp"
 #include <Eigen/Dense>
 #include "feature.hpp"
-#include "odometry.hpp"
+#include "common.hpp"
 
 using namespace cv;
 
-CameraFeatures::CameraFeatures( void ) {
+CameraDetector::CameraDetector( void ) {
 	int maxCorners = 500;
 	double qualityLevel = 0.02;
 	double minDistance = 5;
@@ -24,7 +24,7 @@ CameraFeatures::CameraFeatures( void ) {
 	matcher = BFMatcher(NORM_HAMMING, true);
 }
 
-void CameraFeatures::detectFeatures( const Mat& image, std::list<CameraMeas_t>& meas ) {
+void CameraDetector::detectFeatures( const Mat& image, CameraMeasurements& cameraMeasurements ) {
 
 	std::vector<KeyPoint> keypointsNew;
 	detector.detect( image, keypointsNew );
@@ -35,54 +35,6 @@ void CameraFeatures::detectFeatures( const Mat& image, std::list<CameraMeas_t>& 
 	std::vector< DMatch > matches;
 	matcher.match( descriptorsOld, descriptorsNew, matches );
 
-
-	// Go through all measurements and mark all of them as lost
-	for ( std::list<CameraMeas_t>::iterator meas_j = meas.begin(); meas_j != meas.end(); ++meas_j ) {
-		meas_j->isLost = true;
-	}
-
-	// mark all new links as no link
-	std::vector< std::list<CameraMeas_t>::iterator > linkNew;
-	linkNew.assign( keypointsNew.size(), meas.end() );
-
-	// Go through all features with a match, add them at the correct place
-	for ( int i = 0; i < matches.size(); i++ ) {
-		// Check if this feature is in meas
-		if ( linkOld[matches[i].queryIdx] != meas.end() ) {
-			//
-			// Feature is already in meas
-			//
-
-			// Link it
-			linkNew[matches[i].trainIdx] = linkOld[matches[i].queryIdx];
-			// Add feature TODO: consider if theis matrix should be made a vector
-			MatrixX2d& z = linkNew[matches[i].trainIdx]->z;
-			z.conservativeResize ( z.rows() + 1, NoChange );
-			z.block<1,2>( z.rows()-1, 0 ) <<
-					keypointsNew[matches[i].trainIdx].pt.x,
-					keypointsNew[matches[i].trainIdx].pt.y;
-			// It is no longer lost
-			linkNew[matches[i].trainIdx]->isLost = false;
-		} else {
-			//
-			// Feature is new. In this case both old and new is to be added
-			//
-
-			// Add a new entry
-			CameraMeas_t z;
-			std::list<CameraMeas_t>::iterator newFeature = meas.insert( meas.begin(), z );
-			newFeature->z = Eigen::MatrixX2d( 2, 2 );
-			newFeature->z << 
-					keypointsOld[matches[i].queryIdx].pt.x, keypointsOld[matches[i].queryIdx].pt.y,
-					keypointsNew[matches[i].trainIdx].pt.x, keypointsNew[matches[i].trainIdx].pt.y;
-			// not lost (we just got it duh)
-			newFeature->isLost = false;
-			// Link it
-			linkNew[matches[i].trainIdx] = newFeature;
-		}
-	}
-
-	keypointsOld = keypointsNew;
-	descriptorsOld = descriptorsNew;
-	linkOld = linkNew;
+	cameraMeasurements.addFeatures( keypointsOld, keypointsNew,
+		matches );
 }

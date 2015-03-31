@@ -11,14 +11,15 @@ int main( int argc, char** argv )
 {
 	cv::VideoCapture cap(0);
 	cv::Mat image;
-	std::list<CameraMeas_t> meas;
 
-	CameraFeatures cameraFeatures = CameraFeatures( );
+	CameraMeasurements cameraMeasurements;
+	CameraDetector cameraDetector = CameraDetector( );
 
 
 	cv::namedWindow( "Matches" );
 
-	while( cv::waitKey(0) != 27 ) {
+	int key;
+	while( ( key = cv::waitKey(0) ) != 27 ) {
 		cap.grab();
 		cap.grab();
 		cap.grab();
@@ -26,10 +27,10 @@ int main( int argc, char** argv )
 		cap.grab();
 		cap.retrieve( image );
 
-		cameraFeatures.detectFeatures( image, meas );
+		cameraDetector.detectFeatures( image, cameraMeasurements );
 
 		// Iterate over meas and draw all non lost elements:
-		for ( std::list<CameraMeas_t>::iterator meas_j = meas.begin(); meas_j != meas.end(); ++meas_j ) {
+		for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ++meas_j ) {
 			if ( !meas_j->isLost ) {
 				Eigen::MatrixX2d& z = meas_j->z;
 				cv::Point pt = Point( z( z.rows()-1, 0 ), z( z.rows()-1, 1 ) );

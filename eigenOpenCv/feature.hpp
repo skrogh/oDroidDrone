@@ -5,11 +5,11 @@
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
 #include <Eigen/Dense>
-#include "odometry.hpp"
+#include "common.hpp"
 
 using namespace cv;
 
-class CameraFeatures {
+class CameraDetector {
 private:
 	//
 	// Interfaces for detection, extraction and matching
@@ -21,17 +21,13 @@ private:
 	// Matcher
 	BFMatcher matcher;
 
-	//
-	// Variables to hold results
-	//
+	// iterators pointing to CameraMeas of keypointOld
 	std::vector<KeyPoint> keypointsOld;
 	Mat descriptorsOld;
-	// iterators pointing to CameraMeas of keypointOld
-	std::vector< std::list<CameraMeas_t>::iterator > linkOld;
 
 public:
 	// Constructor. TODO: add parameters
-	CameraFeatures( void );
+	CameraDetector( void );
 	// detect features and add to feature vector
 	void detectFeatures( const Mat& image, std::list<CameraMeas_t>& meas );
 };

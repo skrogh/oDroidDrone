@@ -4,6 +4,7 @@
 #include <cmath>
 
 #include "odometry.hpp"
+#include "common.hpp"
 
 using namespace Eigen;
 
