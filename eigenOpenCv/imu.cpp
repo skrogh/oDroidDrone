@@ -112,7 +112,7 @@ void Imu::imuThread( void *pointerToThis ) {
 	Imu* This = (Imu* )pointerToThis;
 
 	int rc; // return code
-	struct pollfd fdset;
+	struct pollfd fdset = {};
 	fdset.fd = This->gpioFd;
 	fdset.events = POLLPRI;
 
@@ -147,14 +147,13 @@ void Imu::gpioIntHandler( void ) {
 	int ret;
 	uint8_t tx[MESSAGE_LENGTH] = { 0 };
 	uint8_t rx[MESSAGE_LENGTH] = { 0 };
-	struct spi_ioc_transfer tr = {
-		.tx_buf = (unsigned long)tx,
-		.rx_buf = (unsigned long)rx,
-		.len = MESSAGE_LENGTH,
-		.delay_usecs = delay,
-		.speed_hz = speed,
-		.bits_per_word = bits,
-	};
+	struct spi_ioc_transfer tr = {};
+		tr.tx_buf = (unsigned long)tx;
+		tr.rx_buf = (unsigned long)rx;
+		tr.len = MESSAGE_LENGTH;
+		tr.delay_usecs = delay;
+		tr.speed_hz = speed;
+		tr.bits_per_word = bits;
 
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
@@ -178,9 +177,8 @@ void Imu::gpioIntHandler( void ) {
 		alpha[0], alpha[1], alpha[2] );
 	
 	struct timeval tv;
-		struct timezone tz = {
-		.tz_minuteswest = 0,
-		.tz_dsttime = 0
-	};
+	struct timezone tz = {};
+		tz.tz_minuteswest = 0;
+		tz.tz_dsttime = 0;
 	gettimeofday( &tv, &tz );
 }
