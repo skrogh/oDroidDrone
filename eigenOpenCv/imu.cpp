@@ -89,7 +89,21 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	//
 	// start thread
 	//
-	pthread_create( &thread, NULL, &Imu::imuThreadWrapper, this );
+	pthread_attr_t attr;
+	pthread_attr_init(&thAttr);
+
+	struct sched_param param;
+	int policy = SCHED_FIFO;
+	param.sched_priority = sched_get_priority_max( policy );
+
+	pthread_attr_setinheritsched( &attr, PTHREAD_EXPLICIT_SCHED );
+	pthread_attr_setschedpolicy( &attr, policy );
+	pthread_attr_setschedparam( &attr, &param );
+
+	ret = pthread_create( &thread, &attr, &Imu::imuThreadWrapper, this );
+	if (ret == -1) {
+		perror("Creating thread");
+	}
 }
 
 Imu::~Imu( ) {
