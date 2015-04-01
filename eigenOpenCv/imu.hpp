@@ -24,11 +24,11 @@ private:
 	//
 	// Spi settings
 	//
-	uint32_t mode = 0;
-	uint32_t bits = 8;
-	uint32_t speed = 6000000;
-	uint16_t delay = 0;
-	uint32_t timeout = 500;
+	uint32_t mode;
+	uint32_t bits;
+	uint32_t speed;
+	uint16_t delay;
+	uint32_t timeout;
 
 	//
 	// Thread handing
