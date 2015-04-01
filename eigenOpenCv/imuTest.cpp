@@ -6,7 +6,7 @@
 /** @function main */
 int main( int argc, char** argv )
 {
-	system("pause");
+	(void) system("pause");
 	std::cout << "Progam ended" << std::endl;
 	rdeturn 0;
 }
