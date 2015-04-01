@@ -107,7 +107,7 @@ void inline Imu::clearSpiInt( void ) {
 	read( gpioFd, &c, 1);
 }
 
-void Imu::imuThread( void *pointerToThis ) {
+static void * Imu::imuThread( void *pointerToThis ) {
 	// Lazy conversion
 	Imu* This = (Imu* )pointerToThis;
 
@@ -140,7 +140,7 @@ void Imu::imuThread( void *pointerToThis ) {
 			this->gpioIntHandler( );
 		}
 	}
-	pthread_exit(NULL);
+	return (NULL);
 }
 
 void Imu::gpioIntHandler( void ) {
