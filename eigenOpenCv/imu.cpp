@@ -89,7 +89,7 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	//
 	// start thread
 	//
-	pthread_create( &thread, NULL, &Imu::imuThread, this );
+	pthread_create( &thread, NULL, &Imu::imuThreadWrapper, this );
 }
 
 Imu::~Imu( ) {
@@ -107,24 +107,21 @@ void inline Imu::clearSpiInt( void ) {
 	read( gpioFd, &c, 1);
 }
 
-static void * Imu::imuThread( void *pointerToThis ) {
-	// Lazy conversion
-	Imu* This = (Imu* )pointerToThis;
-
+void Imu::imuThread( void ) {
 	int rc; // return code
 	struct pollfd fdset = {};
-	fdset.fd = This->gpioFd;
+	fdset.fd = gpioFd;
 	fdset.events = POLLPRI;
 
-	This->clearSpiInt();
+	this->clearSpiInt();
 
 	while( !endThread ) {
 		fdset.revents = 0;
 
 		// start waiting for next interrupt
-		rc = poll( &fdset, 1, This->timeout );
+		rc = poll( &fdset, 1, timeout );
 		// clear interrupt
-		This->clearSpiInt();
+		this->clearSpiInt();
 
 		// Check if interrupt request failed
 		if (rc < 0) {
