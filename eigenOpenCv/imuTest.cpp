@@ -6,7 +6,9 @@
 /** @function main */
 int main( int argc, char** argv )
 {
-	int wait;
+	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
+
+	char wait;
 	std::cout << "Press a key..." << std::endl;
 	std::cin >> wait;
 	std::cout << "Progam ended" << std::endl;
