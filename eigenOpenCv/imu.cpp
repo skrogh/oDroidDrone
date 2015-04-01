@@ -48,7 +48,7 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	//
 	// Setup spi
 	//
-
+	int ret;
 	// spi mode
 	ret = ioctl(spiFd, SPI_IOC_WR_MODE, &mode);
 	if (ret == -1) {
@@ -89,7 +89,7 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	//
 	// start thread
 	//
-	pthread_create( &thread, NULL, Imu::imuThread, this );
+	pthread_create( &thread, NULL, &Imu::imuThread, this );
 }
 
 Imu::~Imu( ) {
@@ -98,7 +98,6 @@ Imu::~Imu( ) {
 
 	close(gpioFd);
 	close(spiFd);
-	close (logFd);
 }
 
 void inline Imu::clearSpiInt( void ) {
@@ -108,7 +107,7 @@ void inline Imu::clearSpiInt( void ) {
 	read( gpioFd, &c, 1);
 }
 
-void *Imu::imuThread( void *pointerToThis ) {
+void Imu::imuThread( void *pointerToThis ) {
 	// Lazy conversion
 	Imu* This = (Imu* )pointerToThis;
 
