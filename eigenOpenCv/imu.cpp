@@ -90,7 +90,7 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	// start thread
 	//
 	pthread_attr_t attr;
-	pthread_attr_init(&thAttr);
+	pthread_attr_init(&attr);
 
 	struct sched_param param;
 	int policy = SCHED_FIFO;
@@ -104,6 +104,8 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	if (ret == -1) {
 		perror("Creating thread");
 	}
+
+	pthread_attr_destroy(&attr);
 }
 
 Imu::~Imu( ) {
