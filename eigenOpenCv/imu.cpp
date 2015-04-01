@@ -20,6 +20,16 @@ void unpackFloats( uint8_t* from, float to[], uint32_t n ) {
 
 Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	//
+	// Init variables
+	//
+	endThread = false;
+	mode = 0;
+	bits = 8;
+	speed = 6000000;
+	delay = 0;
+	timeout = 500;
+
+	//
 	// open I/O files
 	//
 

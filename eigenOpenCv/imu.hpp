@@ -34,13 +34,13 @@ private:
 	// Thread handing
 	//
 	pthread_t thread;
-	bool volatile endThread = false;
+	bool volatile endThread;
 
 	//
 	void inline clearSpiInt( void );
 	void gpioIntHandler( void );
 	//
-	void *imuThread( void *This )
+	void *imuThread( void *This );
 
 public:
 
