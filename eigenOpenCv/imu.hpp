@@ -40,7 +40,7 @@ private:
 	void inline clearSpiInt( void );
 	void gpioIntHandler( void );
 	//
-	void imuThread( void *This );
+	static void * imuThread( void *This );
 
 public:
 
