@@ -132,6 +132,7 @@ void* Imu::imuThread( void ) {
 
 	this->clearSpiInt();
 
+	while( !endThread );
 	while( !endThread ) {
 		fdset.revents = 0;
 
