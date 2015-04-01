@@ -1,4 +1,4 @@
-CXX = g++ -O3 -g -pg
+CXX = g++ -O3 -g
 CPPFLAGS = $(shell pkg-config --cflags opencv )
 LIBS = $(shell pkg-config --libs opencv )
 
