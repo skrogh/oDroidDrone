@@ -8,7 +8,7 @@ int main( int argc, char** argv )
 {
 	int wait;
 	std::cout << "Press a key..." << std::endl;
-	std::in >> wait;
+	std::cin >> wait;
 	std::cout << "Progam ended" << std::endl;
 	return 0;
 }
