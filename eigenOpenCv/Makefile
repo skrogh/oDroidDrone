@@ -1,10 +1,10 @@
 CXX = g++ -O3 -g
 CPPFLAGS = $(shell pkg-config --cflags opencv )
-LIBS = $(shell pkg-config --libs opencv )
+LIBS = $(shell pkg-config --libs opencv ) -pthread
 
 
-DEPS = feature.hpp odometry.hpp common.hpp
-OBJ = feature.o odometry.o common.o
+DEPS = feature.hpp odometry.hpp common.hpp imu.hpp
+OBJ = feature.o odometry.o common.o imu.o
 
 
 
@@ -22,5 +22,8 @@ opencvTest: opencvTest.o $(OBJ)
 egienTest: egienTest.o $(OBJ)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
+imuTest: imuTest.o $(OBJ)
+	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
+
 clean: 
-	$(RM) test egienTest opencvTest *.o
+	$(RM) test egienTest opencvTest imuTest *.o

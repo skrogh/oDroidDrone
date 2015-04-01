@@ -17,41 +17,24 @@ int main( int argc, char** argv )
 	cv::namedWindow( "Matches" );
 
 	int key = 0;
-	/*while( ( key = cv::waitKey(1) ) != 27 ) {*/
-	while( key++ < 20 ) {
-		/*
+	while( ( key = cv::waitKey(1) ) != 27 ) {
 		cap.grab();
 		cap.grab();
 		cap.grab();
 		cap.grab();
 		cap.grab();
 		cap.retrieve( image );
-		*/
-
-		cap.read( image );
 
 
 		cameraDetector.detectFeatures( image, cameraMeasurements );
 
-		for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
-			if ( ( meas_j->z.rows() > 5 ) || ( meas_j->isLost ) ) {
-				meas_j = cameraMeasurements.removeFeature( meas_j );
-			} else {
-				++meas_j;
-			}
-		}
-
-/*
 		if( key == '\n' ) {
 			for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
 				meas_j = cameraMeasurements.removeFeature( meas_j );
 			}
 		}
-*/
 
-		std::cout << cameraMeasurements.meas.size() << " Total features" << std::endl;
 		// Iterate over meas and draw all non lost elements:
-		/*
 		for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ++meas_j ) {
 			if ( !meas_j->isLost ) {
 				Eigen::MatrixX2d& z = meas_j->z;
@@ -64,9 +47,9 @@ int main( int argc, char** argv )
 				}
 
 			}
-		}*/
+		}
 
-		//cv::imshow("Matches", image );
+		cv::imshow("Matches", image );
 	}
 
 
