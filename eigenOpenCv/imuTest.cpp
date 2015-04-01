@@ -6,7 +6,9 @@
 /** @function main */
 int main( int argc, char** argv )
 {
-	(void) system("PAUSE");
+	int wait;
+	std::cout << "Press a key..." << std::endl;
+	std::in >> wait;
 	std::cout << "Progam ended" << std::endl;
 	return 0;
 }
