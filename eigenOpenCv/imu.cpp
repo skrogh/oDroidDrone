@@ -107,7 +107,7 @@ void inline Imu::clearSpiInt( void ) {
 	read( gpioFd, &c, 1);
 }
 
-void Imu::imuThread( void ) {
+void* Imu::imuThread( void ) {
 	int rc; // return code
 	struct pollfd fdset = {};
 	fdset.fd = gpioFd;

@@ -43,7 +43,7 @@ private:
 	void imuThread( void );
 
 	static void * imuThreadWrapper( void *This )
-			{ ( (Imu *) This )->imuThread(); return NULL; }
+			{ return ( (Imu *) This )->imuThread(); }
 
 public:
 
