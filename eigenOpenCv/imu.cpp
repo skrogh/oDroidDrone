@@ -94,7 +94,7 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 
 Imu::~Imu( ) {
 	endThread = true;
-	pthread_join( &thread, NULL );
+	pthread_join( thread, NULL );
 
 	close(gpioFd);
 	close(spiFd);

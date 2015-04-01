@@ -8,5 +8,5 @@ int main( int argc, char** argv )
 {
 	(void) system("pause");
 	std::cout << "Progam ended" << std::endl;
-	rdeturn 0;
+	return 0;
 }
