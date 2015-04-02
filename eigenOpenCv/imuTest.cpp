@@ -16,13 +16,12 @@ int main( int argc, char** argv )
 
 	std::cout
 	<< std::fixed
-	<< std::setprecision(2)
-	<< std::setw(8);
+	<< std::setprecision(2);
 	ImuMeas_t element;
 	while( imu.fifoPop( element ) ) {
 		std::cout <<
 		"Acc: " <<
-		element.acc[0] << ", " << element.acc[1] << ", " <<  element.acc[2] << "\n" << 
+		std::setw(8) << element.acc[0] << ", " << element.acc[1] << ", " <<  element.acc[2] << "\n" << 
 		"Gyro: " <<
 		element.gyro[0] << ", " << element.gyro[1] << ", " <<  element.gyro[2] << "\n" << 
 		"Alpha: " <<
