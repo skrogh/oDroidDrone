@@ -126,9 +126,17 @@ void inline Imu::clearSpiInt( void ) {
 
 void* Imu::imuThread( void ) {
 	int rc; // return code
+
+	// Poll struct
 	struct pollfd fdset = {};
 	fdset.fd = gpioFd;
 	fdset.events = POLLPRI;
+
+	// Timing struct
+	struct timeval tv;
+	struct timezone tz = {};
+		tz.tz_minuteswest = 0;
+		tz.tz_dsttime = 0;
 
 	this->clearSpiInt();
 
@@ -139,6 +147,8 @@ void* Imu::imuThread( void ) {
 		rc = poll( &fdset, 1, timeout );
 		// clear interrupt
 		this->clearSpiInt();
+		// Get time
+		gettimeofday( &tv, &tz );
 
 		// Check if interrupt request failed
 		if (rc < 0) {
@@ -157,7 +167,7 @@ void* Imu::imuThread( void ) {
 	return (NULL);
 }
 
-void Imu::gpioIntHandler( void ) {
+void Imu::gpioIntHandler( const struct timeval& tv ) {
 	int ret;
 	uint8_t tx[MESSAGE_LENGTH] = { 0 };
 	uint8_t rx[MESSAGE_LENGTH] = { 0 };
@@ -182,17 +192,56 @@ void Imu::gpioIntHandler( void ) {
 	float alpha[3];
 	unpackFloats( &rx[sizeof(acc)+sizeof(gyro)], alpha, 3 );
 	uint32_t ping = unpackUint32( &rx[sizeof(acc)+sizeof(gyro)+sizeof(alpha)] );
-	
+	double dist = ping / ( 340.29 / 80000000 ) / 2;
+
+	ImuMeas_t element = {};
+	element.timeStamp = tv;
+	element.dist = dist;
+	for ( int i = 0; i < 3; i++ ) {
+		element.acc[i] = acc[i];
+		element.gyro[i] = gyro[i];
+		element.alpha[i] = alpha[i];
+	}
+	this->fifoPush( element );
+
+	/*
 	printf( "Acc: %3.3f\n     %3.3f\n     %3.3f\n",
 		acc[0], acc[1], acc[2] );
 	printf( "Gyro: %3.3f\n      %3.3f\n      %3.3f\n",
 		gyro[0], gyro[1], gyro[2] );
 	printf( "Alpha: %3.3f\n       %3.3f\n       %3.3f\n",
 		alpha[0], alpha[1], alpha[2] );
-	
-	struct timeval tv;
-	struct timezone tz = {};
-		tz.tz_minuteswest = 0;
-		tz.tz_dsttime = 0;
-	gettimeofday( &tv, &tz );
+	printf( "Dist: %3.3f\n",
+		ping / ( 340.29 / 80000000 ) / 2 );
+	*/
+
+}
+
+void Imu::fifoPush( const ImuMeas_t &element ) {
+	pthread_mutex_lock( &fifoMutex );
+	dataFifo.push_back( element );
+	pthread_mutex_unlock( &fifoMutex );
+}
+
+bool Imu::fifoPop( ImuMeas_t &element ) {
+	pthread_mutex_lock( &fifoMutex );
+	if( !dataFifo.empty() ) {
+		element = dataFifo.front( );
+		dataFifo.pop_front( );
+		pthread_mutex_unlock( &fifoMutex );
+		return true;
+	}
+	pthread_mutex_unlock( &fifoMutex );
+	return false;
+}
+
+bool Imu::fifoPeak( unsigned int n, ImuMeas_t &element ) {
+	pthread_mutex_unlock( &fifoMutex );
+	if( !dataFifo.size() > n ) {
+		element = dataFifo.at( n );
+		pthread_mutex_unlock( &fifoMutex );
+		return true;
+	}
+	pthread_mutex_unlock( &fifoMutex );
+	return false;
 }

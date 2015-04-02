@@ -14,13 +14,21 @@
 #include <linux/types.h>
 #include <linux/spi/spidev.h>
 #include <endian.h>
+#include <deque>
 
+
+typedef struct{
+	double acc[3];
+	double gyro[3];
+	double alpha[3];
+	double dist;
+	struct timeval tv;
+} ImuMeas_t;
 
 class Imu {
 private:
 	// filedescriptors
 	int gpioFd, spiFd;
-	// Spi settings
 	//
 	// Spi settings
 	//
@@ -35,22 +43,38 @@ private:
 	//
 	pthread_t thread;
 	bool volatile endThread;
+	pthread_mutex_t fifoMutex;
 
 	//
+	// Data FIFO
+	//
+	deque<ImuMeas_t> dataFifo;
+
+	//
+	// Functions
+	//
+
+	// Clear SPI interrupt
 	void inline clearSpiInt( void );
-	void gpioIntHandler( void );
-	//
+	// Interrupt handler
+	void gpioIntHandler( const struct timeval& tv );
+	// Interrupt thread
 	void* imuThread( void );
-
 	static void * imuThreadWrapper( void *This )
 			{ return ( ( (Imu *) This )->imuThread() ); }
 
 public:
-
-
-
 	Imu( const char *spiDevice, const char *gpioDevice );
 	~Imu( void );
+
+	// Push element into the fifo
+	void fifoPush( const ImuMeas_t &element );
+	// Pop ad copy to element.
+	// Retruns true if there was something to pop
+	bool fifoPop( ImuMeas_t &element );
+	// Peak at the n'th oldest element and copy it to element.
+	// Retruns true, if there was an element there.
+	bool fifoPeak( unsigned int n, ImuMeas_t &element );
 };
 
 #endif//_IMU_H_
