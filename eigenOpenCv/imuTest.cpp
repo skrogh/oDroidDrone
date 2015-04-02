@@ -11,6 +11,7 @@ int main( int argc, char** argv )
 	char wait;
 	std::cout << "Press a key..." << std::endl;
 	std::cin >> wait;
+	std::cout << "Got: " << imu.fifoSize() << " Imu samples" << std::endl;
 	std::cout << "Progam ended" << std::endl;
 	return 0;
 }
