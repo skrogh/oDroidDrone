@@ -496,7 +496,7 @@ void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<Matr
 	H0 = A * H_x;
 }
 
-void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
+void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 	//
 	// Append current state to frame FIFO
 	//
@@ -509,7 +509,7 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 	// Get max length of "living" feature r0 and H0
 	//
 	unsigned int longestLiving = 0;
-	for ( std::list<CameraMeas_t>::iterator meas_j = meas.begin(); meas_j != meas.end(); ) {
+	for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
 		if ( meas_j->isLost ) {
 			// If more that, or 3 points, use for update
 			if ( meas_j->z.rows() >= 3 ) {
@@ -529,7 +529,7 @@ void MSCKF::updateCamera( std::list<CameraMeas_t>& meas ) {
 				}
 			}
 			// in any case, remove it and advance
-			meas_j = meas.erase(meas_j);
+			meas_j = cameraMeasurements.remove( meas_j );
 		} else {
 			// Set longest living
 			longestLiving = (meas_j->z.rows()>longestLiving)?meas_j->z.rows():longestLiving;

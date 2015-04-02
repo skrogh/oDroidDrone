@@ -22,6 +22,7 @@ typedef struct{
 	double gyro[3];
 	double alpha[3];
 	double dist;
+	bool distValid;
 	struct timeval timeStamp;
 } ImuMeas_t;
 

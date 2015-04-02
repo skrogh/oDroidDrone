@@ -197,26 +197,13 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 	ImuMeas_t element = {};
 	element.timeStamp = tv;
 	element.dist = dist;
+	element.distValid = ( ping != 0  )
 	for ( int i = 0; i < 3; i++ ) {
 		element.acc[i] = acc[i];
 		element.gyro[i] = gyro[i];
 		element.alpha[i] = alpha[i];
 	}
 	this->fifoPush( element );
-
-	/*
-	printf( "Acc: %3.3f\n     %3.3f\n     %3.3f\n",
-		acc[0], acc[1], acc[2] );
-	printf( "Gyro: %3.3f\n      %3.3f\n      %3.3f\n",
-		gyro[0], gyro[1], gyro[2] );
-	printf( "Alpha: %3.3f\n       %3.3f\n       %3.3f\n",
-		alpha[0], alpha[1], alpha[2] );
-	*/
-	if( dist > 0.001 )
-	printf( "Dist: %3.3f\n",
-		dist );
-	
-
 }
 
 void Imu::fifoPush( const ImuMeas_t &element ) {

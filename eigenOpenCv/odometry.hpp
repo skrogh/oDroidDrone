@@ -92,11 +92,11 @@ public:
 	// remove n old states
 	void removeOldStates( int n );
 	// updateCamera
-	void updateCamera( std::list<CameraMeas_t>& meas );
+	void updateCamera( CameraMeasurements &cameraMeasurements );
 	// 	triangluate
 	Vector3d triangluate( MatrixX2d z );
 	// -marginalize
-	void marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 );
+	void marginalize( const MatrixX2d &z, const Vector3d &G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 );
 	// TODO: -isInlinerCamera
 	// updateHeight
 	void updateHeight( double height );
