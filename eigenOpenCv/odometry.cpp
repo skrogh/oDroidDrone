@@ -523,8 +523,8 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 				// If not a clear outlier:
 				if ( std::isfinite(G_p_fj(0)) && std::isfinite(G_p_fj(1)) && std::isfinite(G_p_fj(2)) ) {
 					// Marignalize:
-					VectorXd r0j( meas_j->z.rows()*2 );
-					MatrixXd H0j( meas_j->z.rows()*2, sigma.cols() );
+					VectorXd r0j( meas_j->z.rows()*2 - 3 );
+					MatrixXd H0j( meas_j->z.rows()*2 - 3, sigma.cols() );
 					this->marginalize( meas_j->z, G_p_fj, r0j, H0j );
 					// TODO: Check if inlier
 					// Add to huge H0 and r0 matrix
