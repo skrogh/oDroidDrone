@@ -493,11 +493,6 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 	Eigen::FullPivLU<MatrixXd> LU( H_f.transpose() );
 	MatrixXd A = LU.kernel().transpose();
 	// Marginalize
-	std::cout << "r0: " << r0.rows() << "x" << r0.cols() << std::endl;
-	std::cout << "r: " << r.rows() << "x" << r.cols() << std::endl;
-	std::cout << "A: " << A.rows() << "x" << A.cols() << std::endl;
-	std::cout << "H0: " << H0.rows() << "x" << H0.cols() << std::endl;
-	std::cout << "H_x: " << H_x.rows() << "x" << H_x.cols() << std::endl;
 	r0 = A * r;
 	H0 = A * H_x;
 }
