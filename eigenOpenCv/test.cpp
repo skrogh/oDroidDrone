@@ -90,6 +90,12 @@ int main( int argc, char** argv )
 			// Get time of image without delay
 			struct timeval imageTime;
 			timersub( &tv, &(element.timeStamp), &imageTime );
+
+			std::cout <<
+			"IMU time: " <<
+			element.timeStamp.tv_sec << "." << std::setfill('0') << std::setw(6) << element.timeStamp.tv_usec << "s\n" <<
+			"Image time: " <<
+			imageTime.tv_sec << "." << std::setfill('0') << std::setw(6) << imageTime.tv_usec << "s\n" <<
 			// If image is older that propagated point, update
 			if ( timercmp( &imageTime, &(element.timeStamp), < ) )
 				break;
