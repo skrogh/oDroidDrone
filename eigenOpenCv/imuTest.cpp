@@ -23,7 +23,7 @@ int main( int argc, char** argv )
 		"Time: " <<
 		element.timeStamp.tv_sec << "." << std::setfill('0') << std::setw(6) << element.timeStamp.tv_usec << "s\n" <<
 		"Acc: " <<
-		<< element.acc[0] << ", " << element.acc[1] << ", " <<  element.acc[2] << "\n" << 
+		element.acc[0] << ", " << element.acc[1] << ", " <<  element.acc[2] << "\n" << 
 		"Gyro: " <<
 		element.gyro[0] << ", " << element.gyro[1] << ", " <<  element.gyro[2] << "\n" << 
 		"Alpha: " <<
