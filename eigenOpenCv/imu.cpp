@@ -197,7 +197,7 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 	ImuMeas_t element = {};
 	element.timeStamp = tv;
 	element.dist = dist;
-	element.distValid = ( ping != 0  )
+	element.distValid = ( ping != 0  );
 	for ( int i = 0; i < 3; i++ ) {
 		element.acc[i] = acc[i];
 		element.gyro[i] = gyro[i];
