@@ -50,6 +50,13 @@ int main( int argc, char** argv )
 
 	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
 
+	// Wait for flightcontroller to start
+	{
+		std::cout << "Waiting for flightcontroller to boot" << std::endl;
+		ImuMeas_t element;
+		while( !imu.fifoPop( element ) );
+		std::cout << "Flightcontroller booted" << std::endl;
+	}
 
 	struct timeval tv;
 	struct timezone tz = {};
