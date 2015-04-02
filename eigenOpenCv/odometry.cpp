@@ -530,7 +530,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 				}
 			}
 			// in any case, remove it and advance
-			meas_j = cameraMeasurements.remove( meas_j );
+			meas_j = cameraMeasurements.removeFeature( meas_j );
 		} else {
 			// Set longest living
 			longestLiving = (meas_j->z.rows()>longestLiving)?meas_j->z.rows():longestLiving;
