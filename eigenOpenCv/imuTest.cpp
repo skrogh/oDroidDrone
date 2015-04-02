@@ -18,10 +18,14 @@ int main( int argc, char** argv )
 	<< std::fixed
 	<< std::setprecision(2);
 	ImuMeas_t element;
+	double timePrev = 0;
 	while( imu.fifoPop( element ) ) {
+		double timeNow = element.timeStamp.tv_sec + element.timeStamp.tv_usec/1000000;
 		std::cout <<
 		"Time: " <<
 		element.timeStamp.tv_sec << "." << std::setfill('0') << std::setw(6) << element.timeStamp.tv_usec << "s\n" <<
+		"Delta time: " <<
+		timeNow - timePrev << "s\n" <<
 		"Acc: " <<
 		element.acc[0] << ", " << element.acc[1] << ", " <<  element.acc[2] << "\n" << 
 		"Gyro: " <<
@@ -30,6 +34,7 @@ int main( int argc, char** argv )
 		element.alpha[0] << ", " << element.alpha[1] << ", " <<  element.alpha[2] << "\n" << 
 		"Dist: " <<
 		element.dist << "\n" << std::endl;
+		timePrev = timneNow;
 	}
 	std::cout << "Progam ended" << std::endl;
 	return 0;
