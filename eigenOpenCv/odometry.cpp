@@ -135,7 +135,8 @@ Calib::Calib( ) {
 	//
 	g = 0;           // Gravitational acceleration [m/s^2]
 	delta_t = 1;     // Time between IMU data [s]
-	imageOffset = {}; // Time delay for images [s]
+	imageOffset.tv_sec = 0; // Time delay for images [s]
+	imageOffset.tv_usec = 0; // Time delay for images [us]
 	//
 	// Noise levels
 	//
