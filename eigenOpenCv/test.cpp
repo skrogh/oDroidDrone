@@ -90,7 +90,7 @@ int main( int argc, char** argv )
 
 			// Get time of image without delay
 			struct timeval imageTime;
-			timersub( &tv, &(element.timeStamp), &imageTime );
+			timersub( &tv, &(calib.imageOffset), &imageTime );
 
 			std::cout <<
 			"IMU time: " <<
