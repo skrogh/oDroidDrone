@@ -13,7 +13,7 @@ int main( int argc, char** argv )
 	std::cin >> wait;
 	std::cout << "Got: " << imu.fifoSize() << " Imu samples" << std::endl;
 	ImuMeas_t element;
-	while( fifoPop( element ) ) {
+	while( imu.fifoPop( element ) ) {
 		std::cout <<
 		"Acc: " <<
 		element.acc[0] << ", " << element.acc[1] << ", " <<  element.acc[2] << "\n" << 
