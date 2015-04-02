@@ -211,9 +211,11 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 		gyro[0], gyro[1], gyro[2] );
 	printf( "Alpha: %3.3f\n       %3.3f\n       %3.3f\n",
 		alpha[0], alpha[1], alpha[2] );
-	printf( "Dist: %3.3f\n",
-		ping / ( 340.29 / 80000000 ) / 2 );
 	*/
+	if( dist > 0.001 )
+	printf( "Dist: %3.3f\n",
+		dist );
+	
 
 }
 
