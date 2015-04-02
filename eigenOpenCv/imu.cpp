@@ -161,7 +161,7 @@ void* Imu::imuThread( void ) {
 
 		// Check if correct interrupt
 		if (fdset.revents & POLLPRI) {
-			this->gpioIntHandler( );
+			this->gpioIntHandler( tv );
 		}
 	}
 	return (NULL);

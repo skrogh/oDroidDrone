@@ -22,7 +22,7 @@ typedef struct{
 	double gyro[3];
 	double alpha[3];
 	double dist;
-	struct timeval tv;
+	struct timeval timeStamp;
 } ImuMeas_t;
 
 class Imu {
@@ -48,7 +48,7 @@ private:
 	//
 	// Data FIFO
 	//
-	deque<ImuMeas_t> dataFifo;
+	std::deque<ImuMeas_t> dataFifo;
 
 	//
 	// Functions
