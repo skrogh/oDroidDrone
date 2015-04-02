@@ -34,7 +34,7 @@ int main( int argc, char** argv )
 		element.alpha[0] << ", " << element.alpha[1] << ", " <<  element.alpha[2] << "\n" << 
 		"Dist: " <<
 		element.dist << "\n" << std::endl;
-		timePrev = timneNow;
+		timePrev = timeNow;
 	}
 	std::cout << "Progam ended" << std::endl;
 	return 0;
