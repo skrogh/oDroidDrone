@@ -16,7 +16,7 @@ int main( int argc, char** argv )
 
 	std::cout
 	<< std::fixed
-	<< std::setprecision(2);
+	<< std::setprecision(5);
 	ImuMeas_t element;
 	double timePrev = 0;
 	while( imu.fifoPop( element ) ) {
