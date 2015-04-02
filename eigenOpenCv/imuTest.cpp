@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <iostream>
+#include <iomanip>
 #include "imu.hpp"
 
 
@@ -12,6 +13,11 @@ int main( int argc, char** argv )
 	std::cout << "Press a key..." << std::endl;
 	std::cin >> wait;
 	std::cout << "Got: " << imu.fifoSize() << " Imu samples" << std::endl;
+
+	std::cout
+	<< std::fixed
+	<< std::setprecision(2)
+	<< std::setw(8);
 	ImuMeas_t element;
 	while( imu.fifoPop( element ) ) {
 		std::cout <<
