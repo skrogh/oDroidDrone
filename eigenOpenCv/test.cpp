@@ -96,7 +96,7 @@ int main( int argc, char** argv )
 			"IMU time: " <<
 			element.timeStamp.tv_sec << "." << std::setfill('0') << std::setw(6) << element.timeStamp.tv_usec << "s\n" <<
 			"Image time: " <<
-			imageTime.tv_sec << "." << std::setfill('0') << std::setw(6) << imageTime.tv_usec << "s\n" <<
+			imageTime.tv_sec << "." << std::setfill('0') << std::setw(6) << imageTime.tv_usec << "s" << std::endl;
 			// If image is older that propagated point, update
 			if ( timercmp( &imageTime, &(element.timeStamp), < ) )
 				break;
