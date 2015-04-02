@@ -21,7 +21,7 @@ int main( int argc, char** argv )
 	while( imu.fifoPop( element ) ) {
 		std::cout <<
 		"Time: " <<
-		element.timeStamp.tv_sec << "." << std::setfill('0') << std::setw(6) << element.timeStamp.tv_usec << "s\n"
+		element.timeStamp.tv_sec << "." << std::setfill('0') << std::setw(6) << element.timeStamp.tv_usec << "s\n" <<
 		"Acc: " <<
 		<< element.acc[0] << ", " << element.acc[1] << ", " <<  element.acc[2] << "\n" << 
 		"Gyro: " <<
