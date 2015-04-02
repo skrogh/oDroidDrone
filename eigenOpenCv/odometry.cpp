@@ -135,7 +135,7 @@ Calib::Calib( ) {
 	//
 	g = 0;           // Gravitational acceleration [m/s^2]
 	delta_t = 1;     // Time between IMU data [s]
-	imageOffset = 0; // Time delay for images [s]
+	imageOffset = { 0 }; // Time delay for images [s]
 	//
 	// Noise levels
 	//
@@ -458,7 +458,7 @@ Vector3d MSCKF::triangluate( MatrixX2d z ) {
 // calculate the residuals (r0) and state jacobian (H0) marginalizing out the feature error
 // A block matrix can be parsed to r0 and H0, if this is of the correct size
 //
-void MSCKF::marginalize( MatrixX2d z, Vector3d G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 ) {
+void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 ) {
 	//
 	// calculate residuals and 
 	//

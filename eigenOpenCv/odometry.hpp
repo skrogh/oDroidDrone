@@ -13,6 +13,7 @@
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
+#include <sys/time.h>
 #include <list>
 #include "common.hpp"
 
@@ -36,7 +37,7 @@ public:
 	//
 	double g;           // Gravitational acceleration [m/s^2]
 	double delta_t;     // Time between IMU data [s]
-	double imageOffset; // Time delay for images [s]
+	struct timeval imageOffset; // Time delay for images [s]
 	//
 	// Noise levels
 	//
