@@ -135,7 +135,7 @@ Calib::Calib( ) {
 	//
 	g = 0;           // Gravitational acceleration [m/s^2]
 	delta_t = 1;     // Time between IMU data [s]
-	imageOffset = { 0 }; // Time delay for images [s]
+	imageOffset = {}; // Time delay for images [s]
 	//
 	// Noise levels
 	//
@@ -162,7 +162,7 @@ std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
 	"CI_q: " << (calib.CI_q).coeffs().transpose() << " C_p_I: " << calib.C_p_I.transpose() << "\n" <<
 	"g: " << calib.g << "\n" <<
 	"delta_t: " << calib.delta_t << "\n" <<
-	"imageOffset: " << calib.imageOffset << "\n" <<
+	"imageOffset: " << calib.imageOffset.tv_usec << "us\n" <<
 	"sigma_gc: " << calib.sigma_gc << " sigma_ac: " << calib.sigma_ac << "\n" <<
 	"sigma_wgc: " << calib.sigma_wgc << " sigma_wac: " << calib.sigma_wac << "\n" <<
 	"sigma_Im: " << calib.sigma_Im << "\n" <<
