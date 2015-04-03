@@ -553,8 +553,8 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, const Matri
 		std::cout << "A: " << A.rows() << " z: " << z.rows() << std::endl;
 
 	// Marginalize
-	r0.resize( A.rows(), NoChange );
-	H0.resize( A.rows(), sigma.cols() );
+	r0.derived().resize( A.rows(), NoChange );
+	H0.derived().resize( A.rows(), sigma.cols() );
 	r0 = A * r;
 	H0 = A * H_x;
 
