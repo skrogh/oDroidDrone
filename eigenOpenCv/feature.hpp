@@ -9,7 +9,7 @@
 using namespace cv;
 
 class CameraDetector {
-private:
+public:
 	//
 	// Interfaces for detection, extraction and matching
 	//
@@ -24,7 +24,7 @@ private:
 	std::vector<KeyPoint> keypointsOld;
 	Mat descriptorsOld;
 
-public:
+//public:
 	// Constructor. TODO: add parameters
 	CameraDetector( void );
 	// detect features and add to feature vector

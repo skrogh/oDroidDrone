@@ -99,6 +99,19 @@ int main( int argc, char** argv )
 		while( imu.fifoPop( element ) );
 	}
 	int n = 0;
+
+	std::vector<KeyPoint> keypointsNew;
+	cameraDetector.detector.detect( image, keypointsNew );
+
+	Mat descriptorsNew;
+	cameraDetector.extractor->compute( image, keypointsNew, descriptorsNew );
+
+	cameraDetector.keypointsOld = keypointsNew;
+	cameraDetector.descriptorsOld = descriptorsNew;
+
+	std::vector< DMatch > matches;
+	cameraDetector.matcher.match( cameraDetector.descriptorsOld, descriptorsNew, matches );
+
 	while( cv::waitKey(1) != 27 ) {
 		//cap.grab();
 		//cap.grab();
@@ -148,7 +161,9 @@ int main( int argc, char** argv )
 		//
 		// ´Detect features ( can be run in parallel with propagation)
 		//
-		cameraDetector.detectFeatures( image, cameraMeasurements );
+		//cameraDetector.detectFeatures( image, cameraMeasurements );
+		cameraMeasurements.addFeatures( cameraDetector.keypointsOld, keypointsNew,
+			matches );
 
 		//
 		// We have propagated and got a new image, time to update with camera data
