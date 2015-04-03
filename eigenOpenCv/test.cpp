@@ -99,6 +99,8 @@ int main( int argc, char** argv )
 		while( imu.fifoPop( element ) );
 	}
 	cameraDetector.detectFeatures( image, cameraMeasurements );
+	cap.grab();
+	cap.retrieve( image );
 	cameraDetector.detectFeatures( image, cameraMeasurements );
 	int n = 0;
 	while( cv::waitKey(1) != 27 ) {
