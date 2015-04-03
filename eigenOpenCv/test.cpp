@@ -51,6 +51,7 @@ int main( int argc, char** argv )
 	cv::VideoCapture cap(0);
 	cv::Mat image;
 	cv::namedWindow( "DebugDraw" );
+	cv::waitKey(1);
 
 	CameraMeasurements cameraMeasurements;
 	CameraDetector cameraDetector = CameraDetector( );
@@ -118,7 +119,7 @@ int main( int argc, char** argv )
 		//
 		msckf.updateCamera( cameraMeasurements );
 
-		cv::imshow("Matches", msckf.debugImg );
+		cv::imshow("debygDraw", msckf.debugImg );
 
 		//
 		// Print state
