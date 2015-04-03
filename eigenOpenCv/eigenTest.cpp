@@ -46,7 +46,7 @@ int main()
 	double g_m[3] = { 0, 0, 0 };
 
 	std::cout << std::fixed;
-	std::cout << std::setprecision(2);
+	std::cout << std::setprecision(10);
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
 
