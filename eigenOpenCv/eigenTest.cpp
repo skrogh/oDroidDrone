@@ -53,12 +53,13 @@ int main()
 	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
 
 	msckf.updateHeight( 1 );
+	msckf.augmentState( );
+	msckf.augmentState( );
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
 	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
 	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
 
-	msckf.augmentState( );
 	MatrixX2d z = MatrixX2d(1, 2);
 	z << 240, 320;
 	msckf.triangluate( z );
