@@ -515,7 +515,7 @@ Vector3d MSCKF::triangluate( MatrixX2d z ) {
 // A block matrix can be parsed to r0 and H0, if this is of the correct size
 //
 template <typename Derived_r0, typename Derived_H0>
-void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, const MatrixBase<Derived_r0>& r0, const MatrixBase_H0<Derived>& H0 ) {
+void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, const MatrixBase<Derived_r0>& r0, const MatrixBase<Derived_H0>& H0 ) {
 	//
 	// calculate residuals and 
 	//
