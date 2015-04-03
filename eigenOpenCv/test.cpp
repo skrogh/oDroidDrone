@@ -176,6 +176,7 @@ int main( int argc, char** argv )
 		// Print state
 		//
 		std::cout << "msckf is:\n" << msckf << std::endl;
+		std::cout << "sigma is:" << msckf.sigma.rows() << "x" << msckf.sigma.cols() << std::endl;
 	}
 	logFile.close();
 }
