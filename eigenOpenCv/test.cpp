@@ -54,7 +54,6 @@ int main( int argc, char** argv )
 	cv::VideoCapture cap(0);
 	cv::Mat image;
 	cv::namedWindow( "DebugDraw" );
-	cv::waitKey(1);
 
 	CameraMeasurements cameraMeasurements;
 	CameraDetector cameraDetector = CameraDetector( );
@@ -74,6 +73,21 @@ int main( int argc, char** argv )
 		tz.tz_minuteswest = 0;
 		tz.tz_dsttime = 0;
 	
+	//
+	// Spool up image display
+	//
+	cap.grab();
+	cap.retrieve( image );
+	cv::imshow("DebugDraw", image );
+	cv::waitKey(1);
+
+	//
+	// Clear Imu buffer
+	//
+	{
+		ImuMeas_t element;
+		while( imu.fifoPop( element ) );
+	}
 	int n = 0;
 	while( cv::waitKey(1) != 27 ) {
 		cap.grab();
