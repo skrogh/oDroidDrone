@@ -42,16 +42,17 @@ int main()
 	msckf.x.block<3,1>(4,0) << 0, 0, 0.1;
 
 
-	double a_m[3] = { 0, 0, 0 };
+	double a_m[3] = { 0, 0, -9.82 };
 	double g_m[3] = { 0, 0, 0 };
+
+	std::cout << std::fixed;
+	std::cout << std::setprecision(2);
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
 
 	for( int i = 0; i < 400; i++ ) {
 		msckf.propagate( a_m, g_m );
 	}
-	std::cout << std::fixed;
-	std::cout << std::setprecision(2);
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
 	//std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
