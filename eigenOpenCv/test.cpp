@@ -41,6 +41,11 @@ int main( int argc, char** argv )
 
 
 	MSCKF msckf( &calib );
+	// Start upside down
+	msckf.x.block<4,1>(0,0) << 0, 1, 0, 0;
+	// Start 10cm off the ground
+	msckf.x.block<3,1>(4,0) << 0, 0, 0.1;
+
 
 
 	cv::VideoCapture cap(0);
