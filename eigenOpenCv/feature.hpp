@@ -31,6 +31,8 @@ public:
 	CameraDetector( void );
 	// detect features and add to feature vector
 	void detectFeatures( const Mat& image, CameraMeasurements& cameraMeasurements );
+	// Add features
+	void addFeatures( CameraMeasurements& cameraMeasurements );
 };
 
 #endif

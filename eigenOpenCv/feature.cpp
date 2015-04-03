@@ -34,3 +34,8 @@ void CameraDetector::detectFeatures( const Mat& image, CameraMeasurements& camer
 
 	descriptorsOld = descriptorsNew;
 }
+
+void CameraDetector::addFeatures( CameraMeasurements& cameraMeasurements ) {
+	cameraMeasurements.addFeatures( keypointsOld, keypointsNew,
+		matches );
+}

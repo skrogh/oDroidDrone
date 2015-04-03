@@ -149,7 +149,7 @@ int main( int argc, char** argv )
 		// ´Detect features ( can be run in parallel with propagation)
 		//
 		cameraDetector.detectFeatures( image, cameraMeasurements );
-		cameraMeasurements.addFeatures( cameraDetector );
+		cameraDetector.addFeatures( cameraMeasurements );
 
 		//
 		// We have propagated and got a new image, time to update with camera data

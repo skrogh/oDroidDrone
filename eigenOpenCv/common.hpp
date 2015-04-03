@@ -5,7 +5,6 @@
 #include "opencv2/opencv.hpp"
 #include <Eigen/Dense>
 #include <list>
-#include "feature.hpp"
 
 typedef struct{
 	Eigen::MatrixX2d z; // length is stored as number of elements in z
@@ -21,7 +20,7 @@ public:
 	// Variables to hold feature info
 	//
 	std::vector< std::list<CameraMeas_t>::iterator > link;
-	void CameraMeasurements::addToFeatures( CameraDetector& cameraDetector );
+	
 	void addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, const std::vector<cv::KeyPoint> &keypointsNew,
 		const std::vector<cv::DMatch>& matches );
 	void linkBack( std::list<CameraMeas_t>::iterator& feature, int linkLink );
