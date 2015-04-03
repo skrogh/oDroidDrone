@@ -94,7 +94,7 @@ int main( int argc, char** argv )
 			msckf.propagate( element.acc, element.gyro );
 			// If valid distance measurement, update with that
 			if ( element.distValid ) {
-				if ( n > 10 ) {
+				if ( n > 5 ) {
 					msckf.updateHeight( element.dist );
 					n = 0;
 				} else {
