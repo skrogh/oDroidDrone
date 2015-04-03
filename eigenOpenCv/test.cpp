@@ -65,7 +65,7 @@ int main( int argc, char** argv )
 		tz.tz_minuteswest = 0;
 		tz.tz_dsttime = 0;
 
-	while( cv::waitKey(1) ) != 27 ) {
+	while( cv::waitKey(1) != 27 ) {
 		cap.grab();
 		cap.grab();
 		cap.grab();
