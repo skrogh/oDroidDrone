@@ -239,8 +239,8 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	/*
 	** Convert inputs
 	*/
-	Map<Vector3d> I_a_m( a_m, 3 );
-	Map<Vector3d> I_g_m( g_m, 3 );
+	Vector3d I_a_m( a_m[0], a_m[1], a_m[2] );
+	Vector3d I_g_m( g_m[0], g_m[1], g_m[2] );
 
 	/*
 	** Reusable constants:
