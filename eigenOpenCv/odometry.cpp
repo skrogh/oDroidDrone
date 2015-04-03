@@ -584,7 +584,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 						for( int i = 0; i < z.rows() - 1; i++ ) {
 							cv::Point pt1 = cv::Point( z( i, 0 ), z( i, 1 ) );
 							cv::Point pt2 = cv::Point( z( i+1, 0 ), z( i+1, 1 ) );
-							cv::line( debugImg, pt1, pt2, cv::Scalar( 255, 0, 0 ) );
+							cv::line( debugImg, pt1, pt2, cv::Scalar( 0, 255, 0 ) );
 						}
 
 						// Add to huge H0 and r0 matrix
@@ -602,9 +602,17 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 							cv::Point pt2 = cv::Point( z( i+1, 0 ), z( i+1, 1 ) );
 							cv::line( debugImg, pt1, pt2, cv::Scalar( 0, 0, 255 ) );
 						}
-
 					}
-				}
+				} else {
+					// debug draw
+					Eigen::MatrixX2d& z = meas_j->z;
+					cv::Point pt = cv::Point( z( z.rows()-1, 0 ), z( z.rows()-1, 1 ) );
+					cv::circle( debugImg, pt, 4, cv::Scalar( 0, 0, 255 ) );
+					for( int i = 0; i < z.rows() - 1; i++ ) {
+						cv::Point pt1 = cv::Point( z( i, 0 ), z( i, 1 ) );
+						cv::Point pt2 = cv::Point( z( i+1, 0 ), z( i+1, 1 ) );
+						cv::line( debugImg, pt1, pt2, cv::Scalar( 0, 255, 255 ) );
+					}
 			}
 			// in any case, remove it and advance
 			meas_j = cameraMeasurements.removeFeature( meas_j );
