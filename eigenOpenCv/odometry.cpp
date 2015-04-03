@@ -1,5 +1,6 @@
 #include <iostream>
 #include <Eigen/Dense>
+#include <Eigen/Sparse>
 #include <Eigen/Geometry>
 #include <cmath>
 
@@ -580,7 +581,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 						// debug draw
 						Eigen::MatrixX2d& z = meas_j->z;
 						cv::Point pt = cv::Point( z( z.rows()-1, 0 ), z( z.rows()-1, 1 ) );
-						cv::circle( debugImg, pt, 4, cv::Scalar( 255, 0, 0 ) );
+						cv::circle( debugImg, pt, 4, cv::Scalar( 0, 255, 0 ) );
 						for( int i = 0; i < z.rows() - 1; i++ ) {
 							cv::Point pt1 = cv::Point( z( i, 0 ), z( i, 1 ) );
 							cv::Point pt2 = cv::Point( z( i+1, 0 ), z( i+1, 1 ) );
@@ -607,7 +608,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 					// debug draw
 					Eigen::MatrixX2d& z = meas_j->z;
 					cv::Point pt = cv::Point( z( z.rows()-1, 0 ), z( z.rows()-1, 1 ) );
-					cv::circle( debugImg, pt, 4, cv::Scalar( 0, 0, 255 ) );
+					cv::circle( debugImg, pt, 4, cv::Scalar( 0, 255, 255 ) );
 					for( int i = 0; i < z.rows() - 1; i++ ) {
 						cv::Point pt1 = cv::Point( z( i, 0 ), z( i, 1 ) );
 						cv::Point pt2 = cv::Point( z( i+1, 0 ), z( i+1, 1 ) );
@@ -712,8 +713,13 @@ void MSCKF::updateHeight( double height ) {
 	// Sensor residual
 	double r = height - x(0+4+2); // x(0+4+3) is G_p(2)
 	// Sensor model
+	/*
 	Matrix<double,1,Dynamic> H( 1, sigma.cols() );
 	H << MatrixXd::Zero( 1, 5 ), 1, MatrixXd::Zero( 1, sigma.cols() - 6 );
+	*/
+	SparseMatrix<double> H( 1, sigma.cols() );
+	H.reserve(1);
+	H.insertBack( 1, 6 ) = 1;
 
 	// Kalman gain
 	MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
