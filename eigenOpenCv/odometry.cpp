@@ -581,7 +581,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 				if ( std::isfinite(G_p_fj(0)) && std::isfinite(G_p_fj(1)) && std::isfinite(G_p_fj(2)) ) {
 					// Marignalize:
 					VectorXd r0j = VectorXd( 0 );
-					MatrixXd H0j = MatrixXd( 0 );
+					MatrixXd H0j = MatrixXd( 0, 0 );
 					this->marginalize( meas_j->z, G_p_fj, r0j, H0j );
 					// TODO: Check if inlier
 					if ( isInlinerCamera( r0j, H0j ) ) {
