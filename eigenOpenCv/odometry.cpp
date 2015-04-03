@@ -717,9 +717,10 @@ void MSCKF::updateHeight( double height ) {
 	Matrix<double,1,Dynamic> H( 1, sigma.cols() );
 	H << MatrixXd::Zero( 1, 5 ), 1, MatrixXd::Zero( 1, sigma.cols() - 6 );
 	*/
-	SparseMatrix<double> H( 1, sigma.cols() );
+	SparseVector<double,RowMajor> H( sigma.cols() );
 	H.reserve(1);
-	H.insertBack( 1, 6 ) = 1;
+	H.insert( 6 ) = 1;
+	std::cout << H << std::endl;
 
 	// Kalman gain
 	MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
