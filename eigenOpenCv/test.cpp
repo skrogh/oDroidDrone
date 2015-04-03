@@ -100,13 +100,13 @@ int main( int argc, char** argv )
 	}
 	int n = 0;
 	while( cv::waitKey(1) != 27 ) {
-		cap.grab();
-		cap.grab();
-		cap.grab();
-		cap.grab();
-		cap.grab();
+		//cap.grab();
+		//cap.grab();
+		//cap.grab();
+		//cap.grab();
+		//cap.grab();
 		gettimeofday( &tv, &tz );
-		cap.retrieve( image );
+		//cap.retrieve( image );
 		msckf.debugImg = image;
 
 		//
