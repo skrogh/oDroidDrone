@@ -93,7 +93,7 @@ int main( int argc, char** argv )
 			msckf.propagate( element.acc, element.gyro );
 			// If valid distance measurement, update with that
 			if ( element.distValid ) {
-				msckf.updateHeight( element.dist );
+				//msckf.updateHeight( element.dist );
 			}
 
 			// Get time of image without delay
