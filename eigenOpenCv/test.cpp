@@ -73,7 +73,7 @@ int main( int argc, char** argv )
 		cap.grab();
 		gettimeofday( &tv, &tz );
 		cap.retrieve( image );
-		debugImg = image;
+		msckf.debugImg = image;
 
 		//
 		// Propagate up to new image ( can be run in parallel with feature detection)
@@ -113,7 +113,7 @@ int main( int argc, char** argv )
 		//
 		msckf.updateCamera( cameraMeasurements );
 
-		cv::imshow("Matches", debugImg );
+		cv::imshow("Matches", msckf.debugImg );
 
 		//
 		// Print state

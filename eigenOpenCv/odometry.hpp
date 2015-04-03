@@ -60,6 +60,7 @@ public:
 
 class MSCKF {
 public:
+	cv::Mat debugImg;
 	//
 	// Calibration object
 	//
