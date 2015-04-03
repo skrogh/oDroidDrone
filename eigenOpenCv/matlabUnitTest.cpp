@@ -54,7 +54,8 @@ int main( int argc, char** argv )
 	msckf.x.block<3,1>(4,0) << 0,0,0;
 	Eigen::MatrixX2d z( 2, 1 );
 	z << 0,0;
-	std::cout << "Triangulate test1: " << msckf.triangluate( z ) << std::endl;
+	Eigen::Vector3d res = msckf.triangluate( z );
+	std::cout << "Triangulate test1: " << res << std::endl;
 
 
 
