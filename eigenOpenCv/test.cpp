@@ -65,7 +65,7 @@ int main( int argc, char** argv )
 		tz.tz_minuteswest = 0;
 		tz.tz_dsttime = 0;
 
-	while( 1 ) {
+	while( cv::waitKey(1) ) != 27 ) {
 		cap.grab();
 		cap.grab();
 		cap.grab();
@@ -73,7 +73,7 @@ int main( int argc, char** argv )
 		cap.grab();
 		gettimeofday( &tv, &tz );
 		cap.retrieve( image );
-		debugImage = image;
+		debugImg = image;
 
 		//
 		// Propagate up to new image ( can be run in parallel with feature detection)
@@ -113,7 +113,7 @@ int main( int argc, char** argv )
 		//
 		msckf.updateCamera( cameraMeasurements );
 
-		cv::imshow("Matches", debugImage );
+		cv::imshow("Matches", debugImg );
 
 		//
 		// Print state
