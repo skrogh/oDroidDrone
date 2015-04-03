@@ -53,7 +53,7 @@ int main( int argc, char** argv )
 	msckf.sigma.diagonal().block<3,1>(0,0) << 0, 0, 0;
 	msckf.sigma.diagonal().block<3,1>(3,0) << 0, 0, 0;
 	msckf.sigma.diagonal().block<3,1>(6,0) << 0, 0, 0;
-	msckf.sigma.diagonal().block<3,1>(9,0) << 0.1, 0.1, 0.1;
+	msckf.sigma.diagonal().block<3,1>(9,0) << 0.01, 0.01, 0.01;
 	msckf.sigma.diagonal().block<3,1>(12,0) << 0.1, 0.1, 0.1;
 
 
