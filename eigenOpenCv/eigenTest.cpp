@@ -61,11 +61,11 @@ int main()
 	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
 
 	MatrixX2d z = MatrixX2d(1, 2);
-	z << 240, 320;
+	z << 320, 240;
 	msckf.triangluate( z );
-	z << 240, 0;
+	z << 0, 240;
 	msckf.triangluate( z );
-	z << 0, 320;
+	z << 320, 0;
 	msckf.triangluate( z );
 
 	for( int i = 0; i < 400; i++ ) {
