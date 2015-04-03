@@ -547,14 +547,16 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 	// Find left null-space
 	Eigen::FullPivLU<MatrixXd> LU( H_f.transpose() );
 	MatrixXd A = LU.kernel().transpose();
-	// Marginalize
-	r0 = VectorXd( A.rows() );
-	H0 = MatrixXd( A.rows(), sigma.cols() );
-	r0 = A * r;
-	H0 = A * H_x;
 
 	if ( z.rows()*2 - 3 != A.rows() )
 		std::cout << "A: " << A.rows() << " z: " << z.rows() << std::endl;
+
+	// Marginalize
+	r0.resize( A.rows(), NoChange );
+	H0.resize( A.rows(), sigma.cols() );
+	r0 = A * r;
+	H0 = A * H_x;
+
 }
 
 void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
@@ -578,8 +580,8 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 				// If not a clear outlier:
 				if ( std::isfinite(G_p_fj(0)) && std::isfinite(G_p_fj(1)) && std::isfinite(G_p_fj(2)) ) {
 					// Marignalize:
-					VectorXd r0j;
-					MatrixXd H0j;
+					VectorXd r0j = VectorXd( 0 );
+					MatrixXd H0j = MatrixXd( 0 );
 					this->marginalize( meas_j->z, G_p_fj, r0j, H0j );
 					// TODO: Check if inlier
 					if ( isInlinerCamera( r0j, H0j ) ) {
