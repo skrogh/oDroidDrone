@@ -47,7 +47,7 @@ int main( int argc, char** argv )
 	// Start 10cm off the ground
 	msckf.x.block<3,1>(4,0) << 0, 0, 0.1;
 
-	ofstream logFile;
+	std::ofstream logFile;
  	logFile.open ("log.csv");
 
 
