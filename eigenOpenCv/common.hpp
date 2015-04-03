@@ -6,7 +6,7 @@
 #include <Eigen/Dense>
 #include <list>
 
-cv::Mat debugImage;
+cv::Mat debugImg;
 
 typedef struct{
 	Eigen::MatrixX2d z; // length is stored as number of elements in z
