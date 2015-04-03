@@ -47,7 +47,7 @@ int main( int argc, char** argv )
 	// Start 10cm off the ground
 	msckf.x.block<3,1>(4,0) << 0, 0, 0.1;
 	//acc offset
-	msckf.x.block<3,1>(4+3+3+3,0) << 0.12, -0.036, 0.09;
+	msckf.x.block<3,1>(4+3+3+3,0) << 0, 0, 0;
 
 	// Set initial uncertancy
 	msckf.sigma.diagonal().block<3,1>(0,0) << 0, 0, 0;
