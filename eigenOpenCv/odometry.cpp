@@ -436,7 +436,7 @@ void MSCKF::removeOldStates( int n ) {
 // 
 // z is the observations of a feature
 //
-Vector3d MSCKF::triangluate( MatrixX2d z ) {
+Vector3d MSCKF::triangulate( MatrixX2d z ) {
 	unsigned int itterations = 3;
 
 	//
@@ -588,7 +588,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 		if ( meas_j->isLost ) {
 			// If more that, or 3 points, use for update
 			if ( meas_j->z.rows() >= 3 ) {
-				Vector3d G_p_fj = this->triangluate( meas_j->z );
+				Vector3d G_p_fj = this->triangulate( meas_j->z );
 				// If not a clear outlier:
 				if ( std::isfinite(G_p_fj(0)) && std::isfinite(G_p_fj(1)) && std::isfinite(G_p_fj(2)) ) {
 					// Marignalize:

@@ -54,15 +54,15 @@ int main( int argc, char** argv )
 	msckf.x.block<3,1>(4,0) << 0,0,0;
 	Eigen::MatrixX2d z( 1, 2 );
 	z << 320,240;
-	std::cout << "Triangulate test1: " << msckf.triangluate( z ) << std::endl;
+	std::cout << "Triangulate test1: " << msckf.triangulate( z ) << std::endl;
 	z << 0,0;
-	std::cout << "Triangulate test2: " << msckf.triangluate( z ) << std::endl;
+	std::cout << "Triangulate test2: " << msckf.triangulate( z ) << std::endl;
 	z << 640,0;
-	std::cout << "Triangulate test3: " << msckf.triangluate( z ) << std::endl;
+	std::cout << "Triangulate test3: " << msckf.triangulate( z ) << std::endl;
 	z << 0,480;
-	std::cout << "Triangulate test4: " << msckf.triangluate( z ) << std::endl;
+	std::cout << "Triangulate test4: " << msckf.triangulate( z ) << std::endl;
 	z << 640,480;
-	std::cout << "Triangulate test5: " << msckf.triangluate( z ) << std::endl;
+	std::cout << "Triangulate test5: " << msckf.triangulate( z ) << std::endl;
 
 
 

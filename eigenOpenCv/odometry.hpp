@@ -95,8 +95,8 @@ public:
 	void removeOldStates( int n );
 	// updateCamera
 	void updateCamera( CameraMeasurements &cameraMeasurements );
-	// 	triangluate
-	Vector3d triangluate( MatrixX2d z );
+	// 	triangulate
+	Vector3d triangulate( MatrixX2d z );
 	// -marginalize
 	void marginalize( const MatrixX2d &z, const Vector3d &G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 );
 	// TODO: -isInlinerCamera

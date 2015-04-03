@@ -68,11 +68,11 @@ int main()
 
 	MatrixX2d z = MatrixX2d(1, 2);
 	z << 320, 240;
-	msckf.triangluate( z );
+	msckf.triangulate( z );
 	z << 0, 240;
-	msckf.triangluate( z );
+	msckf.triangulate( z );
 	z << 320, 0;
-	msckf.triangluate( z );
+	msckf.triangulate( z );
 
 	for( int i = 0; i < 400; i++ ) {
 		msckf.propagate( a_m, g_m );
