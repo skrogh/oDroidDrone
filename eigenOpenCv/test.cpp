@@ -98,6 +98,8 @@ int main( int argc, char** argv )
 		ImuMeas_t element;
 		while( imu.fifoPop( element ) );
 	}
+	cameraDetector.detectFeatures( image, cameraMeasurements );
+	cameraDetector.detectFeatures( image, cameraMeasurements );
 	int n = 0;
 	while( cv::waitKey(1) != 27 ) {
 		//cap.grab();
@@ -148,7 +150,6 @@ int main( int argc, char** argv )
 		//
 		// ´Detect features ( can be run in parallel with propagation)
 		//
-		cameraDetector.detectFeatures( image, cameraMeasurements );
 		cameraDetector.addFeatures( cameraMeasurements );
 
 		//
