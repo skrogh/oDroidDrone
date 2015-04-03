@@ -52,7 +52,7 @@ int main( int argc, char** argv )
 	msckf.x.block<3,1>(4,0) << 0,0,0;
 	msckf.augmentState();
 	msckf.x.block<3,1>(4,0) << 0,0,0;
-	Eigen::MatrixX2d z( 2, 1 );
+	Eigen::MatrixX2d z( 1, 2 );
 	z << 0,0;
 	Eigen::Vector3d res = msckf.triangluate( z );
 	std::cout << "Triangulate test1: " << res << std::endl;
