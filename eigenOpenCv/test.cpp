@@ -84,6 +84,7 @@ int main( int argc, char** argv )
 		//
 		// Propagate up to new image ( can be run in parallel with feature detection)
 		//
+		int n = 0;
 		while( 1 ) {
 			ImuMeas_t element;
 			// Wait for at least one imu measurement
@@ -93,7 +94,12 @@ int main( int argc, char** argv )
 			msckf.propagate( element.acc, element.gyro );
 			// If valid distance measurement, update with that
 			if ( element.distValid ) {
-				//msckf.updateHeight( element.dist );
+				if ( n > 10 ) {
+					msckf.updateHeight( element.dist );
+					n = 0;
+				} else {
+					n++;
+				}
 			}
 
 			// Get time of image without delay
