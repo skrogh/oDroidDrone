@@ -578,7 +578,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 						H0.bottomRows( H0j.rows() ) = H0j;
 						r0.bottomRows( r0j.rows() ) = r0j;
 					} else {
-						/ debug draw
+						// debug draw
 						Eigen::MatrixX2d& z = meas_j->z;
 						cv::Point pt = Point( z( z.rows()-1, 0 ), z( z.rows()-1, 1 ) );
 						cv::circle( debugImage, pt, 4, Scalar( 0, 0, 255 ) );
