@@ -96,7 +96,7 @@ int main( int argc, char** argv )
 			if ( timercmp( &imageTime, &(element.timeStamp), < ) ) {
 				timersub( &(element.timeStamp), &imageTime, &imageTime );
 				std::cout << "Image/IMU time difference: " <<
-				imageTime.tv_sec << "." << std::setfill('0') << std::setw(6) << imageTime.tv_usec << "s" << std::endl;
+				imageTime.tv_sec << "." << std::setfill('0') << std::setw(6) << imageTime.tv_usec << "s" << std::setfill(' ') << std::endl;
 				break;
 			}
 		}

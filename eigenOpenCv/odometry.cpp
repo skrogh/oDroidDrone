@@ -8,6 +8,45 @@
 
 using namespace Eigen;
 
+
+//
+// Chi square lookup for 95% confidence. TODO: calculate at runtime so size fits with max frame fifo length
+//
+const double chi2Inv[] = {
+	0,
+	3.841458821,
+	5.991464547,
+	7.814727903,
+	9.487729037,
+	11.07049769,
+	12.59158724,
+	14.06714045,
+	15.50731306,
+	16.9189776,
+	18.30703805,
+	19.67513757,
+	21.02606982,
+	22.36203249,
+	23.6847913,
+	24.99579014,
+	26.2962276,
+	27.58711164,
+	28.86929943,
+	30.14352721,
+	31.41043284,
+	32.67057334,
+	33.92443847,
+	35.17246163,
+	36.4150285,
+	37.65248413,
+	38.88513866,
+	40.11327207,
+	41.33713815,
+	42.5569678,
+	43.77297183
+};
+
+
 //
 // calculates a to the power of i. i is a positive, non zero, integer
 //
@@ -522,11 +561,13 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 					MatrixXd H0j( meas_j->z.rows()*2 - 3, sigma.cols() );
 					this->marginalize( meas_j->z, G_p_fj, r0j, H0j );
 					// TODO: Check if inlier
-					// Add to huge H0 and r0 matrix
-					H0.conservativeResize( H0j.rows(), NoChange );
-					r0.conservativeResize( r0j.rows(), NoChange );
-					H0.bottomRows( H0j.rows() ) = H0j;
-					r0.bottomRows( r0j.rows() ) = r0j;
+					if ( isInlinerCamera( r0j, H0j ) ) {
+						// Add to huge H0 and r0 matrix
+						H0.conservativeResize( H0j.rows(), NoChange );
+						r0.conservativeResize( r0j.rows(), NoChange );
+						H0.bottomRows( H0j.rows() ) = H0j;
+						r0.bottomRows( r0j.rows() ) = r0j;
+					}
 				}
 			}
 			// in any case, remove it and advance
@@ -676,4 +717,9 @@ void MSCKF::updateHeight( double height ) {
 		x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
 	}
 
+}
+
+bool MSCKF::isInlinerCamera( const VectorXd &r0, const MatrixXd &H0 ) {
+	double gamma = r0.transpose() * ( H0 * sigma * H0.transpose() ).inverse() * r0;
+	return gamma <= chi2Inv[ r0.rows() ];
 }
