@@ -722,7 +722,7 @@ void MSCKF::updateHeight( double height ) {
 	H.insert( 1, 6 ) = 1;
 	H.makeCompressed();
 
-	std:cout << "H: " << H << std::endl;
+	std::cout << "H: " << H << std::endl;
 
 	// Kalman gain
 	MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
