@@ -3,7 +3,13 @@
 #include "opencv2/opencv.hpp"
 #include <Eigen/Dense>
 #include <list>
+#include "feature.hpp"
 #include "common.hpp"
+
+void CameraMeasurements::addToFeatures( CameraDetector& cameraDetector ) {
+	this->addFeatures( cameraDetector.keypointsOld, cameraDetector.keypointsNew,
+		cameraDetector.matches );
+}
 
 void CameraMeasurements::addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, const std::vector<cv::KeyPoint> &keypointsNew,
 		const std::vector< cv::DMatch >& matches ) {

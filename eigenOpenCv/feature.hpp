@@ -22,7 +22,9 @@ public:
 
 	// iterators pointing to CameraMeas of keypointOld
 	std::vector<KeyPoint> keypointsOld;
+	std::vector<KeyPoint> keypointsNew;
 	Mat descriptorsOld;
+	std::vector< DMatch > matches;
 
 //public:
 	// Constructor. TODO: add parameters

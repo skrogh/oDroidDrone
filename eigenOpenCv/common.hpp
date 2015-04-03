@@ -20,7 +20,7 @@ public:
 	// Variables to hold feature info
 	//
 	std::vector< std::list<CameraMeas_t>::iterator > link;
-
+	void CameraMeasurements::addToFeatures( CameraDetector& cameraDetector );
 	void addFeatures( const std::vector<cv::KeyPoint> &keypointsOld, const std::vector<cv::KeyPoint> &keypointsNew,
 		const std::vector<cv::DMatch>& matches );
 	void linkBack( std::list<CameraMeas_t>::iterator& feature, int linkLink );
