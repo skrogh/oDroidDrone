@@ -47,14 +47,14 @@ int main( int argc, char** argv )
 	// Start 10cm off the ground
 	msckf.x.block<3,1>(4,0) << 0, 0, 0.1;
 	//acc offset
-	msckf.x.block<3,1>(4+3+3+3,0) << 0.11, -0.04, 0.06;
+	msckf.x.block<3,1>(4+3+3+3,0) << 0.12, -0.036, 0.09;
 
 	// Set initial uncertancy
 	msckf.sigma.diagonal().block<3,1>(0,0) << 0, 0, 0;
 	msckf.sigma.diagonal().block<3,1>(3,0) << 0, 0, 0;
 	msckf.sigma.diagonal().block<3,1>(6,0) << 0, 0, 0;
 	msckf.sigma.diagonal().block<3,1>(9,0) << 0.1, 0.1, 0.1;
-	msckf.sigma.diagonal().block<3,1>(12,0) << 0.3, 0.3, 0.3;
+	msckf.sigma.diagonal().block<3,1>(12,0) << 0.1, 0.1, 0.1;
 
 
 	std::ofstream logFile;
