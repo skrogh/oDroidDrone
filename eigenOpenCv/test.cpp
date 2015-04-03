@@ -45,6 +45,7 @@ int main( int argc, char** argv )
 
 	cv::VideoCapture cap(0);
 	cv::Mat image;
+	cv::namedWindow( "DebugDraw" );
 
 	CameraMeasurements cameraMeasurements;
 	CameraDetector cameraDetector = CameraDetector( );
@@ -72,6 +73,7 @@ int main( int argc, char** argv )
 		cap.grab();
 		gettimeofday( &tv, &tz );
 		cap.retrieve( image );
+		debugImage = image;
 
 		//
 		// Propagate up to new image ( can be run in parallel with feature detection)
@@ -110,6 +112,8 @@ int main( int argc, char** argv )
 		// We have propagated and got a new image, time to update with camera data
 		//
 		msckf.updateCamera( cameraMeasurements );
+
+		cv::imshow("Matches", debugImage );
 
 		//
 		// Print state

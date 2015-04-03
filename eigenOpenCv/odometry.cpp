@@ -562,11 +562,32 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 					this->marginalize( meas_j->z, G_p_fj, r0j, H0j );
 					// TODO: Check if inlier
 					if ( isInlinerCamera( r0j, H0j ) ) {
+						// debug draw
+						Eigen::MatrixX2d& z = meas_j->z;
+						cv::Point pt = Point( z( z.rows()-1, 0 ), z( z.rows()-1, 1 ) );
+						cv::circle( debugImage, pt, 4, Scalar( 255, 0, 0 ) );
+						for( int i = 0; i < z.rows() - 1; i++ ) {
+							cv::Point pt1 = Point( z( i, 0 ), z( i, 1 ) );
+							cv::Point pt2 = Point( z( i+1, 0 ), z( i+1, 1 ) );
+							cv::line( debugImage, pt1, pt2, Scalar( 255, 0, 0 ) );
+						}
+
 						// Add to huge H0 and r0 matrix
 						H0.conservativeResize( H0j.rows(), NoChange );
 						r0.conservativeResize( r0j.rows(), NoChange );
 						H0.bottomRows( H0j.rows() ) = H0j;
 						r0.bottomRows( r0j.rows() ) = r0j;
+					} else {
+						/ debug draw
+						Eigen::MatrixX2d& z = meas_j->z;
+						cv::Point pt = Point( z( z.rows()-1, 0 ), z( z.rows()-1, 1 ) );
+						cv::circle( debugImage, pt, 4, Scalar( 0, 0, 255 ) );
+						for( int i = 0; i < z.rows() - 1; i++ ) {
+							cv::Point pt1 = Point( z( i, 0 ), z( i, 1 ) );
+							cv::Point pt2 = Point( z( i+1, 0 ), z( i+1, 1 ) );
+							cv::line( debugImage, pt1, pt2, Scalar( 0, 0, 255 ) );
+						}
+
 					}
 				}
 			}

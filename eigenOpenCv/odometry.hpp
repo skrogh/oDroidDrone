@@ -2,7 +2,7 @@
 #define _ODOMETRY_H_
 
 
-#define ODO_MAX_FRAMES (10) // used for static allocation of state and sigma
+#define ODO_MAX_FRAMES (5) // used for static allocation of state and sigma
 #define ODO_STATE_SIZE (16)
 #define ODO_STATE_FRAME_SIZE (10)
 #define ODO_STATE_MAX_SIZE ( ODO_STATE_SIZE + ODO_STATE_FRAME_SIZE * ( ODO_MAX_FRAMES + 1 ) )
