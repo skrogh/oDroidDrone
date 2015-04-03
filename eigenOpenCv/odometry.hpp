@@ -99,6 +99,7 @@ public:
 	// -marginalize
 	void marginalize( const MatrixX2d &z, const Vector3d &G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 );
 	// TODO: -isInlinerCamera
+	bool isInlinerCamera( const VectorXd &r0, const MatrixXd &H0 );
 	// updateHeight
 	void updateHeight( double height );
 	// TODO: -isInlierHeight
