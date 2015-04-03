@@ -5,6 +5,7 @@
 #include "opencv2/opencv.hpp"
 #include <Eigen/Dense>
 #include <list>
+#include "feature.hpp"
 
 typedef struct{
 	Eigen::MatrixX2d z; // length is stored as number of elements in z
