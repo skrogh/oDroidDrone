@@ -70,7 +70,8 @@ int main( int argc, char** argv )
 	struct timezone tz = {};
 		tz.tz_minuteswest = 0;
 		tz.tz_dsttime = 0;
-
+	
+	int n = 0;
 	while( cv::waitKey(1) != 27 ) {
 		cap.grab();
 		cap.grab();
@@ -84,7 +85,6 @@ int main( int argc, char** argv )
 		//
 		// Propagate up to new image ( can be run in parallel with feature detection)
 		//
-		int n = 0;
 		while( 1 ) {
 			ImuMeas_t element;
 			// Wait for at least one imu measurement
