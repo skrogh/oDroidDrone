@@ -107,7 +107,7 @@ int main( int argc, char** argv )
 		//cap.grab();
 		gettimeofday( &tv, &tz );
 		//cap.retrieve( image );
-		msckf.debugImg = image;
+		msckf.debugImg = image.clone();
 
 		//
 		// Propagate up to new image ( can be run in parallel with feature detection)
