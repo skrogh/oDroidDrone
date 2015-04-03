@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <iostream>
 #include <iomanip>
+#include <fstream>
 #include <sys/time.h>
 
 #include "feature.hpp"
@@ -46,6 +47,8 @@ int main( int argc, char** argv )
 	// Start 10cm off the ground
 	msckf.x.block<3,1>(4,0) << 0, 0, 0.1;
 
+	ofstream logFile;
+ 	logFile.open ("log.csv");
 
 
 	cv::VideoCapture cap(0);
@@ -92,6 +95,8 @@ int main( int argc, char** argv )
 
 			// Propagate
 			msckf.propagate( element.acc, element.gyro );
+			logFile << msckf.x.block<16,1>(0,0).transpose() << "\n";
+
 			// If valid distance measurement, update with that
 			if ( element.distValid ) {
 				if ( n > 5 ) {
@@ -147,5 +152,5 @@ int main( int argc, char** argv )
 		//
 		std::cout << "msckf is:\n" << msckf << std::endl;
 	}
-
+	logFile.close();
 }
