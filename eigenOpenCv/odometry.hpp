@@ -98,8 +98,7 @@ public:
 	// 	triangluate
 	Vector3d triangluate( MatrixX2d z );
 	// -marginalize
-	template <typename Derived_r0, typename Derived_H0>
-	void marginalize( const MatrixX2d &z , const Vector3d &G_p_f, const MatrixBase<Derived_r0>& r0, const MatrixBase<Derived_H0>& H0 );
+	void marginalize( const MatrixX2d &z, const Vector3d &G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 );
 	// TODO: -isInlinerCamera
 	bool isInlinerCamera( const VectorXd &r0, const MatrixXd &H0 );
 	// updateHeight
