@@ -25,5 +25,8 @@ eigenTest: eigenTest.o $(OBJ)
 imuTest: imuTest.o $(OBJ)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
+matlabUnitTest: $@.o $(OBJ)
+	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
+
 clean: 
 	$(RM) test egienTest opencvTest imuTest *.o
