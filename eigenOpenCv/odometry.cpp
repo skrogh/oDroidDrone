@@ -581,10 +581,10 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 	//
 	unsigned int longestLiving = 0;
 	for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
-		// Enforce maximum age of features
+		// Enforce maximum age of features. TODO: figure out if this is really the best way
 		if ( meas_j->z.rows() >= calib->maxFrame ) {
 			meas_j->isLost = true;
-			meas_j->z.conservativeResize( z.rows()-1, NoChange );
+			meas_j->z.conservativeResize( meas_j->z.rows()-1, NoChange );
 		}
 		if ( meas_j->isLost ) {
 			// If more that, or 3 points, use for update
