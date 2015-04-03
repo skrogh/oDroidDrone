@@ -613,6 +613,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 						cv::Point pt2 = cv::Point( z( i+1, 0 ), z( i+1, 1 ) );
 						cv::line( debugImg, pt1, pt2, cv::Scalar( 0, 255, 255 ) );
 					}
+				}
 			}
 			// in any case, remove it and advance
 			meas_j = cameraMeasurements.removeFeature( meas_j );
