@@ -42,7 +42,7 @@ int main()
 	msckf.x.block<3,1>(4,0) << 0, 0, 0.1;
 
 
-	double a_m[3] = { 0, 0, 0 };
+	double a_m[3] = { 0, 0, 9.82 };
 	double g_m[3] = { 0, 0, 0 };
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
@@ -54,8 +54,8 @@ int main()
 	std::cout << std::setprecision(2);
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
-	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
-	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
+	//std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
+	//std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
 
 	msckf.updateHeight( 1 );
 	msckf.augmentState( );
