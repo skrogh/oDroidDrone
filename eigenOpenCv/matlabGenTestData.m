@@ -41,27 +41,25 @@ calib.maxFrame = 5;
 calib.imageOffset = 0.033; %delay of camera with respect to imu in s
 
 
+x_Ci = [ [ 0, 1, 0, 0 ] [ 0, 0, 0.90 ] [ 0, 0, 0 ] ]';
+
+
 z = [320;240];
-x_Ci = [ [ 0, 1, 0, 0 ] [ 0, 0, 1 ] [ 0, 0, 0 ] ]';
 [ G_p_f, f, J_h, theta_log, G_p_f_log ] = triangulate( z, x_Ci, calib );
 G_p_f = G_p_f
 
 z = [0;0];
-x_Ci = [ [ 0, 1, 0, 0 ] [ 0, 0, 1 ] [ 0, 0, 0 ] ]';
 [ G_p_f, f, J_h, theta_log, G_p_f_log ] = triangulate( z, x_Ci, calib );
 G_p_f = G_p_f
 
 z = [640;0];
-x_Ci = [ [ 0, 1, 0, 0 ] [ 0, 0, 1 ] [ 0, 0, 0 ] ]';
 [ G_p_f, f, J_h, theta_log, G_p_f_log ] = triangulate( z, x_Ci, calib );
 G_p_f = G_p_f
 
 z = [0;480];
-x_Ci = [ [ 0, 1, 0, 0 ] [ 0, 0, 1 ] [ 0, 0, 0 ] ]';
 [ G_p_f, f, J_h, theta_log, G_p_f_log ] = triangulate( z, x_Ci, calib );
 G_p_f = G_p_f
 
 z = [640;480];
-x_Ci = [ [ 0, 1, 0, 0 ] [ 0, 0, 1 ] [ 0, 0, 0 ] ]';
 [ G_p_f, f, J_h, theta_log, G_p_f_log ] = triangulate( z, x_Ci, calib );
 G_p_f = G_p_f

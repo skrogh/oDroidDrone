@@ -584,6 +584,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 		// Enforce maximum age of features
 		if ( meas_j->z.rows() >= calib->maxFrame ) {
 			meas_j->isLost = true;
+			meas_j->z.conservativeResize( z.rows()-1, NoChange );
 		}
 		if ( meas_j->isLost ) {
 			// If more that, or 3 points, use for update
