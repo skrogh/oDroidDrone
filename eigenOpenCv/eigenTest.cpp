@@ -23,7 +23,7 @@ int main()
 			-0.923879532511287
 	);
 	calib.C_p_I = Eigen::Vector3d( 0.0, 0.0, -0.056 );
-	calib.g = 9.82;
+	calib.g = 0;
 	calib.delta_t = 0.0025;
 	//calib.imageOffset 
 	calib.sigma_gc = 5.0e-04;
@@ -42,7 +42,7 @@ int main()
 	msckf.x.block<3,1>(4,0) << 0, 0, 0.1;
 
 
-	double a_m[3] = { 0, 0, 9.82 };
+	double a_m[3] = { 0, 0, 0 };
 	double g_m[3] = { 0, 0, 0 };
 
 	std::cout << "msckf is:\n" << msckf << std::endl;
