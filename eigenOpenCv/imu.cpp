@@ -28,6 +28,7 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	speed = 6000000;
 	delay = 0;
 	timeout = 500;
+	pthread_mutex_init( &fifoMutex, NULL );
 
 	//
 	// open I/O files
