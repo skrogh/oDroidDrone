@@ -469,8 +469,8 @@ Vector3d MSCKF::triangluate( MatrixX2d z ) {
 
 		// Calculate feature position estimate
 		Vector3d Ci_theta_i( beta(0), beta(1), 1 );
-		Vector3d G_theta_i = CiG_q._transformVector( Ci_theta_i );
-		double t_i = G_p_Ci( 2 ) / G_theta_i( 2 );
+		Vector3d G_theta_i = CiG_q.conjugate()._transformVector( Ci_theta_i );
+		double t_i = - G_p_Ci( 2 ) / G_theta_i( 2 );
 		G_p_fi.row( i ) = ( t_i * G_theta_i + G_p_Ci ).transpose();
 
 		// Check if feature position is estimated behind camera
