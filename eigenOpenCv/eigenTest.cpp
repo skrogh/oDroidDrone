@@ -59,7 +59,7 @@ int main()
 	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
 
 	msckf.augmentState( );
-	MatrixX2d z = MatrixX2d(1, 2)
+	MatrixX2d z = MatrixX2d(1, 2);
 	z << 240, 320;
 	msckf.triangluate( z );
 	z << 240, 0;
