@@ -293,13 +293,13 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	Vector3d s = calib->delta_t/2.0 * (
 			I1I_q.conjugate()._transformVector( I_a ) + I_a_dly
 	);
-	std::cout << "debug1: " << I1G_q.conjugate()._transformVector( I_a ) << std::endl;
+/*	std::cout << "debug1: " << I1G_q.conjugate()._transformVector( I_a ) << std::endl;
 	std::cout << "debug2: " << I_a_dly << std::endl;
 	std::cout << "debug3: " << I1G_q.conjugate()._transformVector( I_a )  + I_a_dly << std::endl;
 	std::cout << "debug4: " << calib->delta_t/2.0 * ( I1G_q.conjugate()._transformVector( I_a )  + I_a_dly ) << std::endl;
 	std::cout << "debug5: " << calib->delta_t * ( I1G_q.conjugate()._transformVector( I_a )  + I_a_dly ) << std::endl;
 	std::cout << "debug6: " << calib->delta_t * ( I1G_q.conjugate()._transformVector( I_a )  + I_a_dly ) /2.0 << std::endl;
-	std::cout << "debug7: " << s << std::endl;
+	std::cout << "debug7: " << s << std::endl;*/
 
 	Vector3d y = calib->delta_t/2.0 * s;
 
