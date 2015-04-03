@@ -42,7 +42,7 @@ int main()
 	msckf.x.block<3,1>(4,0) << 0, 0, 0.1;
 
 
-	double a_m[3] = { 0, 0, -9.82 };
+	double a_m[3] = { 0, 0, 9.82 };
 	double g_m[3] = { 0, 0, 0 };
 
 	std::cout << std::fixed;
