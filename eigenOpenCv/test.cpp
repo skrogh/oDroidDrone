@@ -119,7 +119,22 @@ int main( int argc, char** argv )
 		//
 		msckf.updateCamera( cameraMeasurements );
 
-		cv::imshow("debygDraw", msckf.debugImg );
+				// Iterate over meas and draw all non lost elements:
+		for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ++meas_j ) {
+			if ( !meas_j->isLost ) {
+				Eigen::MatrixX2d& z = meas_j->z;
+				cv::Point pt = Point( z( z.rows()-1, 0 ), z( z.rows()-1, 1 ) );
+				cv::circle( msckf.debugImg, pt, 4, Scalar( 255, 0, 0 ) );
+				for( int i = 0; i < z.rows() - 1; i++ ) {
+					cv::Point pt1 = Point( z( i, 0 ), z( i, 1 ) );
+					cv::Point pt2 = Point( z( i+1, 0 ), z( i+1, 1 ) );
+					cv::line( msckf.debugImg, pt1, pt2, Scalar( 255, 0, 0 ) );
+				}
+
+			}
+		}
+
+		cv::imshow("debugDraw", msckf.debugImg );
 
 		//
 		// Print state
