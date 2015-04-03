@@ -25,7 +25,7 @@ int main()
 	calib.C_p_I = Eigen::Vector3d( 0.0, 0.0, -0.056 );
 	calib.g = 9.82;
 	calib.delta_t = 0.0025;
-	calib.imageOffset = 0.033;
+	//calib.imageOffset 
 	calib.sigma_gc = 5.0e-04;
 	calib.sigma_ac = 5.0e-04;
 	calib.sigma_wgc = 0.05;
