@@ -553,7 +553,7 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 	r0 = A * r;
 	H0 = A * H_x;
 
-	if ( meas_j->z.rows()*2 - 3 != A.rows() )
+	if ( z.rows()*2 - 3 != A.rows() )
 		std::cout << "A: " << A.rows() << " z: " << z.rows() << std::endl;
 }
 
