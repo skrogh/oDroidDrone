@@ -553,6 +553,8 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 		std::cout << "z: " << z.rows() << "x" << z.cols() << std::endl;
 		std::cout << "r0: " << r0.rows() << "x" << r0.cols() << std::endl;
 		std::cout << "H0: " << H0.rows() << "x" << H0.cols() << std::endl;
+		std::cout << "H_f: " << H_f.rows() << "x" << H_f.cols() << std::endl;
+		std::cout << "H_x: " << H_x.rows() << "x" << H_x.cols() << std::endl;
 		std::cout << "H_f" << H_f << std::endl;
 		std::cout << "H_x" << H_x << std::endl;
 	}
