@@ -19,7 +19,7 @@ test: test.o $(OBJ)
 opencvTest: opencvTest.o $(OBJ)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
-egienTest: egienTest.o $(OBJ)
+eigenTest: eigenTest.o $(OBJ)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
 imuTest: imuTest.o $(OBJ)

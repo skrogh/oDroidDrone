@@ -483,6 +483,8 @@ Vector3d MSCKF::triangluate( MatrixX2d z ) {
 	//
 	Vector3d G_p_f( G_p_fi.col(0).mean(), G_p_fi.col(1).mean(), G_p_fi.col(2).mean() );
 
+	std::cout << " G_p_f: " << G_p_f.transpose() << std::endl;
+
 	//
 	// Signal no solution
 	//

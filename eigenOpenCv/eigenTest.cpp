@@ -58,6 +58,11 @@ int main()
 	std::cout << "Sigma is " << msckf.sigma.rows() << "x" << msckf.sigma.cols() << " :\n" << msckf.sigma << std::endl;
 	std::cout << "State is " << msckf.x.rows() << "x" << msckf.x.cols() << " :\n" << msckf.x << std::endl;
 
+	msckf.augmentState( );
+	msckf.triangluate( MatrixX2d(1, 2) << 240, 320 );
+	msckf.triangluate( MatrixX2d(1, 2) << 240, 0 );
+	msckf.triangluate( MatrixX2d(1, 2) << 0, 320 );
+
 	for( int i = 0; i < 400; i++ ) {
 		msckf.propagate( a_m, g_m );
 	}
