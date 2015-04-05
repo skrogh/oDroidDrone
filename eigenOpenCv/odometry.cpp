@@ -335,13 +335,13 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	Matrix3d Phi_pq = -crossMat( R_ * y );
 	Matrix3d Phi_vq = -crossMat( R_ * s );
 
-	Matrix3d Phi_qbg = -calib->delta_t * ( R1_ + R_ ) / 2.0;
-	Matrix3d Phi_vbg = calib->delta_t * calib->delta_t * crossMat( G_a - G_g ) * ( R1_ + R_ ) / 4.0;
-	Matrix3d Phi_pbg = calib->delta_t * Phi_vbg / 2.0;
+	Matrix3d Phi_qbg = -calib->delta_t / 2.0 * ( R1_ + R_ );
+	Matrix3d Phi_vbg = calib->delta_t * calib->delta_t / 4.0 * ( crossMat( G_a - G_g ) * ( R1_ + R_ ) );
+	Matrix3d Phi_pbg = calib->delta_t / 2.0 * Phi_vbg;
 
 	Matrix3d Phi_qba = Matrix3d::Zero(); // assuming no gravitational effect on gyro
-	Matrix3d Phi_vba = -calib->delta_t * ( R1_ + R_ ) / 2.0;
-	Matrix3d Phi_pba = calib->delta_t * Phi_vba / 2.0;
+	Matrix3d Phi_vba = -calib->delta_t / 2.0 * ( R1_ + R_ );
+	Matrix3d Phi_pba = calib->delta_t / 2.0 * Phi_vba;
 
 	Matrix<double,15,15> Phi_I;
 	Phi_I <<
@@ -361,7 +361,7 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 			calib->sigma_wgc*calib->sigma_wgc*Vector3d(1,1,1),
 			calib->sigma_wac*calib->sigma_wac*Vector3d(1,1,1);
 	N_c = N_c_diag.asDiagonal();
-	Q_d = calib->delta_t * Phi_I * N_c * Phi_I.transpose() + N_c;
+	Q_d = calib->delta_t /2.0 * Phi_I * N_c * Phi_I.transpose() + N_c;
 
 	// do the update
 	sigma.block<15,15>(0,0) = Phi_I * sigma.block<15,15>(0,0) * Phi_I.transpose() + Q_d;
