@@ -156,7 +156,6 @@ int main( int argc, char** argv )
 		//
 		// We have propagated and got a new image, time to update with camera data
 		//
-		msckf.x.block<4,1>(0,0) << 0,1,0,0;
 		msckf.updateCamera( cameraMeasurements );
 
 				// Iterate over meas and draw all non lost elements:
