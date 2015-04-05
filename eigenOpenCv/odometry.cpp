@@ -671,6 +671,9 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 		// apply feedback
 		//
 
+
+		/* DEBUG
+
 		// To inertial state
 		// IG_q
 		Quaternion<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
@@ -702,6 +705,8 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 			x.block<3,1>( frameStart + 0+4, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3, 0 );
 			// G_v_i
 			x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
+
+		*/
 		}
 	}
 
