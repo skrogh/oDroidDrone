@@ -705,9 +705,8 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 			x.block<3,1>( frameStart + 0+4, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3, 0 );
 			// G_v_i
 			x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
-
-		*/
 		}
+		*/
 	}
 
 	//
