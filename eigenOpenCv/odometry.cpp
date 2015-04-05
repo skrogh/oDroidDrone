@@ -540,7 +540,8 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 
 		std::cout << "CiG_q: " << CiG_q.coeffs() << std::endl;
 		std::cout << "C_z1: " << CiG_q._transformVector( Vector3d(0,0,1) ) << std::endl;
-		std::cout << "C_z2: " << Quaternion<double>(-0.3806, 0.9247, -0.0021, 0.0040)._transformVector( Vector3d(0,0,1) ) << std::endl;
+		std::cout << "C_z2: " << CiG_q.toRotationMatrix()*( Vector3d(0,0,1) ) << std::endl;
+		std::cout << "C_z3: " << Quaternion<double>(-0.3806, 0.9247, -0.0021, 0.0040)._transformVector( Vector3d(0,0,1) ) << std::endl;
 		std::cout << "G_p_f: " << G_p_f << std::endl;
 		std::cout << "G_p_Ci: " << G_p_Ci << std::endl;
 		std::cout << "G_p_f - G_p_Ci: " << G_p_f - G_p_Ci << std::endl;
