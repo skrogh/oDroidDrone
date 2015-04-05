@@ -538,6 +538,11 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 		// Calculate feature position in camera frame
 		Vector3d C_p_f = CiG_q._transformVector( G_p_f - G_p_Ci );
 
+		std::cout << "CiG_q: " << CiG_q.coeffs() << std::endl;
+		std::cout << "G_p_f: " << G_p_f << std::endl;
+		std::cout << "G_p_Ci: " << G_p_Ci << std::endl;
+		std::cout << "C_p_f: " << C_p_f << std::endl;
+
 		r.block<2,1>( i*2, 0 ) = z.row( i ).transpose() - cameraProject( C_p_f(0), C_p_f(1), C_p_f(2), calib );
 		H_f.block<2,3>( i*2,0 ) = jacobianH( C_p_f(0), C_p_f(1), C_p_f(2), calib ) * CiG_q.toRotationMatrix();
 		H_x.block<2,9>( i*2, H_x.cols() - ODO_SIGMA_FRAME_SIZE*( z.rows() - i + 1 ) ) <<
