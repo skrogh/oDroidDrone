@@ -75,7 +75,7 @@ public:
 	}
 	EIGEN_STRONG_INLINE Vector3 _transformVector(const Vector3& v) const
 	{
-		return this->conjugate()._transformVector( v );
+		return this->conjugate().Base::_transformVector( v );
 	}
 
 };
