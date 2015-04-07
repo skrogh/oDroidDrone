@@ -62,10 +62,11 @@ public:
 //		return (*this).Base::operator*( other );
 		return other.operator*( *this );
 	}
-	inline QuaternionAlias<_Scalar> conjugate()
+	QuaternionAlias<Scalar> conjugate() const
 	{
-		QuaternionAlias<_Scalar>(this->w(),-this->x(),-this->y(),-this->z());
+		return QuaternionAlias<Scalar>(this->w(),-this->x(),-this->y(),-this->z());
 	}
+
 	
 	//template<class OtherDerived> EIGEN_STRONG_INLINE Derived& operator*= (const QuaternionBase<OtherDerived>& q) 
 	Matrix3 toRotationMatrix() const 
@@ -79,6 +80,12 @@ public:
 
 };
 
+55 template <class Derived>
+  656 inline Quaternion<typename internal::traits<Derived>::Scalar>
+  657 QuaternionBase<Derived>::conjugate() const
+  658 
+
 }
+
 
 #endif//_QUATERNION_ALIAS_H_
