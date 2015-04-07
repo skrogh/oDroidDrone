@@ -57,7 +57,7 @@ public:
 	{ m_coeffs = other.coeffs().template cast<Scalar>(); }
 */
 
-	template<class OtherDerived> EIGEN_STRONG_INLINE QuaternionAlias<Scalar> operator* (const QuaternionAlias<OtherDerived>& other) const
+	template<class OtherDerived> EIGEN_STRONG_INLINE QuaternionAlias<Scalar> operator* (const QuaternionBase<OtherDerived>& other) const
 	{
 	EIGEN_STATIC_ASSERT((internal::is_same<typename QuaternionAlias<_Scalar,_Options>::Scalar, typename OtherDerived::Scalar>::value),
 		YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
