@@ -36,7 +36,7 @@ public:
 	typedef typename internal::traits<Quaternion>::Coefficients Coefficients;
 	typedef typename Base::AngleAxisType AngleAxisType;
 
-	inline QuaternionAlias : Quaternion() {}
+	inline QuaternionAlias : Base() {}
 
 	inline QuaternionAlias(const Scalar& w, const Scalar& x, const Scalar& y, const Scalar& z) : Quaternion(w, x, y, z);
 
