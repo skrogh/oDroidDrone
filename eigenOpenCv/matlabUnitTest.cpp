@@ -20,7 +20,7 @@ int main( int argc, char** argv )
 	calib.k2 = 0.1012;
 	calib.t1 = -0.0003;
 	calib.t2 = 0.0014;
-	calib.CI_q = Eigen::Quaternion<double>(
+	calib.CI_q = Eigen::QuaternionAlias<double>(
 			0.000000000000000, // note that the real value comes first in the eigen quaterneon constructor
 			-0.000000000000000,
 			0.382683432365090,

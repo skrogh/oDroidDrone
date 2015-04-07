@@ -15,8 +15,8 @@ int main( int argc, char** argv )
 	/*
 	QuaternionAlias<double> q_a1( 1, 0, 0, 0 );
 	QuaternionAlias<double> q_a2 = QuaternionAlias<double>( 1, 0, 0, 0 );
-	Quaternion<double> q1 = Quaternion<double>( 0, 0, 0, 1 );
-	Quaternion<double> q2 = Quaternion<double>( 1, 0, 0, 0 );
+	QuaternionAlias<double> q1 = QuaternionAlias<double>( 0, 0, 0, 1 );
+	QuaternionAlias<double> q2 = QuaternionAlias<double>( 1, 0, 0, 0 );
 
 	std::cout << "q_a1: " << q_a1.coeffs() << " q_a2: " << q_a2.coeffs() << std::endl;
 	std::cout << "q_a1 * q_a2: " << (q_a1*q_a2).coeffs() << std::endl;
@@ -33,7 +33,7 @@ int main( int argc, char** argv )
 	calib.k2 = 0.1012;
 	calib.t1 = -0.0003;
 	calib.t2 = 0.0014;
-	calib.CI_q = Eigen::Quaternion<double>(
+	calib.CI_q = Eigen::QuaternionAlias<double>(
 			0.000000000000000,
 			-0.000000000000000,
 			0.382683432365090,

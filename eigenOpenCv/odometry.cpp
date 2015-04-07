@@ -168,7 +168,7 @@ Calib::Calib( ) {
 	k1 = 0; k2 = 0;     // radial distortion parameters [n/u,n/u]
 	t1 = 0; t2 = 0;     // tangential distortion parameters [n/u,n/u]
 	/* Position */
-	CI_q = Quaternion<double>( 1, 0, 0, 0 ); // Rotation from intertial to camera coordinates. [unit quaternion]
+	CI_q = QuaternionAlias<double>( 1, 0, 0, 0 ); // Rotation from intertial to camera coordinates. [unit quaternion]
 	C_p_I = Vector3d( 0, 0, 0 );                // Position of inertial frame in camera coordinates [m,m,m]
 	//
 	// Physical properties
@@ -218,7 +218,7 @@ MSCKF::MSCKF( Calib* cal ) {
 	// init all states to 0;
 	x = VectorXd::Zero(16);
 	// init quaternion
-	x.segment<4>(0) = Quaternion<double>( 1, 0, 0, 0 ).coeffs();
+	x.segment<4>(0) = QuaternionAlias<double>( 1, 0, 0, 0 ).coeffs();
 	// init state to known
 	sigma = MatrixXd::Zero(15,15);
 
@@ -252,7 +252,7 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	** unpack state:
 	*/
 	// Rotation from global to inertial coordinates
-	Quaternion<double> IG_q( x.segment<4>(0) );
+	QuaternionAlias<double> IG_q( x.segment<4>(0) );
 	// Position (of inertial frame) in global coordinates
 	Vector3d G_p( x.segment<3>(0+4) );
 	// Velocity (of inertial frame) in global coordinates
@@ -280,13 +280,13 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	Vector4d k3 = Omega( ( I_g_dly + I_g ) / 2.0 ) * ( q0 + calib->delta_t/2.0 * k2 ) / 2.0;
 	Vector4d k4 = Omega( I_g ) * ( q0 + calib->delta_t * k3 ) / 2.0;
 
-	Quaternion<double> I1I_q(
+	QuaternionAlias<double> I1I_q(
 			Vector4d( 0, 0, 0, 1 )
 			+ calib->delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 )
 	);
 	I1I_q.normalize();
 
-	Quaternion<double> I1G_q = I1I_q * IG_q;
+	QuaternionAlias<double> I1G_q = I1I_q * IG_q;
 
 	// Translation
 	Vector3d G_a = I1G_q.conjugate()._transformVector( I_a ) + G_g;
@@ -470,8 +470,8 @@ Vector3d MSCKF::triangulate( MatrixX2d z ) {
 		// Get index of start of this frame in state
 		unsigned int frameStart = x.rows() - ODO_STATE_FRAME_SIZE*( z.rows() - i + 1 );
 		// Get inertial frame state at that time:	
-		Quaternion<double> IiG_q( x.block<4,1>( frameStart + 0, 0 ) );
-		Quaternion<double> CiG_q = calib->CI_q * IiG_q;
+		QuaternionAlias<double> IiG_q( x.block<4,1>( frameStart + 0, 0 ) );
+		QuaternionAlias<double> CiG_q = calib->CI_q * IiG_q;
 		// Calculate camera state
 		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 );
 		Vector3d G_p_Ci = G_p_Ii - CiG_q.conjugate()._transformVector( calib->C_p_I );
@@ -529,8 +529,8 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 		// Get index of start of this frame in state
 		unsigned int frameStart = x.rows() - ODO_STATE_FRAME_SIZE*( z.rows() - i + 1 );
 		// Get inertial frame state at that time:	
-		Quaternion<double> IiG_q( x.block<4,1>( frameStart + 0, 0 ) );
-		Quaternion<double> CiG_q = calib->CI_q * IiG_q;
+		QuaternionAlias<double> IiG_q( x.block<4,1>( frameStart + 0, 0 ) );
+		QuaternionAlias<double> CiG_q = calib->CI_q * IiG_q;
 		// Calculate camera state
 		Vector3d G_p_Ii = x.block<3,1>( frameStart + 4, 0 );
 		Vector3d G_p_Ci = G_p_Ii - CiG_q.conjugate()._transformVector( calib->C_p_I );
@@ -541,7 +541,7 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 		std::cout << "CiG_q: " << CiG_q.coeffs() << std::endl;
 		std::cout << "C_z1: " << CiG_q._transformVector( Vector3d(0,0,1) ) << std::endl;
 		std::cout << "C_z2: " << CiG_q.toRotationMatrix()*( Vector3d(0,0,1) ) << std::endl;
-		std::cout << "C_z3: " << Quaternion<double>(-0.3806, 0.9247, -0.0021, 0.0040)._transformVector( Vector3d(0,0,1) ) << std::endl;
+		std::cout << "C_z3: " << QuaternionAlias<double>(-0.3806, 0.9247, -0.0021, 0.0040)._transformVector( Vector3d(0,0,1) ) << std::endl;
 		std::cout << "G_p_f: " << G_p_f << std::endl;
 		std::cout << "G_p_Ci: " << G_p_Ci << std::endl;
 		std::cout << "G_p_f - G_p_Ci: " << G_p_f - G_p_Ci << std::endl;
@@ -685,8 +685,8 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 
 		// To inertial state
 		// IG_q
-		Quaternion<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
-		Quaternion<double> IG_q = ( Quaternion<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q );
+		QuaternionAlias<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
+		QuaternionAlias<double> IG_q = ( QuaternionAlias<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q );
 		IG_q.normalize();
 		x.block<4,1>( 0, 0 ) = IG_q.coeffs();
 		// G_p
@@ -702,12 +702,12 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 		for ( int i = 0; i < ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE; i++ ) {
 			unsigned int frameStart = ODO_STATE_SIZE + i * ODO_STATE_FRAME_SIZE;
 			unsigned int delta_frameStart = ODO_SIGMA_SIZE + i * ODO_SIGMA_FRAME_SIZE;
-			Quaternion<double> delta_IiG_q( 1,
+			QuaternionAlias<double> delta_IiG_q( 1,
 					delta_x( delta_frameStart + 0 ),
 					delta_x( delta_frameStart + 1 ),
 					delta_x( delta_frameStart + 2 )
 			);
-			Quaternion<double> IiG_q = ( Quaternion<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q );
+			QuaternionAlias<double> IiG_q = ( QuaternionAlias<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q );
 			IiG_q.normalize();
 			x.block<4,1>( frameStart + 0, 0 ) = IiG_q.coeffs();
 			// G_p_i
@@ -765,8 +765,8 @@ void MSCKF::updateHeight( double height ) {
 
 	// To inertial state
 	// IG_q
-	Quaternion<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
-	Quaternion<double> IG_q = ( Quaternion<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q );
+	QuaternionAlias<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
+	QuaternionAlias<double> IG_q = ( QuaternionAlias<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q );
 	IG_q.normalize();
 	x.block<4,1>( 0, 0 ) = IG_q.coeffs();
 	// G_p
@@ -782,12 +782,12 @@ void MSCKF::updateHeight( double height ) {
 	for ( int i = 0; i < ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE; i++ ) {
 		unsigned int frameStart = ODO_STATE_SIZE + i * ODO_STATE_FRAME_SIZE;
 		unsigned int delta_frameStart = ODO_SIGMA_SIZE + i * ODO_SIGMA_FRAME_SIZE;
-		Quaternion<double> delta_IiG_q( 1,
+		QuaternionAlias<double> delta_IiG_q( 1,
 				delta_x( delta_frameStart + 0 ),
 				delta_x( delta_frameStart + 1 ),
 				delta_x( delta_frameStart + 2 )
 		);
-		Quaternion<double> IiG_q = ( Quaternion<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q );
+		QuaternionAlias<double> IiG_q = ( QuaternionAlias<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q );
 		IiG_q.normalize();
 		x.block<4,1>( frameStart + 0, 0 ) = IiG_q.coeffs();
 		// G_p_i
