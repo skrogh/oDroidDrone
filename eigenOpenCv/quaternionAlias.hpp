@@ -8,6 +8,7 @@ namespace Eigen {
 template<typename _Scalar, int _Options>
 class QuaternionAlias : public Quaternion<_Scalar,_Options>
 {
+/*
 	typedef Quaternion<_Scalar,_Options> Base;
 	enum { IsAligned = internal::traits<QuaternionAlias>::IsAligned };
 public:
@@ -28,7 +29,7 @@ public:
 	{
 		return this->conjugate()._transformVector( v );
 	}
-
+*/
 };
 
 #endif//_QUATERNION_ALIAS_H_
