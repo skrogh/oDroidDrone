@@ -64,7 +64,7 @@ public:
 	EIGEN_STATIC_ASSERT((internal::is_same<typename QuaternionAlias<_Scalar,_Options>::Scalar, typename OtherDerived::Scalar>::value),
 		YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
 	S*/
-	return (*this) * other;
+	return (*this) Base::operator* other;
 	/*
 	return internal::quat_product<
 				Architecture::Target,
