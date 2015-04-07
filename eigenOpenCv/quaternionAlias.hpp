@@ -40,15 +40,15 @@ public:
 
 	QuaternionAlias(const Scalar& w, const Scalar& x, const Scalar& y, const Scalar& z) : Base(w, x, y, z) {}
 
-	QuaternionAlias(const Scalar* data) : Base(data);
+	QuaternionAlias(const Scalar* data) : Base(data) {}
 
 	template<typename Derived>
-	QuaternionAlias(const QuaternionBase<Derived>& other) : Base(other);
+	QuaternionAlias(const QuaternionBase<Derived>& other) : Base(other) {}
 
-	QuaternionAlias(const AngleAxisType& aa) : Base(aa);
+	QuaternionAlias(const AngleAxisType& aa) : Base(aa) {}
 
 	template<typename Derived>
-	QuaternionAlias(const MatrixBase<Derived>& other) : Base(other);
+	QuaternionAlias(const MatrixBase<Derived>& other) : Base(other) {}
 
 /*
 	template<typename OtherScalar, int OtherOptions>
