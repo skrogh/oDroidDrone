@@ -33,6 +33,17 @@ public:
 	typedef Matrix<Scalar,3,1> Vector3;
 	typedef Matrix<Scalar,3,3> Matrix3;
 
+	inline QuaternionAlias:Quaternion() {}
+	inline QuaternionAlias:Quaternion(const Scalar& w, const Scalar& x, const Scalar& y, const Scalar& z);
+	inline QuaternionAliasQuaternion(const Scalar* data);
+	template<class Derived> EIGEN_STRONG_INLINE QuaternionAlias:Quaternion(const QuaternionBase<Derived>& other);
+	explicit inline QuaternionAlias:Quaternion(const AngleAxisType& aa);
+	template<typename Derived>
+	explicit inline QuaternionAlias:Quaternion(const MatrixBase<Derived>& other);
+	template<typename OtherScalar, int OtherOptions>
+	explicit inline QuaternionAlias(const QuaternionAlias<OtherScalar, OtherOptions>& other)
+	{ m_coeffs = other.coeffs().template cast<Scalar>(); }
+
 	template<class OtherDerived> EIGEN_STRONG_INLINE QuaternionAlias<Scalar> operator* (const QuaternionAlias<OtherDerived>& other) const
 	{
 	
