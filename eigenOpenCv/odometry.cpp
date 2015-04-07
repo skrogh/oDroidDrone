@@ -620,8 +620,8 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 						}
 
 						// Add to huge H0 and r0 matrix
-						H0.conservativeResize( H0j.rows(), NoChange );
-						r0.conservativeResize( r0j.rows(), NoChange );
+						H0.conservativeResize( H0.rows() + H0j.rows(), NoChange );
+						r0.conservativeResize( r0.rows() + r0j.rows(), NoChange );
 						H0.bottomRows( H0j.rows() ) = H0j;
 						r0.bottomRows( r0j.rows() ) = r0j;
 					} else {
@@ -671,8 +671,8 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 		// Kalman gain
 		MatrixXd K = sigma * H0.transpose() * ( H0 * sigma * H0.transpose() + R_q ).inverse();
 
-		std::cout << "r0: " << r0 << std::endl;
-		std::cout << "K: " << K << std::endl;
+		//std::cout << "r0: " << r0 << std::endl;
+		//std::cout << "K: " << K << std::endl;
 		// Update to be appled to state
 		VectorXd delta_x = K * r0;
 
