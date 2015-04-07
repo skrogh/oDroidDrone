@@ -11,7 +11,7 @@ s_G_v = 23:25;
 s_b_g = 26:28;
 s_b_a = 29:31;
 
-load( 'log_.csv' );
+load( 'log.csv' );
 subplot(2,3,1)
 plot( log(:,G_p) )
 subplot(2,3,2)
