@@ -60,7 +60,7 @@ public:
 	template<class OtherDerived> EIGEN_STRONG_INLINE QuaternionAlias<_Scalar, _Options> operator* (const QuaternionBase<OtherDerived>& other) const
 	{
 //		return (*this).Base::operator*( other );
-		return other.Base::operator*( *this );
+		return other.operator*( *this );
 	}
 
 	
