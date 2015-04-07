@@ -37,18 +37,18 @@ public:
 	typedef typename Base::AngleAxisType AngleAxisType;
 
 	QuaternionAlias : Base();
-/*
-	QuaternionAlias(const Scalar& w, const Scalar& x, const Scalar& y, const Scalar& z) : Quaternion(w, x, y, z);
 
-	QuaternionAlias(const Scalar* data) : Quaternion(data);
+	QuaternionAlias(const Scalar& w, const Scalar& x, const Scalar& y, const Scalar& z) : Base(w, x, y, z);
 
-	template<typename Derived>
-	QuaternionAlias(const QuaternionBase<Derived>& other) : Quaternion(other);
-
-	QuaternionAlias(const AngleAxisType& aa) : Quaternion(aa);
+	QuaternionAlias(const Scalar* data) : Base(data);
 
 	template<typename Derived>
-	QuaternionAlias(const MatrixBase<Derived>& other) : Quaternion(other);
+	QuaternionAlias(const QuaternionBase<Derived>& other) : Base(other);
+
+	QuaternionAlias(const AngleAxisType& aa) : Base(aa);
+
+	template<typename Derived>
+	QuaternionAlias(const MatrixBase<Derived>& other) : Base(other);
 
 /*
 	template<typename OtherScalar, int OtherOptions>
