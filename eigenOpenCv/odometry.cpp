@@ -671,6 +671,8 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 		// Kalman gain
 		MatrixXd K = sigma * H0.transpose() * ( H0 * sigma * H0.transpose() + R_q ).inverse();
 
+		std::cout << "r0: " << r0 << std::endl;
+		std::cout << "K: " << K << std::endl;
 		// Update to be appled to state
 		VectorXd delta_x = K * r0;
 
