@@ -6,10 +6,10 @@
 namespace Eigen {
 
 template<typename _Scalar, int _Options>
-class QuaternionAlias : public Quaternion<Quaternion<_Scalar,_Options> >
+class QuaternionAlias : public Quaternion<_Scalar,_Options>
 {
-	typedef Quaternion<Quaternion<_Scalar,_Options> > Base;
-	enum { IsAligned = internal::traits<Quaternion>::IsAligned };
+	typedef Quaternion<_Scalar,_Options> Base;
+	enum { IsAligned = internal::traits<QuaternionAlias>::IsAligned };
 public:
 	template<class OtherDerived> EIGEN_STRONG_INLINE QuaternionAlias<Scalar> operator* (const QuaternionAlias<OtherDerived>& q) const
 	{
