@@ -62,9 +62,9 @@ public:
 //		return (*this).Base::operator*( other );
 		return other.operator*( *this );
 	}
-	inline QuaternionAlias<_Scalar, _Options> conjugate()
+	inline QuaternionAlias<_Scalar> conjugate()
 	{
-		QuaternionAlias<_Scalar, _Options>(this->w(),-this->x(),-this->y(),-this->z());
+		QuaternionAlias<_Scalar>(this->w(),-this->x(),-this->y(),-this->z());
 	}
 	
 	//template<class OtherDerived> EIGEN_STRONG_INLINE Derived& operator*= (const QuaternionBase<OtherDerived>& q) 
