@@ -5,6 +5,8 @@
 
 namespace Eigen {
 
+template<typename Scalar, int Options = AutoAlign> class QuaternionAlias;
+
 namespace internal {
 template<typename _Scalar,int _Options>
 struct traits<QuaternionAlias<_Scalar,_Options> >
