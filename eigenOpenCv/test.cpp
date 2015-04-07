@@ -45,9 +45,9 @@ int main( int argc, char** argv )
 	calib.imageOffset.tv_usec = 33000;
 	calib.sigma_gc = 0.001;//5.0e-04;
 	calib.sigma_ac = 0.008;//5.0e-04;
-	calib.sigma_wgc = 0.0001;
-	calib.sigma_wac = 0.0001;
-	calib.sigma_Im = 1;
+	calib.sigma_wgc = 0.01;
+	calib.sigma_wac = 0.01;
+	calib.sigma_Im = 10;
 	calib.sigma_hc = 0.05;
 	calib.minFrame = 1;
 	std::cout << "calib is:\n" << calib << std::endl;
