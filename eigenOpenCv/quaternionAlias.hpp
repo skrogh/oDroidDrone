@@ -42,6 +42,7 @@ public:
 
 	QuaternionAlias(const Scalar* data) : Quaternion(data);
 
+	template<typename Derived>
 	QuaternionAlias(const QuaternionBase<Derived>& other) : Quaternion(other);
 
 	QuaternionAlias(const AngleAxisType& aa) : Quaternion(aa);
