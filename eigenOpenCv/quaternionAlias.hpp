@@ -61,9 +61,9 @@ public:
 	{
 	EIGEN_STATIC_ASSERT((internal::is_same<typename QuaternionAlias<_Scalar,_Options>::Scalar, typename OtherDerived::Scalar>::value),
 		YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
-	return internal::quat_product<Architecture::Target, QuaternionAlias<_Scalar,_Options>, OtherDerived,
-			typename internal::traits<QuaternionAlias<_Scalar,_Options>>::Scalar,
-			internal::traits<QuaternionAlias<_Scalar,_Options>>::IsAligned && internal::traits<OtherDerived>::IsAligned>::run(*this, other);
+	return internal::quat_product< Architecture::Target, QuaternionAlias< _Scalar,_Options>, OtherDerived,
+			typename internal::traits<QuaternionAlias<_Scalar,_Options> >::Scalar,
+			internal::traits<Quaternion<_Scalar,_Options> >::IsAligned && internal::traits<OtherDerived>::IsAligned >::run(*this, other);
 	}
 
 	
