@@ -42,7 +42,7 @@ public:
 			typename internal::traits<Scalar>::Scalar,
 			internal::traits<Scalar>::IsAligned && internal::traits<OtherDerived>::IsAligned>::run(other, *this);
 	}
-	/*
+	
 	//template<class OtherDerived> EIGEN_STRONG_INLINE Derived& operator*= (const QuaternionBase<OtherDerived>& q) 
 	Matrix3 toRotationMatrix() const 
 	{
@@ -52,7 +52,7 @@ public:
 	{
 		return this->conjugate()._transformVector( v );
 	}
-*/
+
 };
 
 /*
