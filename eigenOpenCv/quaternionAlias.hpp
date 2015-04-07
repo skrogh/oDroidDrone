@@ -26,6 +26,7 @@ class QuaternionAlias : public Quaternion<_Scalar,_Options>
 {
 
 	typedef Quaternion<_Scalar,_Options> Base;
+	typedef QuaternionAlias<_Scalar,_Options> This;
 	enum { IsAligned = internal::traits<QuaternionAlias>::IsAligned };
 
 public:
@@ -56,18 +57,15 @@ public:
 	{ m_coeffs = other.coeffs().template cast<Scalar>(); }
 */
 
-	template<class OtherDerived> EIGEN_STRONG_INLINE Quaternion<Scalar> operator* (const QuaternionBase<OtherDerived>& q) const;
-	/*
 	template<class OtherDerived> EIGEN_STRONG_INLINE QuaternionAlias<Scalar> operator* (const QuaternionAlias<OtherDerived>& q) const
 	{
-	EIGEN_STATIC_ASSERT((internal::is_same<Scalar, OtherDerived>::value),
-	YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
-	
-	return internal::quat_product<Architecture::Target, Scalar, OtherDerived,
-			typename internal::traits<Scalar>::Scalar,
-			internal::traits<Scalar>::IsAligned && internal::traits<OtherDerived>::IsAligned>::run(other, *this);
+	EIGEN_STATIC_ASSERT((internal::is_same<typename This::Scalar, typename OtherDerived::Scalar>::value),
+		YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
+	return internal::quat_product<Architecture::Target, This, OtherDerived,
+			typename internal::traits<This>::Scalar,
+			internal::traits<This>::IsAligned && internal::traits<OtherDerived>::IsAligned>::run(*this, other);
 	}
-	*/
+
 	
 	//template<class OtherDerived> EIGEN_STRONG_INLINE Derived& operator*= (const QuaternionBase<OtherDerived>& q) 
 	Matrix3 toRotationMatrix() const 
@@ -96,7 +94,7 @@ QuaternionAlias<Derived>::operator* (const QuaternionAlias<OtherDerived>& other)
 			internal::traits<Derived>::IsAligned && internal::traits<OtherDerived>::IsAligned>::run(other, *this);
 }*/
 }
-
+/*
 template <class Derived>
 template <class OtherDerived>
 EIGEN_STRONG_INLINE QuaternionAlias<typename internal::traits<Derived>::Scalar>
@@ -107,6 +105,6 @@ QuaternionBase<Derived>::operator* (const QuaternionBase<OtherDerived>& other) c
 	return internal::quat_product<Architecture::Target, Derived, OtherDerived,
 			typename internal::traits<Derived>::Scalar,
 		internal::traits<Derived>::IsAligned && internal::traits<OtherDerived>::IsAligned>::run(*this, other);
-}
+}*/
 
 #endif//_QUATERNION_ALIAS_H_
