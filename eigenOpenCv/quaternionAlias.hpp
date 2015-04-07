@@ -26,7 +26,7 @@ class QuaternionAlias : public Quaternion<_Scalar,_Options>
 {
 
 	typedef Quaternion<_Scalar,_Options> Base;
-	typedef QuaternionAlias<_Scalar,_Options> This;
+	//typedef QuaternionAlias<_Scalar,_Options> This;
 	enum { IsAligned = internal::traits<QuaternionAlias>::IsAligned };
 
 public:
@@ -59,11 +59,11 @@ public:
 
 	template<class OtherDerived> EIGEN_STRONG_INLINE QuaternionAlias<Scalar> operator* (const QuaternionAlias<OtherDerived>& other) const
 	{
-	EIGEN_STATIC_ASSERT((internal::is_same<typename This::Scalar, typename OtherDerived::Scalar>::value),
+	EIGEN_STATIC_ASSERT((internal::is_same<typename QuaternionAlias<_Scalar,_Options>::Scalar, typename OtherDerived::Scalar>::value),
 		YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
-	return internal::quat_product<Architecture::Target, This, OtherDerived,
-			typename internal::traits<This>::Scalar,
-			internal::traits<This>::IsAligned && internal::traits<OtherDerived>::IsAligned>::run(*this, other);
+	return internal::quat_product<Architecture::Target, QuaternionAlias<_Scalar,_Options>, OtherDerived,
+			typename internal::traits<QuaternionAlias<_Scalar,_Options>>::Scalar,
+			internal::traits<QuaternionAlias<_Scalar,_Options>>::IsAligned && internal::traits<OtherDerived>::IsAligned>::run(*this, other);
 	}
 
 	
