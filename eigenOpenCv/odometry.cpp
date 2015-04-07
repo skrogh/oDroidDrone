@@ -1,6 +1,5 @@
 #include <iostream>
 #include <Eigen/Dense>
-#include <Eigen/Sparse>
 #include <Eigen/Geometry>
 #include <cmath>
 

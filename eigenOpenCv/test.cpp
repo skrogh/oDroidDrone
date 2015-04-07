@@ -8,7 +8,6 @@
 #include "odometry.hpp"
 #include "common.hpp"
 #include "imu.hpp"
-#include "quaternionAlias.hpp"
 
 int main( int argc, char** argv )
 {
