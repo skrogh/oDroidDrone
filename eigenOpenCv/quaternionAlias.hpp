@@ -30,6 +30,8 @@ class QuaternionAlias : public Quaternion<_Scalar,_Options>
 
 public:
 	typedef _Scalar Scalar;
+	typedef Matrix<Scalar,3,1> Vector3;
+	typedef Matrix<Scalar,3,3> Matrix3;
 
 	template<class OtherDerived> EIGEN_STRONG_INLINE QuaternionAlias<Scalar> operator* (const QuaternionAlias<OtherDerived>& other) const
 	{

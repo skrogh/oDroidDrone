@@ -13,19 +13,19 @@ all: test
 %.o: %.x $(DEPS)
 	$(CXX) $(CPPFLAGS) -c -o $@ $< $(LIBS)
 
-test: test.o $(OBJ)
+test: test.o $(OBJ) $(DEPS)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
-opencvTest: opencvTest.o $(OBJ)
+opencvTest: opencvTest.o $(OBJ) $(DEPS)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
-eigenTest: eigenTest.o $(OBJ)
+eigenTest: eigenTest.o $(OBJ) $(DEPS)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
-imuTest: imuTest.o $(OBJ)
+imuTest: imuTest.o $(OBJ) $(DEPS)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
-matlabUnitTest: matlabUnitTest.o $(OBJ)
+matlabUnitTest: matlabUnitTest.o $(OBJ) $(DEPS)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
 clean: 
