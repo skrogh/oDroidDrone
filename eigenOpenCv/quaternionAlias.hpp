@@ -5,6 +5,20 @@
 
 namespace Eigen {
 
+namespace internal {
+template<typename _Scalar,int _Options>
+struct traits<QuaternionAlias<_Scalar,_Options> >
+{
+	typedef QuaternionAlias<_Scalar,_Options> PlainObject;
+	typedef _Scalar Scalar;
+	typedef Matrix<_Scalar,4,1,_Options> Coefficients;
+	enum{
+		IsAligned = internal::traits<Coefficients>::Flags & AlignedBit,
+		Flags = IsAligned ? (AlignedBit | LvalueBit) : LvalueBit
+	};
+};
+}
+
 template<typename _Scalar, int _Options>
 class QuaternionAlias : public Quaternion<_Scalar,_Options>
 {
@@ -13,8 +27,9 @@ class QuaternionAlias : public Quaternion<_Scalar,_Options>
 	enum { IsAligned = internal::traits<QuaternionAlias>::IsAligned };
 
 public:
-	template<class OtherDerived> EIGEN_STRONG_INLINE QuaternionAlias<Scalar> operator* (const QuaternionAlias<OtherDerived>& q) const;
 /*
+	template<class OtherDerived> EIGEN_STRONG_INLINE QuaternionAlias<Scalar> operator* (const QuaternionAlias<OtherDerived>& q) const;
+
 	{
 		EIGEN_STATIC_ASSERT((internal::is_same<typename Derived::Scalar, typename OtherDerived::Scalar>::value),
 		YOU_MIXED_DIFFERENT_NUMERIC_TYPES__YOU_NEED_TO_USE_THE_CAST_METHOD_OF_MATRIXBASE_TO_CAST_NUMERIC_TYPES_EXPLICITLY)
