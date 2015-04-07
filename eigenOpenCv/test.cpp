@@ -101,7 +101,7 @@ int main( int argc, char** argv )
 	cap.grab();
 	cap.retrieve( image );
 	cv::imshow("DebugDraw", image );
-	cv::waitKey(1);
+	cv::waitKey(100);
 
 	//
 	// Clear Imu buffer
