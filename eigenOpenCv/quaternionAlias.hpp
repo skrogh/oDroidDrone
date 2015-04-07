@@ -36,8 +36,8 @@ public:
 	typedef typename internal::traits<QuaternionAlias>::Coefficients Coefficients;
 	typedef typename Base::AngleAxisType AngleAxisType;
 
-	inline QuaternionAlias : Base();
-
+	inline QuaternionAlias : Quaternion<_Scalar,_Options>() {}
+/*
 	inline QuaternionAlias(const Scalar& w, const Scalar& x, const Scalar& y, const Scalar& z) : Quaternion(w, x, y, z);
 
 	inline QuaternionAlias(const Scalar* data) : Quaternion(data);
@@ -47,12 +47,12 @@ public:
 	explicit inline QuaternionAlias(const AngleAxisType& aa) : Quaternion(aa);
 
 	template<typename Derived>
-	explicit inline QuaternionAlias:Quaternion(const MatrixBase<Derived>& other);
+	explicit inline QuaternionAlias(const MatrixBase<Derived>& other) : Quaternion(other);
 
 	template<typename OtherScalar, int OtherOptions>
 	explicit inline QuaternionAlias(const QuaternionAlias<OtherScalar, OtherOptions>& other)
 	{ m_coeffs = other.coeffs().template cast<Scalar>(); }
-
+*/
 	template<class OtherDerived> EIGEN_STRONG_INLINE QuaternionAlias<Scalar> operator* (const QuaternionAlias<OtherDerived>& other) const
 	{
 	
