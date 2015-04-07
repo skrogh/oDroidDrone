@@ -33,7 +33,7 @@ public:
 	typedef Matrix<Scalar,3,1> Vector3;
 	typedef Matrix<Scalar,3,3> Matrix3;
 
-	typedef typename internal::traits<Quaternion>::Coefficients Coefficients;
+	typedef typename internal::traits<QuaternionAlias>::Coefficients Coefficients;
 	typedef typename Base::AngleAxisType AngleAxisType;
 
 	inline QuaternionAlias : Base() {}
