@@ -491,12 +491,13 @@ Vector3d MSCKF::triangulate( MatrixX2d z ) {
 	//
 	Vector3d G_p_f( G_p_fi.col(0).mean(), G_p_fi.col(1).mean(), G_p_fi.col(2).mean() );
 
+	/*
 	std::cout << " G_p_f: " << G_p_f.transpose();
 	if ( clearOutlier )
 		std::cout << "    clearOutlier" << std::endl;
 	else
 		std::cout << "    not clearOutlier" << std::endl;
-
+	*/
 
 	//
 	// Signal no solution
@@ -680,7 +681,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 		//
 		// apply feedback
 		//
-
+/*
 		// To inertial state
 		// IG_q
 		QuaternionAlias<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
@@ -725,7 +726,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 	if ( longestLiving < calib->minFrame )
 		longestLiving = calib->minFrame;
 	this->removeOldStates( ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE - longestLiving );
-
+*/
 }
 
 void MSCKF::updateHeight( double height ) {

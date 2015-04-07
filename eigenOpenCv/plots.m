@@ -11,7 +11,7 @@ s_G_v = 23:25;
 s_b_g = 26:28;
 s_b_a = 29:31;
 
-load( 'log.csv' );
+load( 'log_.csv' );
 subplot(2,3,1)
 plot( log(:,G_p) )
 subplot(2,3,2)
@@ -28,7 +28,7 @@ plot( log(:,s_b_a) )
 figure;
 subplot(2,2,1)
 plot( log(:,q) );
-plot( quaternVectRotate( repmat( [0,0,1], length(log) ), quaternConj(log(:,q)) ) );
+%plot( quaternVectRotate( repmat( [0,0,1], length(log) ), quaternConj(log(:,q)) ) );
 subplot(2,2,2)
 plot( log(:,b_g) );
 subplot(2,2,3)
