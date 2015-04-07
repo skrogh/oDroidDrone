@@ -32,4 +32,5 @@ public:
 */
 };
 
+}
 #endif//_QUATERNION_ALIAS_H_
