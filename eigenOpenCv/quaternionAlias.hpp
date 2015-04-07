@@ -45,6 +45,7 @@ public:
 */
 };
 
+/*
 template <class Derived>
 template <class OtherDerived>
 EIGEN_STRONG_INLINE QuaternionAlias<typename internal::traits<Derived>::Scalar>
@@ -56,7 +57,7 @@ QuaternionAlias<Derived>::operator* (const QuaternionAlias<OtherDerived>& other)
 	return internal::quat_product<Architecture::Target, Derived, OtherDerived,
 			typename internal::traits<Derived>::Scalar,
 			internal::traits<Derived>::IsAligned && internal::traits<OtherDerived>::IsAligned>::run(other, *this);
-}
+}*/
 
 }
 #endif//_QUATERNION_ALIAS_H_
