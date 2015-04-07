@@ -13,6 +13,7 @@
 
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
+#include "quaternionAlias.hpp"
 #include <sys/time.h>
 #include <list>
 #include "common.hpp"
