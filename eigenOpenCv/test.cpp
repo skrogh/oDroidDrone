@@ -14,8 +14,8 @@ int main( int argc, char** argv )
 {
 
 	QuaternionAlias<double> q_a1( 1, 0, 0, 0 );
-	/*
 	QuaternionAlias<double> q_a2 = Quaternion<double>( 1, 0, 0, 0 );
+	/*
 	Quaternion<double> q1 = Quaternion<double>( 1, 0, 0, 0 );
 	Quaternion<double> q2 = Quaternion<double>( 1, 0, 0, 0 );
 
