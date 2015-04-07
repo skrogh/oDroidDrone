@@ -80,12 +80,5 @@ public:
 
 };
 
-55 template <class Derived>
-  656 inline Quaternion<typename internal::traits<Derived>::Scalar>
-  657 QuaternionBase<Derived>::conjugate() const
-  658 
-
-}
-
 
 #endif//_QUATERNION_ALIAS_H_
