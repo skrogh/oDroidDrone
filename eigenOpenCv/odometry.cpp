@@ -715,6 +715,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 			x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
 		}
 	}
+	*/
 
 	//
 	// Remove all old and unused frames
@@ -726,7 +727,8 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 	if ( longestLiving < calib->minFrame )
 		longestLiving = calib->minFrame;
 	this->removeOldStates( ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE - longestLiving );
-*/
+
+
 }
 
 void MSCKF::updateHeight( double height ) {
