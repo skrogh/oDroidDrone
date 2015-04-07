@@ -12,6 +12,7 @@
 
 int main( int argc, char** argv )
 {
+	/*
 	QuaternionAlias<double> q_a1 = Quaternion<double>( 1, 0, 0, 0 );
 	QuaternionAlias<double> q_a2 = Quaternion<double>( 1, 0, 0, 0 );
 	Quaternion<double> q1 = Quaternion<double>( 1, 0, 0, 0 );
@@ -21,7 +22,7 @@ int main( int argc, char** argv )
 	std::cout << "q_a1 * q_a2: " << (q_a1*q_a2).coeffs() << std::endl;
 	std::cout << "q1: " << q1.coeffs() << " q2: " << q2.coeffs() << std::endl;
 	std::cout << "q1 * q2: " << (q1*q2).coeffs() << std::endl;
-
+	*/
 	Calib calib;
 	calib.o_x = 300.8859;
 	calib.o_y = 222.5206;
