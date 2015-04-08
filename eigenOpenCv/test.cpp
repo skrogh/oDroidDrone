@@ -171,7 +171,7 @@ int main( int argc, char** argv )
 		//
 		// We have propagated and got a new image, time to update with camera data
 		//
-		if ( resetCovar > 300 ) {
+		if ( resetCovar > 3000 ) {
 			resetCovar = 0;
 			msckf.sigma.setZero();
 			msckf.sigma.diagonal().block<3,1>(0,0) << 0.005, 0.005, 0.005;
