@@ -118,9 +118,9 @@ int main( int argc, char** argv )
 		//cap.grab();
 		//cap.grab();
 		//cap.grab();
-		//cap.grab();
+		cap.grab();
 		gettimeofday( &tv, &tz );
-		//cap.retrieve( image );
+		cap.retrieve( image );
 		msckf.debugImg = image.clone();
 
 		//
