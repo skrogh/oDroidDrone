@@ -192,7 +192,7 @@ int main( int argc, char** argv )
 		//
 		std::cout << "msckf is:\n" << msckf << std::endl;
 		std::cout << "sigma is:" << msckf.sigma.rows() << "x" << msckf.sigma.cols() << std::endl;
-		std::cout << "The determinant of sigma is " << msckf.sigma.determinant() << endl;
+		std::cout << "The determinant of sigma is " << msckf.sigma.determinant() << std::endl;
 	}
 	logFile.close();
 }
