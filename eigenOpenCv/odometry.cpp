@@ -2,12 +2,16 @@
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <cmath>
+#include <random>
 
 #include "odometry.hpp"
 #include "common.hpp"
 
 using namespace Eigen;
 
+//for simulation
+std::default_random_engine randomGenerator;
+std::uniform_int_distribution<int> randomDistribution(1,10);
 
 //
 // Chi square lookup for 95% confidence. TODO: calculate at runtime so size fits with max frame fifo length
@@ -593,7 +597,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 	unsigned int longestLiving = 0;
 	for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
 		// Enforce maximum age of features. TODO: figure out if this is really the best way
-		if ( meas_j->z.rows() >= calib->maxFrame ) {
+		if ( ( meas_j->z.rows() >= calib->maxFrame ) || ( randomDistribution(randomGenerator) == 1 ) ) {
 			meas_j->isLost = true;
 			meas_j->z.conservativeResize( meas_j->z.rows()-1, NoChange );
 		}
