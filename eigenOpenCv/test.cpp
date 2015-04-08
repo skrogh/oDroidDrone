@@ -133,7 +133,8 @@ int main( int argc, char** argv )
 			// Propagate
 			msckf.propagate( element.acc, element.gyro );
 			logFile << msckf.x.block<16,1>(0,0).transpose() << "\t";
-			logFile << msckf.sigma.diagonal().block<15,1>(0,0).transpose() << "\n";
+			logFile << msckf.sigma.diagonal().block<15,1>(0,0).transpose() << "\t";
+			logFile << msckf.sigma.determinant() << "\n";
 
 			// If valid distance measurement, update with that
 			if ( element.distValid ) {
