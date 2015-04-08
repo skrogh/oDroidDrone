@@ -172,7 +172,7 @@ int main( int argc, char** argv )
 		// We have propagated and got a new image, time to update with camera data
 		//
 		//if ( resetCovar > 300 ) {
-			msckf.sigma.diagonal() = msckf.sigma.diagonal() + 1e-100*Eigen::MatrixXd::Ones( msckf.sigma.rows(), 1 );
+			msckf.sigma.diagonal() = msckf.sigma.diagonal() + 1e-10*Eigen::MatrixXd::Ones( msckf.sigma.rows(), 1 );
 			/*,
 			resetCovar = 0;
 			msckf.sigma.setZero();
