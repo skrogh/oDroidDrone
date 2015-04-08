@@ -112,6 +112,7 @@ int main( int argc, char** argv )
 	}
 	int n = 0;
 	int nn = 0;
+	int resetCovar = 0;
 	while( cv::waitKey(1) != 27 ) {
 		//cap.grab();
 		//cap.grab();
@@ -129,6 +130,7 @@ int main( int argc, char** argv )
 			ImuMeas_t element;
 			// Wait for at least one imu measurement
 			while( !imu.fifoPop( element ) );
+			resetCovar++;
 
 			// Propagate
 			msckf.propagate( element.acc, element.gyro );
@@ -169,6 +171,15 @@ int main( int argc, char** argv )
 		//
 		// We have propagated and got a new image, time to update with camera data
 		//
+		if ( resetCovar > 300 ) {
+			resetCovar = 0;
+			msckf.sigma.setZero();
+			msckf.sigma.diagonal().block<3,1>(0,0) << 0.05, 0.05, 0.05;
+			msckf.sigma.diagonal().block<3,1>(3,0) << 0, 0, 0.1;
+			msckf.sigma.diagonal().block<3,1>(6,0) << 0, 0, 0;
+			msckf.sigma.diagonal().block<3,1>(9,0) << 0.01, 0.01, 0.01;
+			msckf.sigma.diagonal().block<3,1>(12,0) << 0.1, 0.1, 0.1;
+		}
 		msckf.updateCamera( cameraMeasurements );
 
 				// Iterate over meas and draw all non lost elements:

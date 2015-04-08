@@ -10,6 +10,7 @@ s_G_p = 20:22;
 s_G_v = 23:25;
 s_b_g = 26:28;
 s_b_a = 29:31;
+determinant = 32;
 
 load( 'log.csv' );
 subplot(2,3,1)
@@ -35,5 +36,8 @@ subplot(2,2,3)
 plot( log(:,s_q) );
 subplot(2,2,4)
 plot( log(:,s_b_g) );
+
+figure;
+plot( log(3:end,determinant) );
 
 
