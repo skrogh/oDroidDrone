@@ -87,7 +87,7 @@ fprintf( file, 'msckf.sigma = sigma;\n' );
 for j=1:2
     [ r_0j, H_0j, G_p_fj, clearOutlier ] = marginalize( z(:,j), x_C, z_length(j), calib );
     
-    z_ = z( end+1-2-z_length(j)*2:end-2 );
+    z_ = z( end+1-2-z_length(j)*2:end-2, j );
     z_ = reshape( z_', 2, z_length(j) )';
     fprintf( file, '{\n' );
     
