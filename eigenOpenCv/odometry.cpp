@@ -115,6 +115,7 @@ Matrix<double,2,3> jacobianH( double X, double Y, double Z, Calib* calib ) {
 	double& f_y = calib->f_y;
 	double& k1 = calib->k1;
 	double& k2 = calib->k2;
+	double k3 = 0;
 	double& t1 = calib->t1;
 	double& t2 = calib->t2;
 
