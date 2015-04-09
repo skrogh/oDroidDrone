@@ -76,10 +76,10 @@ z = z(:,z_length>=3);
 z_length = z_length(:,z_length>=3);
 
 [ IG_q, G_p, G_v, b_g, b_a, x_C ] = unpackState( x );
-delete 'matlabTest.h'
+
 file = fopen('matlabTest.h','w');
-printMatlabVarAsEigen( file, 'MatrixXd', 'x', x );
-printMatlabVarAsEigen( file, 'MatrixXd', 'sigma', Sigma );
+%printMatlabVarAsEigen( file, 'MatrixXd', 'x', x );
+%printMatlabVarAsEigen( file, 'MatrixXd', 'sigma', Sigma );
 fprintf( file, 'msckf.x = x;\n' );
 fprintf( file, 'msckf.sigma = sigma;\n' );
 
@@ -90,18 +90,15 @@ for j=1:2
     z_ = z( end+1-2-z_length(j)*2:end-2 );
     z_ = reshape( z_', 2, z_length(j) )';
     fprintf( file, '{\n' );
-    
     printMatlabVarAsEigen( file, 'MatrixX2d', 'z', z_ );
     printMatlabVarAsEigen( file, 'MatrixXd', 'G_p_f', G_p_fj );
-    printMatlabVarAsEigen( file, 'MatrixXd', 'r0_matlab', r_0j );
-    printMatlabVarAsEigen( file, 'MatrixXd', 'H0_matlab', H_0j );
+    printMatlabVarAsEigen( file, 'MatrixXd', 'r_0_matlab', r_0j );
+    printMatlabVarAsEigen( file, 'MatrixXd', 'H_0_matlab', H_0j );
     fprintf( file, [...
     'VectorXd r0j = VectorXd( z.rows()*2-3 );\n'...
 	'MatrixXd H0j = MatrixXd( z.rows()*2-3, sigma.cols() );\n'...
     'marginalize( z, G_p_f, r0, H0 );\n'...
-    'std::cout << r0 << "\\n" << r0_matlab << std::endl\n'...
-    'std::cout << H0 << "\\n" << H0_matlab << std::endl\n'...
-    '}\n'...
+    'std::cout 
     ] );
     
     

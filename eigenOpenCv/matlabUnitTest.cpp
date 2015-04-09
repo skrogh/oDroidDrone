@@ -64,6 +64,6 @@ int main( int argc, char** argv )
 	z << 640,480;
 	std::cout << "Triangulate test5: " << msckf.triangulate( z ) << std::endl;
 
-
-
+	std::cout << "marginalizeTest: " << std::endl;
+	#include <matlabTest.h>
 }
