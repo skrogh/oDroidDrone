@@ -173,7 +173,7 @@ int main( int argc, char** argv )
 		//
 		if ( resetCovar > 400 ) {
 			resetCovar = 0;
-			VectorXd diag( msckf.sigma.rows() ) = msckf.sigma.diagonal();
+			Eigen::VectorXd diag = msckf.sigma.diagonal();
 			msckf.sigma.setZero();
 			msckf.sigma.diagonal() = diag;
 		}
