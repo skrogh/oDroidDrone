@@ -133,8 +133,8 @@ int main( int argc, char** argv )
 			resetCovar++;
 
 			// Propagate
-			double acc = { 0, 0, -9.82 };
-			double gyro = { 0, 0, 0 };
+			double acc[3] = { 0, 0, -9.82 };
+			double gyro[3]= { 0, 0, 0 };
 			msckf.propagate( acc, gyro );
 
 			//msckf.propagate( element.acc, element.gyro );
