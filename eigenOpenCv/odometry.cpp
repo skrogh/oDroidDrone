@@ -696,7 +696,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 	// Only if we have measurements
 	if ( r0.rows() > 0 ) {
 		// Image noise
-		MatrixXd R_q = MatrixXd::Identity( r0.rows(), r0.rows() ) * calib->sigma_Im;
+		MatrixXd R_q = MatrixXd::Identity( r0.rows(), r0.rows() ) * calib->sigma_Im * calib->sigma_Im;
 
 		// Kalman gain
 		MatrixXd K = sigma * H0.transpose() * ( H0 * sigma * H0.transpose() + R_q ).inverse();
