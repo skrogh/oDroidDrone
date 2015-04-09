@@ -183,8 +183,8 @@ H0_matlab <<
 VectorXd r0j = VectorXd( z.rows()*2-3 );
 MatrixXd H0j = MatrixXd( z.rows()*2-3, sigma.cols() );
 marginalize( z, G_p_f, r0, H0 );
-std::cout << r0 << "\n" << r0_matlab << std::endl
-std::cout << H0 << "\n" << H0_matlab << std::endl
+std::cout << r0 << "\n" << r0_matlab << std::endl;
+std::cout << H0 << "\n" << H0_matlab << std::endl;
 }
 {
 MatrixX2d z(5, 2);
@@ -220,6 +220,6 @@ H0_matlab <<
 VectorXd r0j = VectorXd( z.rows()*2-3 );
 MatrixXd H0j = MatrixXd( z.rows()*2-3, sigma.cols() );
 marginalize( z, G_p_f, r0, H0 );
-std::cout << r0 << "\n" << r0_matlab << std::endl
-std::cout << H0 << "\n" << H0_matlab << std::endl
+std::cout << r0 << "\n" << r0_matlab << std::endl;
+std::cout << H0 << "\n" << H0_matlab << std::endl;
 }
