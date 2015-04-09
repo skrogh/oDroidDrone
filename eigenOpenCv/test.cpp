@@ -200,12 +200,7 @@ int main( int argc, char** argv )
 		//
 		// Save sigma to file
 		//
-		char nameString[50];
-		sprintf( nameString, "sigmaLog/sigma-s%ld.%06ld.csv", tv.tv_sec, tv.tv_usec );
-		std::ofstream sigmaFile;
- 		sigmaFile.open ("nameString");
- 		sigmaFile << msckf.sigma;
- 		sigmaFile.close();
+ 		std::out << msckf.sigma.block(0,0,15,sigma.cols()) << std::endl;
 
 
 	}
