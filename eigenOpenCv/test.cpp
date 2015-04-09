@@ -142,7 +142,8 @@ int main( int argc, char** argv )
 			logFile << msckf.x.block<16,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.diagonal().block<15,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.determinant() << "\t";
-			logFile << msckf.sigma.diagonal().mean() << "\n";
+			logFile << msckf.sigma.diagonal().mean() << "\t";
+			logFile << ( msckf.sigma - msckf.sigma.transpose() ).sum() << "\n";
 
 			// If valid distance measurement, update with that
 			if ( element.distValid ) {

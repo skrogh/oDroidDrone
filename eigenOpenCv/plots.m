@@ -11,10 +11,15 @@ s_G_v = 23:25;
 s_b_g = 26:28;
 s_b_a = 29:31;
 determinant = 32;
-
+meanSigma = 33;
 
 
 load( 'log.csv' );
+
+if e == 0
+   e = size( log, 1 ); 
+end
+
 subplot(2,3,1)
 plot( log(1:e,G_p) )
 subplot(2,3,2)
@@ -42,4 +47,7 @@ plot( log(1:e,s_b_g) );
 figure;
 plot( log(3:e,determinant) );
 
+
+figure;
+plot( log(3:e,meanSigma) );
 
