@@ -145,7 +145,7 @@ int main( int argc, char** argv )
 			// If valid distance measurement, update with that
 			if ( element.distValid ) {
 				if ( n > 5 ) {
-					msckf.updateHeight( element.dist );
+					//msckf.updateHeight( element.dist );
 					n = 0;
 				} else {
 					n++;
