@@ -55,10 +55,10 @@ const double chi2Inv[] = {
 // calculates a to the power of i. i is a positive, non zero, integer
 //
 double iPow( double a, unsigned int i ) {
-	double a_;
+	double res = a;
 	for( i=i; i>1; i-- )
-		a *= a_;
-	return a;
+		res *= a;
+	return res;
 }
 
 
