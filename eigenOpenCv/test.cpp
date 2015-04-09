@@ -136,6 +136,7 @@ int main( int argc, char** argv )
 			double acc[3] = { 0, 0, -9.82 };
 			double gyro[3]= { 0, 0, 0 };
 			msckf.propagate( acc, gyro );
+			msckf.x(7) = 0.12;
 
 			//msckf.propagate( element.acc, element.gyro );
 			logFile << msckf.x.block<16,1>(0,0).transpose() << "\t";
