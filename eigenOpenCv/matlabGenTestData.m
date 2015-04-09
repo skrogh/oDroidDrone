@@ -66,6 +66,7 @@ G_p_f = G_p_f
 
 
 
+format long % loose as litte precission as possible
 %% Test marignalize and update
 load( 'testVars.mat' )
 
@@ -145,3 +146,4 @@ fprintf( file, [...
     ] );
 
 fclose(file);
+format short

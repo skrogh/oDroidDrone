@@ -441,8 +441,12 @@ void MSCKF::removeOldStates( int n ) {
 	/*
 	** Remove the n oldest frames from the state and covariance
 	*/
+	x.segment( ODO_STATE_SIZE, x.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE ) =
+		x.segment( ODO_STATE_SIZE + n * ODO_STATE_FRAME_SIZE, x.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE );
+	/* old
 	x.block( ODO_STATE_SIZE, 0, x.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE, 1 ) =
 			x.block( ODO_STATE_SIZE + n * ODO_STATE_FRAME_SIZE, 0, x.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE, 1 );
+			*/
 	x.conservativeResize( x.rows() - n * ODO_STATE_FRAME_SIZE, NoChange );
 
 
@@ -452,7 +456,7 @@ void MSCKF::removeOldStates( int n ) {
 	sigma.block( 0, ODO_SIGMA_SIZE, sigma.rows(), sigma.cols() - ODO_SIGMA_SIZE - n * ODO_SIGMA_FRAME_SIZE ) =
 			sigma.block( 0, ODO_SIGMA_SIZE + n * ODO_SIGMA_FRAME_SIZE, sigma.rows(), sigma.cols() - ODO_SIGMA_SIZE - n * ODO_SIGMA_FRAME_SIZE );
 	sigma.conservativeResize( sigma.rows() - n * ODO_SIGMA_FRAME_SIZE, sigma.cols() - n * ODO_SIGMA_FRAME_SIZE );
-	
+
 }
 
 

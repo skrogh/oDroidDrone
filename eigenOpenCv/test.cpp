@@ -166,6 +166,9 @@ int main( int argc, char** argv )
 			}
 		}
 
+		if ( resetCovar++ > 1000 )
+			msckf.sigma.setZero();
+
 		//
 		// Detect features ( can be run in parallel with propagation)
 		//

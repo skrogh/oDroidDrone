@@ -12,32 +12,34 @@ s_b_g = 26:28;
 s_b_a = 29:31;
 determinant = 32;
 
+
+
 load( 'log.csv' );
 subplot(2,3,1)
-plot( log(:,G_p) )
+plot( log(1:e,G_p) )
 subplot(2,3,2)
-plot( log(:,G_v) )
+plot( log(1:e,G_v) )
 subplot(2,3,3)
-plot( log(:,b_a) )
+plot( log(1:e,b_a) )
 subplot(2,3,4)
-plot( log(:,s_G_p) )
+plot( log(1:e,s_G_p) )
 subplot(2,3,5)
-plot( log(:,s_G_v) )
+plot( log(1:e,s_G_v) )
 subplot(2,3,6)
-plot( log(:,s_b_a) )
+plot( log(1:e,s_b_a) )
 
 figure;
 subplot(2,2,1)
-plot( log(:,q) );
+plot( log(1:e,q) );
 %plot( quaternVectRotate( repmat( [0,0,1], length(log) ), quaternConj(log(:,q)) ) );
 subplot(2,2,2)
-plot( log(:,b_g) );
+plot( log(1:e,b_g) );
 subplot(2,2,3)
-plot( log(:,s_q) );
+plot( log(1:e,s_q) );
 subplot(2,2,4)
-plot( log(:,s_b_g) );
+plot( log(1:e,s_b_g) );
 
 figure;
-plot( log(3:end,determinant) );
+plot( log(3:e,determinant) );
 
 
