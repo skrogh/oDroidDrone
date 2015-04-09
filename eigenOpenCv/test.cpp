@@ -200,7 +200,7 @@ int main( int argc, char** argv )
 		//
 		// Save sigma to file
 		//
- 		std::out << msckf.sigma.block(0,0,15,msckf.sigma.cols()) << std::endl;
+ 		std::cout << msckf.sigma.block(0,0,15,msckf.sigma.cols()) << std::endl;
 
 
 	}
