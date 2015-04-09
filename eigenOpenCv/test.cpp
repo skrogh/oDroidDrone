@@ -171,15 +171,11 @@ int main( int argc, char** argv )
 		//
 		// We have propagated and got a new image, time to update with camera data
 		//
-		if ( resetCovar > 3000 ) {
+		if ( resetCovar > 400 ) {
 			resetCovar = 0;
+			VectorXd diag( msckf.sigma.rows() ) = msckf.sigma.diagonal();
 			msckf.sigma.setZero();
-			msckf.sigma.diagonal().block<3,1>(0,0) << 0.005, 0.005, 0.005;
-			msckf.sigma.diagonal().block<3,1>(3,0) << 0, 0, 0.01;
-			msckf.sigma.diagonal().block<3,1>(6,0) << 0, 0, 0;
-			msckf.sigma.diagonal().block<3,1>(9,0) << 0.001, 0.001, 0.001;
-			msckf.sigma.diagonal().block<3,1>(12,0) << 0.01, 0.01, 0.01;
-			
+			msckf.sigma.diagonal() = diag;
 		}
 		msckf.updateCamera( cameraMeasurements );
 
