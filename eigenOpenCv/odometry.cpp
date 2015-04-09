@@ -582,8 +582,12 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 	}
 
 	// Find left null-space
+	/* Old
 	Eigen::FullPivLU<MatrixXd> LU( H_f.transpose() );
 	MatrixXd A = LU.kernel().transpose();
+	*/
+	JacobiSVD<MatrixXf> svd( H_f.transpose(), Eigen::ComputeFullV );
+	A = svd.matrixV().transpose();
 
 	if ( z.rows()*2 - 3 != A.rows() ) {
 		std::cout << "A: " << A.rows() << "x" << A.cols() << std::endl;
