@@ -106,7 +106,7 @@ for j=1:2
 end
 
 %% test append state
-
+fprintf( file, '{\n' );
 fprintf( file, 'msckf.x = x;\n' );
 fprintf( file, 'msckf.sigma = sigma;\n' );
 [ x_, Sigma_ ] = augment( x, Sigma, calib );
