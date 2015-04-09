@@ -12,6 +12,7 @@ s_b_g = 26:28;
 s_b_a = 29:31;
 determinant = 32;
 meanSigma = 33;
+sumSymSigma = 34;
 
 
 load( 'log.csv' );
@@ -50,4 +51,7 @@ plot( log(3:e,determinant) );
 
 figure;
 plot( log(3:e,meanSigma) );
+
+figure;
+plot( log(3:e,sumSymSigma) );
 

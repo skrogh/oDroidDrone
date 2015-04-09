@@ -168,8 +168,9 @@ int main( int argc, char** argv )
 			}
 		}
 
-		if ( resetCovar++ > 1000 ) {
-			//msckf.sigma.setZero();
+		if ( resetCovar++ > 600 ) {
+			msckf.sigma.block(ODO_SIGMA_SIZE,0,msckf.sigma.rows()-ODO_SIGMA_SIZE,msckf.sigma.cols()).setZero();
+			msckf.sigma.block(0,ODO_SIGMA_SIZE,ODO_SIGMA_SIZE,msckf.sigma.cols()-ODO_SIGMA_SIZE).setZero();
 			resetCovar = 0;
 		}
 
