@@ -133,11 +133,21 @@ Matrix<double,2,3> jacobianH( double X, double Y, double Z, Calib* calib ) {
 		+ ( 2*Y*t2 )/iPow(Z,2)
 	),
 	-f_x*(
+		(X*(k1*((2*iPow(X,2))/iPow(Z,3) + (2*iPow(Y,2))/iPow(Z,3)) + 3*k3*(iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2))^2*((2*iPow(X,2))/iPow(Z,3) + (2*iPow(Y,2))/iPow(Z,3)) + 2*k2*(iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2))*((2*iPow(X,2))/iPow(Z,3) + (2*iPow(Y,2))/iPow(Z,3))))/Z
+		+ (X*(k1*(iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2)) + k2*(iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2))^2 + k3*(iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2))^3 + 1))/iPow(Z,2)
+		+ (2*t2*iPow(X,2)*((2*iPow(X,2))/iPow(Z,2) + (2*iPow(Y,2))/iPow(Z,2)))/iPow(Z,3)
+		+ (t2*iPow(X,2)*((4*iPow(X,2))/iPow(Z,3) + (4*iPow(Y,2))/iPow(Z,3)))/iPow(Z,2)
+		+ (4*t1*X*Y)/iPow(Z,3))
+	),
+
+/* Old
+	-f_x*(
 		t2*( ( 6*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) )
 		+ ( X*( k1*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) + 2*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) )*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) ) )/Z
 		+ ( X*( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1 ) )/iPow(Z,2)
 		+ ( 4*X*Y*t1 )/iPow(Z,3)
 	),
+*/
 
 	f_y*(
 		( Y*( ( 2*X*k1 )/iPow(Z,2) + ( 4*X*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) )/iPow(Z,2) ) )/Z
@@ -153,11 +163,21 @@ Matrix<double,2,3> jacobianH( double X, double Y, double Z, Calib* calib ) {
 	),
 
 	-f_y*(
+		(Y*(k1*((2*iPow(X,2))/iPow(Z,3) + (2*iPow(Y,2))/iPow(Z,3)) + 3*k3*(iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2))^2*((2*iPow(X,2))/iPow(Z,3) + (2*iPow(Y,2))/iPow(Z,3)) + 2*k2*(iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2))*((2*iPow(X,2))/iPow(Z,3) + (2*iPow(Y,2))/iPow(Z,3))))/Z
+		+ (Y*(k1*(iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2)) + k2*(iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2))^2 + k3*(iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2))^3 + 1))/iPow(Z,2)
+		+ (2*t1*iPow(Y,2)*((2*iPow(X,2))/iPow(Z,2) + (2*iPow(Y,2))/iPow(Z,2)))/iPow(Z,3)
+		+ (t1*iPow(Y,2)*((4*iPow(X,2))/iPow(Z,3) + (4*iPow(Y,2))/iPow(Z,3)))/iPow(Z,2)
+		+ (4*t2*X*Y)/iPow(Z,3))
+	);
+
+/* Old
+	-f_y*(
 		t1*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 6*iPow(Y,2) )/iPow(Z,3) )
 		+ ( Y*( k1*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) + 2*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) )*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) ) )/Z
 		+ ( Y*( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2 ) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1 ) )/iPow(Z,2)
 		+ ( 4*X*Y*t2 )/iPow(Z,3)
 	);
+*/
 	return m;
 }
 
