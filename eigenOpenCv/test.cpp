@@ -118,9 +118,9 @@ int main( int argc, char** argv )
 		//cap.grab();
 		//cap.grab();
 		//cap.grab();
-		cap.grab();
+		//cap.grab();
 		gettimeofday( &tv, &tz );
-		cap.retrieve( image );
+		//cap.retrieve( image );
 		msckf.debugImg = image.clone();
 
 		//
@@ -164,7 +164,7 @@ int main( int argc, char** argv )
 		//
 		// Detect features ( can be run in parallel with propagation)
 		//
-		if( nn < 2 )
+		if( nn++ < 2 )
 			cameraDetector.detectFeatures( image, cameraMeasurements );
 		cameraDetector.addFeatures( cameraMeasurements );
 

@@ -11,7 +11,7 @@ using namespace Eigen;
 
 //for simulation
 std::default_random_engine randomGenerator;
-std::uniform_int_distribution<int> randomDistribution(2,10);
+std::uniform_int_distribution<int> randomDistribution(1,10);
 
 //
 // Chi square lookup for 95% confidence. TODO: calculate at runtime so size fits with max frame fifo length
