@@ -171,12 +171,6 @@ int main( int argc, char** argv )
 		//
 		// We have propagated and got a new image, time to update with camera data
 		//
-		if ( resetCovar > 400 ) {
-			resetCovar = 0;
-			Eigen::VectorXd diag = msckf.sigma.diagonal();
-			msckf.sigma.setZero();
-			msckf.sigma.diagonal() = diag;
-		}
 		msckf.updateCamera( cameraMeasurements );
 
 				// Iterate over meas and draw all non lost elements:
@@ -202,6 +196,18 @@ int main( int argc, char** argv )
 		std::cout << "msckf is:\n" << msckf << std::endl;
 		std::cout << "sigma is:" << msckf.sigma.rows() << "x" << msckf.sigma.cols() << std::endl;
 		std::cout << "The determinant of sigma is " << msckf.sigma.determinant() << std::endl;
+
+		//
+		// Save sigma to file
+		//
+		char nameString[50];
+		sprintf( nameString, "sigmaLog/sigma-s%ld.%06ld.csv", tv.tv_sec, tv.tv_usec );
+		std::ofstream sigmaFile;
+ 		sigmaFile.open ("nameString");
+ 		sigmaFile << msckf.sigma;
+ 		sigmaFile.close();
+
+
 	}
 	logFile.close();
 }
