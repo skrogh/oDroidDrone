@@ -223,6 +223,7 @@ msckf.marginalize( z, G_p_f, r0, H0 );
 std::cout << "r0: " << r0 - r0_matlab << std::endl;
 std::cout << "H=: " << H0 - H0_matlab << std::endl;
 }
+{
 msckf.x = x;
 msckf.sigma = sigma;
 MatrixXd x_(86, 1);
