@@ -586,8 +586,8 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 	Eigen::FullPivLU<MatrixXd> LU( H_f.transpose() );
 	MatrixXd A = LU.kernel().transpose();
 	*/
-	JacobiSVD<MatrixXd> svd( H_f.transpose(), Eigen::ComputeThinV );
-	MatrixXd A = svd.matrixV().transpose();
+	JacobiSVD<MatrixXd> svd( H_f, Eigen::ComputeFullU );
+	MatrixXd A = svd.matrixU().rightCols( z.rows()*2 - 3 ).transpose();
 
 	if ( z.rows()*2 - 3 != A.rows() ) {
 		std::cout << "A: " << A.rows() << "x" << A.cols() << std::endl;
