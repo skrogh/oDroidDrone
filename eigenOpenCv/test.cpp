@@ -133,7 +133,11 @@ int main( int argc, char** argv )
 			resetCovar++;
 
 			// Propagate
-			msckf.propagate( element.acc, element.gyro );
+			double acc = { 0, 0, -9.82 };
+			double gyro = { 0, 0, 0 };
+			msckf.propagate( acc, gyro );
+
+			//msckf.propagate( element.acc, element.gyro );
 			logFile << msckf.x.block<16,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.diagonal().block<15,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.determinant() << "\n";
@@ -196,12 +200,6 @@ int main( int argc, char** argv )
 		std::cout << "msckf is:\n" << msckf << std::endl;
 		std::cout << "sigma is:" << msckf.sigma.rows() << "x" << msckf.sigma.cols() << std::endl;
 		std::cout << "The determinant of sigma is " << msckf.sigma.determinant() << std::endl;
-
-		//
-		// Save sigma to file
-		//
- 		std::cout << msckf.sigma.block(0,0,15,msckf.sigma.cols()) << std::endl;
-
 
 	}
 	logFile.close();
