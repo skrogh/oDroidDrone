@@ -839,5 +839,6 @@ void MSCKF::updateHeight( double height ) {
 
 bool MSCKF::isInlinerCamera( const VectorXd &r0, const MatrixXd &H0 ) {
 	double gamma = r0.transpose() * ( H0 * sigma * H0.transpose() ).inverse() * r0;
+	return true;
 	return gamma <= chi2Inv[ r0.rows() ];
 }
