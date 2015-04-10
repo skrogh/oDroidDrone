@@ -133,11 +133,7 @@ int main( int argc, char** argv )
 			resetCovar++;
 
 			// Propagate
-			double acc[3] = { 0, 0, -9.82 };
-			double gyro[3]= { 0, 0, 0 };
-			msckf.propagate( acc, gyro );
-
-			//msckf.propagate( element.acc, element.gyro );
+			msckf.propagate( element.acc, element.gyro );
 			logFile << msckf.x.block<16,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.diagonal().block<15,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.determinant() << "\t";
