@@ -133,7 +133,6 @@ int main( int argc, char** argv )
 			resetCovar++;
 
 			// Propagate
-			msckf.x(6) = 0.13;
 			msckf.propagate( element.acc, element.gyro );
 			logFile << msckf.x.block<16,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.diagonal().block<15,1>(0,0).transpose() << "\t";
@@ -144,7 +143,7 @@ int main( int argc, char** argv )
 			// If valid distance measurement, update with that
 			if ( element.distValid ) {
 				if ( n > 5 ) {
-					//msckf.updateHeight( element.dist );
+					msckf.updateHeight( element.dist );
 					n = 0;
 				} else {
 					n++;
