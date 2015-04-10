@@ -146,6 +146,7 @@ int main( int argc, char** argv )
 				if ( n > 5 ) {
 					if ( initiate < 10 ) {
 						initiate++;
+						std::cout << "Is calibrating" << std:endl;
 						msckf.updateInit( element.dist );
 					} else {
 						msckf.updateHeight( element.dist );
