@@ -201,4 +201,8 @@ int main( int argc, char** argv )
 
 	}
 	logFile.close();
+
+ 	logFile.open ("sigma.csv");
+ 	std::cout <<  msckf.sigma;
+ 	logFile.close();
 }
