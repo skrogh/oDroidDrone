@@ -24,7 +24,7 @@ int main( int argc, char** argv )
 		cap.grab();
 		cap.grab();
 		cap.retrieve( image );
-
+		cvtColor(image, image, CV_BGR2GRAY);
 
 		//cameraDetector.detectFeatures( image, cameraMeasurements );
 		//cameraDetector.addFeatures( cameraMeasurements );
