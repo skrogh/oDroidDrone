@@ -193,7 +193,7 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 	float alpha[3];
 	unpackFloats( &rx[sizeof(acc)+sizeof(gyro)], alpha, 3 );
 	uint32_t ping = unpackUint32( &rx[sizeof(acc)+sizeof(gyro)+sizeof(alpha)] );
-	double dist = ping * ( 340.29 / 80000000 ) / 2;
+	double dist = ping * ( 340.29 / 80000000.0 ) / 2.0 - 0.0565;
 
 	ImuMeas_t element = {};
 	element.timeStamp = tv;
