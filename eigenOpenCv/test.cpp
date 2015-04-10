@@ -163,15 +163,6 @@ int main( int argc, char** argv )
 			}
 		}
 
-		if ( resetCovar > 1 ) {
-			msckf.sigma = ( msckf.sigma + msckf.sigma.transpose() )/2;
-			//msckf.sigma.block(0,0,ODO_SIGMA_SIZE,ODO_SIGMA_SIZE) =
-			//( msckf.sigma.block(0,0,ODO_SIGMA_SIZE,ODO_SIGMA_SIZE) + msckf.sigma.block(0,0,ODO_SIGMA_SIZE,ODO_SIGMA_SIZE).transpose() ) / 2;
-			//msckf.sigma.block(ODO_SIGMA_SIZE,0,msckf.sigma.rows()-ODO_SIGMA_SIZE,msckf.sigma.cols()).setZero();
-			//msckf.sigma.block(0,ODO_SIGMA_SIZE,ODO_SIGMA_SIZE,msckf.sigma.cols()-ODO_SIGMA_SIZE).setZero();
-			resetCovar = 0;
-		}
-
 		//
 		// Detect features ( can be run in parallel with propagation)
 		//
