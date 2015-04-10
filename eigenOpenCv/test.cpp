@@ -115,10 +115,10 @@ int main( int argc, char** argv )
 	int resetCovar = 0;
 	int initiate = 0;
 	while( cv::waitKey(1) != 27 ) {
-		//cap.grab();
-		//cap.grab();
-		//cap.grab();
-		//cap.grab();
+		cap.grab();
+		cap.grab();
+		cap.grab();
+		cap.grab();
 		cap.grab();
 		gettimeofday( &tv, &tz );
 		cap.retrieve( image );
