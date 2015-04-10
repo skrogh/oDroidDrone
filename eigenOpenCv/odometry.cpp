@@ -827,7 +827,7 @@ void MSCKF::updateInit( double height ) {
 	//
 
 	// Sensor noise
-	MatrixXd R_q = MatrixXd::Identity( r0.rows(), r0.rows() ) * 0.01*0.01;
+	MatrixXd R = MatrixXd::Identity( 6,6 ) * 0.01*0.01;
 	// Sensor residual
 	VectorXd r(6);
 	r = -x.block<6,1>(4,0);
