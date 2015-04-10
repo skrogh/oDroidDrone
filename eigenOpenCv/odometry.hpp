@@ -105,6 +105,10 @@ public:
 	// updateHeight
 	void updateHeight( double height );
 	// TODO: -isInlierHeight
+	// performUpdate
+	void performUpdate( const VectorXd &delta_x );
+	// Initiate by running this for some time
+	void updateInit( double height );
 };
 
 

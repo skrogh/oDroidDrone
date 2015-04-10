@@ -715,40 +715,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 		//
 		// apply feedback
 		//
-
-		// To inertial state
-		// IG_q
-		QuaternionAlias<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
-		QuaternionAlias<double> IG_q = ( QuaternionAlias<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q );
-		IG_q.normalize();
-		x.block<4,1>( 0, 0 ) = IG_q.coeffs();
-		// G_p
-		x.block<3,1>( 0+4, 0 ) += delta_x.block<3,1>( 0+3, 0 );
-		// G_v
-		x.block<3,1>( 0+4+3, 0 ) += delta_x.block<3,1>( 0+3+3, 0 );
-		// b_g
-		x.block<3,1>( 0+4+3+3, 0 ) += delta_x.block<3,1>( 0+3+3+3, 0 );
-		// b_a
-		x.block<3,1>( 0+4+3+3+3, 0 ) += delta_x.block<3,1>( 0+3+3+3+3, 0 );
-
-		// to all the frames
-		for ( int i = 0; i < ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE; i++ ) {
-			unsigned int frameStart = ODO_STATE_SIZE + i * ODO_STATE_FRAME_SIZE;
-			unsigned int delta_frameStart = ODO_SIGMA_SIZE + i * ODO_SIGMA_FRAME_SIZE;
-			QuaternionAlias<double> delta_IiG_q( 1,
-					delta_x( delta_frameStart + 0 ),
-					delta_x( delta_frameStart + 1 ),
-					delta_x( delta_frameStart + 2 )
-			);
-			QuaternionAlias<double> IiG_q = ( QuaternionAlias<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q );
-			IiG_q.normalize();
-			x.block<4,1>( frameStart + 0, 0 ) = IiG_q.coeffs();
-			// G_p_i
-			x.block<3,1>( frameStart + 0+4, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3, 0 );
-			// G_v_i
-			x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
-		}
-		
+		this->performUpdate( delta_x );
 	}
 
 	//
@@ -801,6 +768,14 @@ void MSCKF::updateHeight( double height ) {
 	//
 	// apply feedback
 	//
+	this->performUpdate( delta_x );
+
+}
+
+void MSCKF::performUpdate( const VectorXd &delta_x ) {
+	//
+	// apply feedback
+	//
 
 	// To inertial state
 	// IG_q
@@ -834,11 +809,46 @@ void MSCKF::updateHeight( double height ) {
 		// G_v_i
 		x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
 	}
-
 }
 
 bool MSCKF::isInlinerCamera( const VectorXd &r0, const MatrixXd &H0 ) {
 	double gamma = r0.transpose() * ( H0 * sigma * H0.transpose() ).inverse() * r0;
 	return true;
 	return gamma <= chi2Inv[ r0.rows() ];
+}
+
+void MSCKF::updateInit( double height ) {
+	//
+	// TODO: check if outlier
+	//
+
+	//
+	// TODO: Optimize since H is very sparse (only one element)
+	//
+
+	// Sensor noise
+	MatrixXd R_q = MatrixXd::Identity( r0.rows(), r0.rows() ) * 0.01*0.01;
+	// Sensor residual
+	VectorXd r(6);
+	r = -x.block<6,1>(4,0);
+	r(3) += height;
+	// Sensor model
+	Matrix<double,6,Dynamic> H( 1, sigma.cols() );
+	H << MatrixXd::Zero( 6, 3 ), MatrixXd::Identity( 6, 6 ), MatrixXd::Zero( 1, sigma.cols() - 9 );
+
+	// Kalman gain
+	MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
+
+	// Update to be appled to sf4ate
+	VectorXd delta_x = K * r;
+
+	// Update covariance
+	MatrixXd A = MatrixXd::Identity( K.rows(), H.cols() ) - K * H;
+	sigma = A * sigma * A.transpose() + K * R * K.transpose();
+
+	//
+	// apply feedback
+	//
+	this->performUpdate( delta_x );
+
 }
