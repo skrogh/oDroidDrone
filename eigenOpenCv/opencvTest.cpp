@@ -26,8 +26,8 @@ int main( int argc, char** argv )
 		cap.retrieve( image );
 
 
-		cameraDetector.detectFeatures( image, cameraMeasurements );
-		cameraDetector.addFeatures( cameraMeasurements );
+		//cameraDetector.detectFeatures( image, cameraMeasurements );
+		//cameraDetector.addFeatures( cameraMeasurements );
 
 		if( key == '\n' ) {
 			for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
