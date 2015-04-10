@@ -19,10 +19,10 @@ int main( int argc, char** argv )
 	int key = 0;
 	while( ( key = cv::waitKey(1) ) != 27 ) {
 		cap.grab();
+/*		cap.grab();
 		cap.grab();
 		cap.grab();
-		cap.grab();
-		cap.grab();
+		cap.grab();*/
 		cap.retrieve( image );
 		cvtColor(image, image, CV_BGR2GRAY);
 
