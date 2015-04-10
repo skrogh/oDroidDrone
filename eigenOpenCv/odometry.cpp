@@ -834,7 +834,7 @@ void MSCKF::updateInit( double height ) {
 	r(3) += height;
 	// Sensor model
 	Matrix<double,6,Dynamic> H( 6, sigma.cols() );
-	H << MatrixXd::Zero( 6, 3 ), MatrixXd::Identity( 6, 6 ), MatrixXd::Zero( 1, sigma.cols() - 9 );
+	H << MatrixXd::Zero( 6, 3 ), MatrixXd::Identity( 6, 6 ), MatrixXd::Zero( 6, sigma.cols() - 9 );
 
 	// Kalman gain
 	MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
