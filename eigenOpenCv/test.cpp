@@ -150,7 +150,7 @@ int main( int argc, char** argv )
 		cap.retrieve( image );
 		*/
 		getImageFromFile( image, tv, fileOfFiles );
-		cvtColor(image, image, CV_BGR2GRAY);
+		//cvtColor(image, image, CV_BGR2GRAY);
 		msckf.debugImg = image.clone();
 
 		//
