@@ -8,9 +8,9 @@
 using namespace cv;
 
 CameraDetector::CameraDetector( void ) {
-	int maxCorners = 500;
-	double qualityLevel = 0.02;
-	double minDistance = 5;
+	int maxCorners = 1000;
+	double qualityLevel = 0.01;
+	double minDistance = 1;
 	int blockSize = 3;
 	bool useHarrisDetector = false;
 	double k = 0.04;
@@ -18,7 +18,7 @@ CameraDetector::CameraDetector( void ) {
 	detector = GoodFeaturesToTrackDetector( maxCorners, qualityLevel,
 			minDistance, blockSize, useHarrisDetector, k );
 
-	extractor = DescriptorExtractor::create( "BRIEF" );
+	extractor = DescriptorExtractor::create( "ORB" );
 
 	matcher = BFMatcher(NORM_HAMMING, true);
 }

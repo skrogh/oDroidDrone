@@ -647,7 +647,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 						// debug draw
 						Eigen::MatrixX2d& z = meas_j->z;
 						cv::Point pt = cv::Point( z( z.rows()-1, 0 ), z( z.rows()-1, 1 ) );
-						cv::circle( debugImg, pt, 4, cv::Scalar( 0, 255, 0 ) );
+						cv::circle( debugImg, pt, 2, cv::Scalar( 0, 255, 0 ) );
 						for( int i = 0; i < z.rows() - 1; i++ ) {
 							cv::Point pt1 = cv::Point( z( i, 0 ), z( i, 1 ) );
 							cv::Point pt2 = cv::Point( z( i+1, 0 ), z( i+1, 1 ) );
@@ -663,7 +663,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 						// debug draw
 						Eigen::MatrixX2d& z = meas_j->z;
 						cv::Point pt = cv::Point( z( z.rows()-1, 0 ), z( z.rows()-1, 1 ) );
-						cv::circle( debugImg, pt, 4, cv::Scalar( 0, 0, 255 ) );
+						cv::circle( debugImg, pt, 2, cv::Scalar( 0, 0, 255 ) );
 						for( int i = 0; i < z.rows() - 1; i++ ) {
 							cv::Point pt1 = cv::Point( z( i, 0 ), z( i, 1 ) );
 							cv::Point pt2 = cv::Point( z( i+1, 0 ), z( i+1, 1 ) );
@@ -674,7 +674,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 					// debug draw
 					Eigen::MatrixX2d& z = meas_j->z;
 					cv::Point pt = cv::Point( z( z.rows()-1, 0 ), z( z.rows()-1, 1 ) );
-					cv::circle( debugImg, pt, 4, cv::Scalar( 0, 255, 255 ) );
+					cv::circle( debugImg, pt, 2, cv::Scalar( 0, 255, 255 ) );
 					for( int i = 0; i < z.rows() - 1; i++ ) {
 						cv::Point pt1 = cv::Point( z( i, 0 ), z( i, 1 ) );
 						cv::Point pt2 = cv::Point( z( i+1, 0 ), z( i+1, 1 ) );
