@@ -782,7 +782,7 @@ void MSCKF::performUpdate( const VectorXd &delta_x ) {
 
 	// To inertial state
 	// IG_q
-	QuaternionAlias<double> delta_IG_q( 1, delta_x(0), delta_x(1), delta_x(2) );
+	QuaternionAlias<double> delta_IG_q( 1, delta_x(0)/2.0, delta_x(1)/2.0, delta_x(2)/2.0 );
 	QuaternionAlias<double> IG_q = ( QuaternionAlias<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q );
 	IG_q.normalize();
 	x.block<4,1>( 0, 0 ) = IG_q.coeffs();
@@ -800,9 +800,9 @@ void MSCKF::performUpdate( const VectorXd &delta_x ) {
 		unsigned int frameStart = ODO_STATE_SIZE + i * ODO_STATE_FRAME_SIZE;
 		unsigned int delta_frameStart = ODO_SIGMA_SIZE + i * ODO_SIGMA_FRAME_SIZE;
 		QuaternionAlias<double> delta_IiG_q( 1,
-				delta_x( delta_frameStart + 0 ),
-				delta_x( delta_frameStart + 1 ),
-				delta_x( delta_frameStart + 2 )
+				delta_x( delta_frameStart + 0 )/2.0,
+				delta_x( delta_frameStart + 1 )/2.0,
+				delta_x( delta_frameStart + 2 )/2.0
 		);
 		QuaternionAlias<double> IiG_q = ( QuaternionAlias<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q );
 		IiG_q.normalize();
