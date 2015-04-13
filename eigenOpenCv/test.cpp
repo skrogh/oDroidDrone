@@ -16,7 +16,7 @@ void getImageFromFile( cv::Mat& image, timeval& tv, std::istream& fileOfFiles )
 		sscanf( line.c_str(), "%*[^i]%*[^m]%*[^g]%*[^-]%*[^s]s%d.%d.png", &(tv.tv_sec), &(tv.tv_usec) );
 		image = imread( line );
 		std::cout << "loaded image: " << line <<
-		"size " << image.size.width << "x" << image.size.height << std::endl;
+		"size " << image.size().width << "x" << image.size().height << std::endl;
 	}
 }
 
