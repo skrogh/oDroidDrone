@@ -136,7 +136,7 @@ for i=1:400
     [ x_, Sigma_, I_omega, I_a, G_a ] = propagate( x_, Sigma_, [ 0,0,0, 0, 0, -9.82]', [0,0,0]', [0,0,-9.82]', calib );
 end
 
-fprintf( file, 'for(int i=0; i<400) msckf.propagate( acc, gyro );\n' );
+fprintf( file, 'for(int i=0; i<400; i++) msckf.propagate( acc, gyro );\n' );
 
 printMatlabVarAsEigen( file, 'MatrixXd', 'x_', x_ );
 printMatlabVarAsEigen( file, 'MatrixXd', 'Sigma_', Sigma_ );

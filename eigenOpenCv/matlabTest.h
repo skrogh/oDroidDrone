@@ -405,7 +405,7 @@ double acc[3] = { 0, 0, -9.82 };
 double gyro[3]= { 0, 0, 0 };
 msckf.I_a_dly(0) = 0; msckf.I_a_dly(1) = 0; msckf.I_a_dly(2) = -9.82;
 msckf.I_g_dly(0) = 0; msckf.I_g_dly(1) = 0; msckf.I_g_dly(2) = 0;
-for(int i=0; i<400) msckf.propagate( acc, gyro );
+for(int i=0; i<400; i++) msckf.propagate( acc, gyro );
 MatrixXd x_(76, 1);
 x_ <<
 1.6885122812987122e-04,
