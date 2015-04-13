@@ -3,6 +3,7 @@
 #include "opencv2/opencv.hpp"
 #include "feature.hpp"
 #include "odometry.hpp"
+#include <sys/time.h>
 
 /** @function main */
 int main( int argc, char** argv )
@@ -15,6 +16,12 @@ int main( int argc, char** argv )
 
 
 	cv::namedWindow( "Matches" );
+	struct timeval tv;
+	struct timezone tz = {};
+		tz.tz_minuteswest = 0;
+		tz.tz_dsttime = 0;
+	gettimeofday( &tv, &tz );
+
 
 	int key = 0;
 	while( ( key = cv::waitKey(1) ) != 27 ) {
@@ -51,6 +58,14 @@ int main( int argc, char** argv )
 		}
 
 		cv::imshow("Matches", image );
+
+		struct timeval tnow;
+		struct timeval tdiff;
+		gettimeofday( &tnow, &tz );
+		timersub( &tnow, &tv, &tdiff );
+		tv = tnow;
+		printf( "Dt = %d.%06d", tdiff.tv_sec, tdiff.tv_usec );
+
 	}
 
 
