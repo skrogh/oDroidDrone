@@ -48,12 +48,12 @@ subplot(2,2,4)
 plot( t, log_odroid(1:e,s_b_g) );
 
 figure;
-plot( t, log_odroid(3:e,determinant) );
+plot( t(3:e), log_odroid(3:e,determinant) );
 
 
 figure;
-plot( t, log_odroid(3:e,meanSigma) );
+plot( t(3:e), log_odroid(3:e,meanSigma) );
 
 figure;
-plot( t, log_odroid(3:e,sumSymSigma) );
+plot( t(3:e), log_odroid(3:e,sumSymSigma) );
 

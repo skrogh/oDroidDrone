@@ -167,6 +167,8 @@ int main( int argc, char** argv )
 
 			// Propagate
 			msckf.propagate( element.acc, element.gyro );
+			std::cout << "data was: " << element.acc[0] << ", " << element.acc[1] << ", "<< element.acc[2] << ", " <<
+			element.gyro[0] << ", " << element.gyro[2] << ", " << element.gyro[3] << std::endl;
 			std::cout << "msckf is:\n" << msckf << std::endl;
 			logFile << msckf.x.block<16,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.diagonal().block<15,1>(0,0).transpose() << "\t";
