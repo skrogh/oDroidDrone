@@ -28,5 +28,8 @@ imuTest: imuTest.o $(OBJ) $(DEPS)
 matlabUnitTest: matlabUnitTest.o $(OBJ) $(DEPS)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
+lkdemo: lkdemo.o
+	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
+
 clean: 
 	$(RM) test egienTest opencvTest imuTest *.o
