@@ -8,7 +8,7 @@
 using namespace cv;
 
 CameraDetector::CameraDetector( void ) {
-	int maxCorners = 200;
+	int maxCorners = 500;
 	double qualityLevel = 0.02;
 	double minDistance = 5;
 	int blockSize = 3;
