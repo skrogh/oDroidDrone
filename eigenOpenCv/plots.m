@@ -15,43 +15,43 @@ meanSigma = 33;
 sumSymSigma = 34;
 
 
-load( 'log.csv' );
+log_odroid = load( 'log.csv' );
 
 if e == 0
-   e = size( log, 1 ); 
+   e = size( log_odroid, 1 ); 
 end
 
 subplot(2,3,1)
-plot( log(1:e,G_p) )
+plot( log_odroid(1:e,G_p) )
 subplot(2,3,2)
-plot( log(1:e,G_v) )
+plot( log_odroid(1:e,G_v) )
 subplot(2,3,3)
-plot( log(1:e,b_a) )
+plot( log_odroid(1:e,b_a) )
 subplot(2,3,4)
-plot( log(1:e,s_G_p) )
+plot( log_odroid(1:e,s_G_p) )
 subplot(2,3,5)
-plot( log(1:e,s_G_v) )
+plot( log_odroid(1:e,s_G_v) )
 subplot(2,3,6)
-plot( log(1:e,s_b_a) )
+plot( log_odroid(1:e,s_b_a) )
 
 figure;
 subplot(2,2,1)
-plot( log(1:e,q) );
-%plot( quaternVectRotate( repmat( [0,0,1], length(log) ), quaternConj(log(:,q)) ) );
+plot( log_odroid(1:e,q) );
+%plot( quaternVectRotate( repmat( [0,0,1], length(log_odroid) ), quaternConj(log_odroid(:,q)) ) );
 subplot(2,2,2)
-plot( log(1:e,b_g) );
+plot( log_odroid(1:e,b_g) );
 subplot(2,2,3)
-plot( log(1:e,s_q) );
+plot( log_odroid(1:e,s_q) );
 subplot(2,2,4)
-plot( log(1:e,s_b_g) );
+plot( log_odroid(1:e,s_b_g) );
 
 figure;
-plot( log(3:e,determinant) );
+plot( log_odroid(3:e,determinant) );
 
 
 figure;
-plot( log(3:e,meanSigma) );
+plot( log_odroid(3:e,meanSigma) );
 
 figure;
-plot( log(3:e,sumSymSigma) );
+plot( log_odroid(3:e,sumSymSigma) );
 
