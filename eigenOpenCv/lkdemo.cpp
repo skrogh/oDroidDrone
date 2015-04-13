@@ -57,6 +57,9 @@ int main( int argc, char** argv )
         cout << "Could not initialize capturing...\n";
         return 0;
     }
+    // size
+    cap.set( CV_CAP_PROP_FRAME_WIDTH, 320 );
+    cap.set( CV_CAP_PROP_FRAME_HEIGHT, 240 );
 
     namedWindow( "LK Demo", 1 );
     setMouseCallback( "LK Demo", onMouse, 0 );
