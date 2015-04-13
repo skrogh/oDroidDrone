@@ -8,7 +8,7 @@ Imu::Imu( char* fileName ) {
 	std::string line;
 	while (std::getline(file, line))
 	{
-		sscanf( line, "%d.%d, %e, %e, %e, %e, %e, %e, %e, %e, %e, %d",
+		sscanf( line.c_str(), "%d.%d, %e, %e, %e, %e, %e, %e, %e, %e, %e, %d",
 			&(element.timeStamp.tv_sec), &(element.timeStamp.tv_usec),
 			&(element.acc[0]), &(element.acc[1]), &(element.acc[2]),
 			&(element.gyro[0]), &(element.gyro[1]), &(element.gyro[2]),
