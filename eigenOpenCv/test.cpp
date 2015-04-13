@@ -119,6 +119,7 @@ int main( int argc, char** argv )
 	// Clear Imu buffer
 	//
 	gettimeofday( &tv, &tz );
+	getImageFromFile( image, tv, fileOfFiles );
 	{
 		ImuMeas_t element;
 		while( imu.fifoPop( element ) ) {
