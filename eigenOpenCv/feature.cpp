@@ -20,7 +20,7 @@ CameraDetector::CameraDetector( void ) {
 
 	extractor = DescriptorExtractor::create( "BRIEF" );
 
-	matcher = BFMatcher(NORM_HAMMING, false);
+	matcher = BFMatcher(NORM_HAMMING, true);
 }
 
 void CameraDetector::detectFeatures( const Mat& image, CameraMeasurements& cameraMeasurements ) {
