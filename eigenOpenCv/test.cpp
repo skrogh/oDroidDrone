@@ -9,6 +9,15 @@
 #include "common.hpp"
 #include "imu.hpp"
 
+void getImageFromFile( cv::Mat& image, timeval& tv, std::istream& fileOfFiles )
+{
+	std::string line;
+	while (std::getline(infile, line))
+	{
+		sscanf( "img-s%d.%d.png", &(tv.tv_sec), &(tv.tv_usec) );
+	}
+}
+
 int main( int argc, char** argv )
 {
 	/*
@@ -69,6 +78,8 @@ int main( int argc, char** argv )
 	msckf.sigma.diagonal().block<3,1>(12,0) << 0.1, 0.1, 0.1;
 
 
+	std::ifstream fileOfFiles("sim/fileOfFiles.txt");
+
 	std::ofstream logFile;
  	logFile.open ("log.csv");
 
@@ -106,9 +117,22 @@ int main( int argc, char** argv )
 	//
 	// Clear Imu buffer
 	//
+	gettimeofday( &tv, &tz );
 	{
 		ImuMeas_t element;
-		while( imu.fifoPop( element ) );
+		while( imu.fifoPop( element ) ) {
+			// Get time of image without delay
+			struct timeval imageTime;
+			timersub( &tv, &(calib.imageOffset), &imageTime );
+
+			// If image is older that propagated point, update
+			if ( timercmp( &imageTime, &(element.timeStamp), < ) ) {
+				timersub( &(element.timeStamp), &imageTime, &imageTime );
+				std::cout << "Image/IMU time difference: " <<
+				imageTime.tv_sec << "." << std::setfill('0') << std::setw(6) << imageTime.tv_usec << "s" << std::setfill(' ') << std::endl;
+				break;
+			}
+		}
 	}
 	int n = 0;
 	int nn = 0;
@@ -122,6 +146,7 @@ int main( int argc, char** argv )
 		cap.grab();
 		gettimeofday( &tv, &tz );
 		cap.retrieve( image );
+		cvtColor(image, image, CV_BGR2GRAY);
 		msckf.debugImg = image.clone();
 
 		//
@@ -208,6 +233,7 @@ int main( int argc, char** argv )
 
 	}
 	logFile.close();
+	fileOfFiles.close();
 
  	logFile.open ("sigma.csv");
  	std::cout <<  msckf.sigma;
