@@ -176,7 +176,7 @@ int main( int argc, char** argv )
 			// If valid distance measurement, update with that
 			if ( element.distValid ) {
 				if ( n > 5 ) {
-					if ( initiate < 10 ) {
+					if ( initiate < 0 ) {
 						initiate++;
 						std::cout << "Is calibrating" << std::endl;
 						msckf.updateInit( element.dist );
