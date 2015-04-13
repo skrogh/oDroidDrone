@@ -12,7 +12,7 @@
 void getImageFromFile( cv::Mat& image, timeval& tv, std::istream& fileOfFiles )
 {
 	std::string line;
-	if ( std::getline(infile, line) ) {
+	if ( std::getline( fileOfFiles, line ) ) {
 		sscanf( "img-s%d.%d.png", &(tv.tv_sec), &(tv.tv_usec) );
 		image = imread( line );
 	}
