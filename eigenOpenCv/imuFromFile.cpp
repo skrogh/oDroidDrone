@@ -1,7 +1,7 @@
 #include "imuFromFile.hpp"
 
 // uses spidev f
-Imu::Imu( char* fileName ) {
+ImuFF::ImuFF( char* fileName ) {
 	file.open( fileName );
 	ImuMeas_t element;
 	int ping;
@@ -21,15 +21,15 @@ Imu::Imu( char* fileName ) {
 	}
 }
 
-Imu::~Imu( ) {
+ImuFF::~ImuFF( ) {
 	file.close();
 }
 
-void Imu::fifoPush( const ImuMeas_t &element ) {
+void ImuFF::fifoPush( const ImuMeas_t &element ) {
 	dataFifo.push_back( element );
 }
 
-bool Imu::fifoPop( ImuMeas_t &element ) {
+bool ImuFF::fifoPop( ImuMeas_t &element ) {
 	if( !dataFifo.empty() ) {
 		element = dataFifo.front( );
 		dataFifo.pop_front( );
@@ -38,7 +38,7 @@ bool Imu::fifoPop( ImuMeas_t &element ) {
 	return false;
 }
 
-bool Imu::fifoPeak( unsigned int n, ImuMeas_t &element ) {
+bool ImuFF::fifoPeak( unsigned int n, ImuMeas_t &element ) {
 	if( dataFifo.size() > n ) {
 		element = dataFifo.at( n );
 		return true;
@@ -47,7 +47,7 @@ bool Imu::fifoPeak( unsigned int n, ImuMeas_t &element ) {
 }
 
 
-unsigned int Imu::fifoSize( void ) {
+unsigned int ImuFF::fifoSize( void ) {
 	unsigned int size = dataFifo.size();
 	return size;
 }

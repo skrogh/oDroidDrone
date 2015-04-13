@@ -92,7 +92,7 @@ int main( int argc, char** argv )
 	CameraDetector cameraDetector = CameraDetector( );
 
 	//Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
-	Imu imu( "sim/log.csv" );
+	ImuFF imu( "sim/log.csv" );
 
 	// Wait for flightcontroller to start
 	{

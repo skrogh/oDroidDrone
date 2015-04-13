@@ -23,7 +23,7 @@ typedef struct{
 	struct timeval timeStamp;
 } ImuMeas_t;
 
-class Imu {
+class ImuFF {
 private:
 	// filesdescriptors
 	std::ifstream file;
@@ -36,8 +36,8 @@ private:
 
 
 public:
-	Imu( char* fileName );
-	~Imu( void );
+	ImuFF( char* fileName );
+	~ImuFF( void );
 
 	// Push element into the fifo
 	void fifoPush( const ImuMeas_t &element );
