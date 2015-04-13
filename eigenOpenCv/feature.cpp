@@ -8,7 +8,7 @@
 using namespace cv;
 
 CameraDetector::CameraDetector( void ) {
-	int maxCorners = 100;
+	int maxCorners = 200;
 	double qualityLevel = 0.02;
 	double minDistance = 5;
 	int blockSize = 3;
@@ -20,7 +20,7 @@ CameraDetector::CameraDetector( void ) {
 
 	extractor = DescriptorExtractor::create( "BRIEF" );
 
-	matcher = BFMatcher(NORM_HAMMING, true);
+	matcher = BFMatcher(NORM_HAMMING, false);
 }
 
 void CameraDetector::detectFeatures( const Mat& image, CameraMeasurements& cameraMeasurements ) {
