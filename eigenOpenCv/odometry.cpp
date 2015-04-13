@@ -706,7 +706,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 		// Kalman gain
 		MatrixXd K = sigma * H0.transpose() * ( H0 * sigma * H0.transpose() + R_q ).inverse();
 		std::cout << "Kalman gain debug: \n" << ( H0 * sigma * H0.transpose() + R_q ) << "\n" <<
-		( H0 * sigma * H0.transpose() + R_q ).inverse() << "\n"
+		( H0 * sigma * H0.transpose() + R_q ).inverse() << "\n" <<
 		( ( H0 * sigma * H0.transpose() + R_q ) * ( ( H0 * sigma * H0.transpose() + R_q ).inverse() ) ) << std::endl;
 
 		//std::cout << "r0: " << r0 << std::endl;
