@@ -7,14 +7,14 @@
 #include "feature.hpp"
 #include "odometry.hpp"
 #include "common.hpp"
-#include "imu.hpp"
+#include "imuFromFile.hpp"
 
 void getImageFromFile( cv::Mat& image, timeval& tv, std::istream& fileOfFiles )
 {
 	std::string line;
-	while (std::getline(infile, line))
-	{
+	if ( std::getline(infile, line) ) {
 		sscanf( "img-s%d.%d.png", &(tv.tv_sec), &(tv.tv_usec) );
+		image = imread( line );
 	}
 }
 
@@ -91,7 +91,8 @@ int main( int argc, char** argv )
 	CameraMeasurements cameraMeasurements;
 	CameraDetector cameraDetector = CameraDetector( );
 
-	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
+	//Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
+	Imu imu( "sim/log.csv" );
 
 	// Wait for flightcontroller to start
 	{
@@ -139,6 +140,7 @@ int main( int argc, char** argv )
 	int resetCovar = 0;
 	int initiate = 0;
 	while( cv::waitKey(1) != 27 ) {
+		/*
 		cap.grab();
 		cap.grab();
 		cap.grab();
@@ -146,6 +148,8 @@ int main( int argc, char** argv )
 		cap.grab();
 		gettimeofday( &tv, &tz );
 		cap.retrieve( image );
+		*/
+		getImageFromFile( image, tv, fileOfFiles );
 		cvtColor(image, image, CV_BGR2GRAY);
 		msckf.debugImg = image.clone();
 
