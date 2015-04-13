@@ -1,4 +1,4 @@
-close all
+%close all
 
 q = 1:4;
 G_p = 5:7;
