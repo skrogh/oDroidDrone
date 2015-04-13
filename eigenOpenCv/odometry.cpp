@@ -342,7 +342,7 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	** Repack state
 	*/
 	// Rotation from global to inertial coordinates
-	x.segment<4>(0) = IG_q.coeffs();
+	x.segment<4>(0) = I1G_q.coeffs();
 	// Position (of inertial frame) in global coordinates
 	x.segment<3>(0+4) = G_p1;
 	// Velocity (of inertial frame) in global coordinates
