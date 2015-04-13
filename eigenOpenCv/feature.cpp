@@ -18,7 +18,7 @@ CameraDetector::CameraDetector( void ) {
 	detector = GoodFeaturesToTrackDetector( maxCorners, qualityLevel,
 			minDistance, blockSize, useHarrisDetector, k );
 
-	extractor = DescriptorExtractor::create( "ORB" );
+	extractor = DescriptorExtractor::create( "BRIEF" );
 
 	matcher = BFMatcher(NORM_HAMMING, true);
 }

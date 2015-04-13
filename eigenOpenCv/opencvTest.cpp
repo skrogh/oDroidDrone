@@ -36,7 +36,7 @@ int main( int argc, char** argv )
 		cameraDetector.detectFeatures( image, cameraMeasurements );
 		cameraDetector.addFeatures( cameraMeasurements );
 
-/*
+
 		if( key == '\n' ) {
 			for ( std::list<CameraMeas_t>::iterator meas_j = cameraMeasurements.meas.begin(); meas_j != cameraMeasurements.meas.end(); ) {
 				meas_j = cameraMeasurements.removeFeature( meas_j );
@@ -59,14 +59,14 @@ int main( int argc, char** argv )
 		}
 
 		cv::imshow("Matches", image );
-		*/
+		
 
 		struct timeval tnow;
 		struct timeval tdiff;
 		gettimeofday( &tnow, &tz );
 		timersub( &tnow, &tv, &tdiff );
 		tv = tnow;
-		printf( "Dt = %d.%06d", tdiff.tv_sec, tdiff.tv_usec );
+		printf( "Dt = %d.%06d\n", tdiff.tv_sec, tdiff.tv_usec );
 
 	}
 
