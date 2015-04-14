@@ -310,14 +310,16 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 
 	std::cout << "( k1 + 2*k2, + 2*k3 + k4 )\n" << ( k1 + 2*k2, + 2*k3 + k4 ) << std::endl;
 	std::cout << "dt/6*( k1 + 2*k2, + 2*k3 + k4 )\n" << calib->delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 ) << std::endl;
-	std::cout << "I1I_q\n" << Vector4d( 0, 0, 0, 1 )
+	std::cout << "I1I_q calc\n" << Vector4d( 0, 0, 0, 1 )
 			+ calib->delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 ) << std::endl;
 
 	QuaternionAlias<double> I1I_q(
 			Vector4d( 0, 0, 0, 1 )
 			+ calib->delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 )
 	);
+	std::cout << "I1I_q real\n" << I1I_q << std::endl;
 	I1I_q.normalize();
+	std::cout << "I1I_q norm\n" << I1I_q << std::endl;
 
 	QuaternionAlias<double> I1G_q = I1I_q * IG_q;
 
