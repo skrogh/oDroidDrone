@@ -105,6 +105,7 @@ public:
 	// updateHeight
 	void updateHeight( double height );
 	// TODO: -isInlierHeight
+	bool isInlinerHeight( const double r, const MatrixXd &H );
 	// performUpdate
 	void performUpdate( const VectorXd &delta_x );
 	// Initiate by running this for some time

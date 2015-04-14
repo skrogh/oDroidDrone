@@ -308,18 +308,11 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	Vector4d k3 = Omega( ( I_g_dly + I_g ) / 2.0 ) * ( q0 + calib->delta_t/2.0 * k2 ) / 2.0;
 	Vector4d k4 = Omega( I_g ) * ( q0 + calib->delta_t * k3 ) / 2.0;
 
-	std::cout << "( k1 + 2*k2, + 2*k3 + k4 )\n" << ( k1 + 2*k2 + 2*k3 + k4 ) << std::endl;
-	std::cout << "dt/6*( k1 + 2*k2, + 2*k3 + k4 )\n" << calib->delta_t/6.0 * ( k1 + 2*k2 + 2*k3 + k4 ) << std::endl;
-	std::cout << "I1I_q calc\n" << Vector4d( 0, 0, 0, 1 )
-			+ calib->delta_t/6.0 * ( k1 + 2*k2 + 2*k3 + k4 ) << std::endl;
-
 	QuaternionAlias<double> I1I_q(
 			Vector4d( 0, 0, 0, 1 )
 			+ calib->delta_t/6.0 * ( k1 + 2*k2 + 2*k3 + k4 )
 	);
-	std::cout << "I1I_q real\n" << I1I_q.coeffs() << std::endl;
 	I1I_q.normalize();
-	std::cout << "I1I_q norm\n" << I1I_q.coeffs() << std::endl;
 
 	QuaternionAlias<double> I1G_q = I1I_q * IG_q;
 
@@ -747,9 +740,6 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 }
 
 void MSCKF::updateHeight( double height ) {
-	//
-	// TODO: check if outlier
-	//
 
 	//
 	// TODO: Optimize since H is very sparse (only one element)
@@ -764,20 +754,23 @@ void MSCKF::updateHeight( double height ) {
 	Matrix<double,1,Dynamic> H( 1, sigma.cols() );
 	H << MatrixXd::Zero( 1, 5 ), 1, MatrixXd::Zero( 1, sigma.cols() - 6 );
 
-	// Kalman gain
-	MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
+	if ( this->isInlinerHeight( r, H ) )
+	{
+		// Kalman gain
+		MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
 
-	// Update to be appled to sf4ate
-	VectorXd delta_x = K * r;
+		// Update to be appled to sf4ate
+		VectorXd delta_x = K * r;
 
-	// Update covariance
-	MatrixXd A = MatrixXd::Identity( K.rows(), H.cols() ) - K * H;
-	sigma = A * sigma * A.transpose() + K * R * K.transpose();
+		// Update covariance
+		MatrixXd A = MatrixXd::Identity( K.rows(), H.cols() ) - K * H;
+		sigma = A * sigma * A.transpose() + K * R * K.transpose();
 
-	//
-	// apply feedback
-	//
-	this->performUpdate( delta_x );
+		//
+		// apply feedback
+		//
+		this->performUpdate( delta_x );
+	}
 
 }
 
@@ -823,6 +816,15 @@ void MSCKF::performUpdate( const VectorXd &delta_x ) {
 bool MSCKF::isInlinerCamera( const VectorXd &r0, const MatrixXd &H0 ) {
 	double gamma = r0.transpose() * ( H0 * sigma * H0.transpose() ).inverse() * r0;
 	return gamma <= chi2Inv[ r0.rows() ];
+}
+
+bool MSCKF::isInlinerHeight( const double r, const MatrixXd &H ) {
+	/* unoptimized
+	double gamma = r * r * ( H * sigma * H.transpose() ).inverse();
+	*/
+	// optimized
+	double gamma = r * r / sigma(5,5);
+	return gamma <= chi2Inv[ 1 ];
 }
 
 void MSCKF::updateInit( double height ) {
