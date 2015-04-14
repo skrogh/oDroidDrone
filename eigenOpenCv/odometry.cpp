@@ -321,7 +321,7 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	I1I_q.normalize();
 	std::cout << "I1I_q norm\n" << I1I_q.coeffs() << std::endl;
 
-	QuaternionAlias<double> I1G_q = I1I_q.coeffs() * IG_q;
+	QuaternionAlias<double> I1G_q = I1I_q * IG_q;
 
 	// Translation
 	Vector3d G_a = I1G_q.conjugate()._transformVector( I_a ) + G_g;
