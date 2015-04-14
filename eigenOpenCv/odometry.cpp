@@ -317,11 +317,11 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 			Vector4d( 0, 0, 0, 1 )
 			+ calib->delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 )
 	);
-	std::cout << "I1I_q real\n" << I1I_q << std::endl;
+	std::cout << "I1I_q real\n" << I1I_q.coeffs() << std::endl;
 	I1I_q.normalize();
-	std::cout << "I1I_q norm\n" << I1I_q << std::endl;
+	std::cout << "I1I_q norm\n" << I1I_q.coeffs() << std::endl;
 
-	QuaternionAlias<double> I1G_q = I1I_q * IG_q;
+	QuaternionAlias<double> I1G_q = I1I_q.coeffs() * IG_q;
 
 	// Translation
 	Vector3d G_a = I1G_q.conjugate()._transformVector( I_a ) + G_g;
