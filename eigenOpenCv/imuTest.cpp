@@ -28,7 +28,7 @@ int main( int argc, char** argv )
 		element.gyro[0] << ", " << element.gyro[1] << ", " <<  element.gyro[2] << ", " <<
 		element.alpha[0] << ", " << element.alpha[1] << ", " <<  element.alpha[2] << ", " <<
 		element.dist << std::endl;
-
+/*
 		std::cout <<
 		"Time: " <<
 		element.timeStamp.tv_sec << "." << std::setfill('0') << std::setw(6) << element.timeStamp.tv_usec << "s\n" <<
@@ -43,6 +43,7 @@ int main( int argc, char** argv )
 		"Dist: " <<
 		element.dist << "\n" << std::endl;
 		timePrev = timeNow;
+*/
 	}
 	std::cout << "Progam ended" << std::endl;
 	return 0;
