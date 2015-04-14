@@ -313,9 +313,6 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	std::cout << "I1I_q\n" << Vector4d( 0, 0, 0, 1 )
 			+ calib->delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 ) << std::endl;
 
-	volatile void* noOpt = (void*) &debug1;
-	noOpt = (void*) &debug2;
-
 	QuaternionAlias<double> I1I_q(
 			Vector4d( 0, 0, 0, 1 )
 			+ calib->delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 )
