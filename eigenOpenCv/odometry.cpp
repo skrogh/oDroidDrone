@@ -308,9 +308,11 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	Vector4d k3 = Omega( ( I_g_dly + I_g ) / 2.0 ) * ( q0 + calib->delta_t/2.0 * k2 ) / 2.0;
 	Vector4d k4 = Omega( I_g ) * ( q0 + calib->delta_t * k3 ) / 2.0;
 
-	volatile Vector4d debug1 = ( k1 + 2*k2, + 2*k3 + k4 );
-	volatile Vector4d debug2 = calib->delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 );
-	
+	Vector4d debug1 = ( k1 + 2*k2, + 2*k3 + k4 );
+	Vector4d debug2 = calib->delta_t/6.0 * ( k1 + 2*k2, + 2*k3 + k4 );
+
+	volatile (void*) noOpt = (void*) &debug1;
+	noOpt = (void*) &debug2;
 
 	QuaternionAlias<double> I1I_q(
 			Vector4d( 0, 0, 0, 1 )
