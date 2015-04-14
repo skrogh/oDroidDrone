@@ -132,7 +132,8 @@ fprintf( file,[ ...
     ]);
 x_ = x;
 Sigma_ = Sigma;
-for i=1:400
+[ x_, Sigma_, I_omega, I_a, G_a ] = propagate( x_, Sigma_, [ 0,0.001,0, 0, 0, -9.82]', [0,0,0]', [0,0,-9.82]', calib );
+for i=1:399
     [ x_, Sigma_, I_omega, I_a, G_a ] = propagate( x_, Sigma_, [ 0,0.001,0, 0, 0, -9.82]', [0,0.001,0]', [0,0,-9.82]', calib );
 end
 
