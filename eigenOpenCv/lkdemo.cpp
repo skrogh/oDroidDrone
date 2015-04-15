@@ -44,6 +44,7 @@ int main( int argc, char** argv )
     Size subPixWinSize(10,10), winSize(31,31);
 
     const int MAX_COUNT = 200;
+    const int N_OPTIMAL = 20;
     bool needToInit = false;
     bool nightMode = false;
 
@@ -64,8 +65,8 @@ int main( int argc, char** argv )
     namedWindow( "LK Demo", 1 );
     setMouseCallback( "LK Demo", onMouse, 0 );
 
-    Mat gray, prevGray, image;
-    vector<Point2f> points[2];
+    Mat gray, prevGray;
+    vector<Point2f> points, prevPoints;
 
     for(;;)
     {
@@ -74,79 +75,69 @@ int main( int argc, char** argv )
         if( frame.empty() )
             break;
 
-        frame.copyTo(image);
-        cvtColor(image, gray, COLOR_BGR2GRAY);
+        cvtColor(frame, gray, COLOR_BGR2GRAY);
 
-        if( nightMode )
-            image = Scalar::all(0);
-
-        if( needToInit )
-        {
+        /*
             // automatic initialization
             Mat roi(gray, Rect(0,0,100,100));
-            goodFeaturesToTrack(roi, points[1], MAX_COUNT, 0.01, 10, Mat(), 3, 0, 0.04);
-            //cornerSubPix(gray, points[1], subPixWinSize, Size(-1,-1), termcrit);
+            goodFeaturesToTrack(roi, points, MAX_COUNT, 0.01, 10, Mat(), 3, 0, 0.04);
+            //cornerSubPix(gray, points, subPixWinSize, Size(-1,-1), termcrit);
             addRemovePt = false;
+        */
+        // Check if we need to add more points
+        if ( prevPoints.size() < N_OPTIMAL ) {
+            // get region of interest
+            int roiX = 0;
+            int roiY = 0;
+            Point2f roiP( roiX, roiY );
+            Mat roi(gray, Rect(roiX,roiY,100,100));
+
+            vector<Point2f> gfttPoints;
+            goodFeaturesToTrack(roi, gfttPoints, N_OPTIMAL-prevPoints.size(), 0.01, 10, Mat(), 3, 0, 0.04);
+            for ( int i = 0; i < gfttPoints.size(); i++ ) {
+                prevPoints.push(gfttPoints[i] + roiP);
+            }
         }
-        else if( !points[0].empty() )
+
+        if( !prevPoints.empty() )
         {
             vector<uchar> status;
             vector<float> err;
             if(prevGray.empty())
                 gray.copyTo(prevGray);
-            calcOpticalFlowPyrLK(prevGray, gray, points[0], points[1], status, err, winSize,
+            calcOpticalFlowPyrLK(prevGray, gray, prevPoints, points, status, err, winSize,
                                  3, termcrit, 0, 0.001);
             size_t i, k;
-            for( i = k = 0; i < points[1].size(); i++ )
+            for( i = k = 0; i < points.size(); i++ )
             {
-                if( addRemovePt )
-                {
-                    if( norm(point - points[1][i]) <= 5 )
-                    {
-                        addRemovePt = false;
-                        continue;
-                    }
-                }
-
+                //´Skip this point, if it is invalid
                 if( !status[i] )
                     continue;
 
-                points[1][k++] = points[1][i];
-                circle( image, points[1][i], 3, Scalar(0,255,0), -1, 8);
+                // Add it if it is valid (since i>k it is safe to use the poins vector for this)
+                points[k++] = points[i];
+                circle( image, points[i], 3, Scalar(0,255,0), -1, 8);
             }
-            points[1].resize(k);
+            // k is the number of valid points
+            points.resize(k);
         }
 
-        if( addRemovePt && points[1].size() < (size_t)MAX_COUNT )
-        {
-            vector<Point2f> tmp;
-            tmp.push_back(point);
-            //cornerSubPix( gray, tmp, winSize, Size(-1,-1), termcrit);
-            points[1].push_back(tmp[0]);
-            addRemovePt = false;
-        }
 
-        needToInit = false;
-        imshow("LK Demo", image);
 
-        char c = (char)waitKey(10);
+        imshow("LK Demo", gray);
+
+        char c = (char)waitKey(1);
         if( c == 27 )
             break;
         switch( c )
         {
-        case 'r':
-            needToInit = true;
-            break;
         case 'c':
-            points[0].clear();
-            points[1].clear();
-            break;
-        case 'n':
-            nightMode = !nightMode;
+            prevPoints.clear();
+            points.clear();
             break;
         }
 
-        std::swap(points[1], points[0]);
+        std::swap(points, prevPoints);
         cv::swap(prevGray, gray);
     }
 
