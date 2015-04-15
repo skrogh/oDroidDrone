@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <ctype.h>
+#include <random>
 
 using namespace cv;
 using namespace std;
@@ -67,6 +68,10 @@ int main( int argc, char** argv )
 
     Mat gray, prevGray;
     vector<Point2f> points, prevPoints;
+    std::default_random_engine generator;
+    std::uniform_int_distribution<int> roiDistX(0,640-1-100);
+    std::uniform_int_distribution<int> roiDistY(0,480-1-100);
+
 
     for(;;)
     {
@@ -87,8 +92,8 @@ int main( int argc, char** argv )
         // Check if we need to add more points
         if ( prevPoints.size() < N_OPTIMAL ) {
             // get region of interest
-            int roiX = 0;
-            int roiY = 0;
+            int roiX = roiDistX(generator);
+            int roiY = roiDistY(generator);
             Point2f roiP( roiX, roiY );
             Mat roi(gray, Rect(roiX,roiY,100,100));
 
