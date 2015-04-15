@@ -3,7 +3,7 @@ CPPFLAGS = $(shell pkg-config --cflags opencv )
 LIBS = $(shell pkg-config --libs opencv ) -pthread
 
 
-DEPS = feature.hpp odometry.hpp common.hpp imu.hpp quaternionAlias.hpp imuFromFile.hpp ikTraker.hpp
+DEPS = feature.hpp odometry.hpp common.hpp imu.hpp quaternionAlias.hpp imuFromFile.hpp ikTracker.hpp
 OBJ = feature.o odometry.o common.o imu.o imuFromFile.o ikTraker.o
 
 
