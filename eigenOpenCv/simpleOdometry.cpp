@@ -25,9 +25,9 @@ Vector2d featureUndistort( const Vector2d &src, const Calib *calib, unsigned int
 	// itterate:
 	while( itterations-- ) {
 		// Residual
-		Matrix<double,2,1> r = src - cameraProject( beta(0), beta(1), 1, &calib );
+		Matrix<double,2,1> r = src - cameraProject( beta(0), beta(1), 1, calib );
 		// Jacobian
-		Matrix<double,2,2> Jf = jacobianH( beta(0), beta(1), 1, &calib ).block<2,2>(0,0);
+		Matrix<double,2,2> Jf = jacobianH( beta(0), beta(1), 1, calib ).block<2,2>(0,0);
 		// New estimate
 		beta = beta + (Jf.transpose()*Jf).inverse() * Jf.transpose() * r;
 	}
