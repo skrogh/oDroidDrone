@@ -110,8 +110,24 @@ int main( int argc, char** argv )
 		// Undistort
 		for ( int i = 0; i < points.cols(); i++ )
 		{
-			points.col(i) = featureUndistort( Vector2d( tracker.points[i].x, tracker.points[i].y ), MSCKF.calib);
-			prevPoints.col(i) = featureUndistort( Vector2d( tracker.prevPoints[i].x, tracker.prevPoints[i].y ), MSCKF.calib);
+			points.col(i) = featureUndistort( Vector2d( tracker.points[i].x, tracker.points[i].y ), msckf.calib);
+			prevPoints.col(i) = featureUndistort( Vector2d( tracker.prevPoints[i].x, tracker.prevPoints[i].y ), msckf.calib);
+		}
+
+		//
+		// Find geometric transform
+		//
+
+		// construct constraints
+		Matrix<double, Dynamic, 5> C( points.cols()*2, 5 );
+		for ( int i = 0; i < points.cols(); i++ )
+		{
+			const double &x = points(1,i);
+			const double &y = points(2,i);
+			const double &x_ = prevPoints(1,i);
+			const double &y_ = prevPoints(2,i);
+			C.row( i*2 )    << -y,  x,  0, -1,  y_;
+			C.row( i*2 + 1) <<  x,  y,  1,  0, -x_;
 		}
 
 
