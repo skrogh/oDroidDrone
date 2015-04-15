@@ -47,7 +47,6 @@ int main( int argc, char** argv )
 	cap.set( CV_CAP_PROP_FRAME_HEIGHT, 480 );
 
 	namedWindow( "LK Demo", 1 );
-	setMouseCallback( "LK Demo", onMouse, 0 );
 
 	Mat gray, prevGray;
 	LKTracker tracker;
