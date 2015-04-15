@@ -15,11 +15,11 @@ using namespace cv;
 using namespace std;
 using namespace Eigen;
 
-Vector2d featureUndistort( const Vector2d &src, const Calib &calib, unsigned int itterations = 3 )
+Vector2d featureUndistort( const Vector2d &src, const Calib *calib, unsigned int itterations = 3 )
 {
 	Vector2d beta( 
-		( src( 0 ) - calib.o_x ) / calib.f_x,
-		( src( 1 ) - calib.o_y ) / calib.f_y
+		( src( 0 ) - calib->o_x ) / calib->f_x,
+		( src( 1 ) - calib->o_y ) / calib->f_y
 	);
 
 	// itterate:
