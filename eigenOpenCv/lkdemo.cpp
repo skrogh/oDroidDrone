@@ -95,7 +95,7 @@ int main( int argc, char** argv )
             vector<Point2f> gfttPoints;
             goodFeaturesToTrack(roi, gfttPoints, N_OPTIMAL-prevPoints.size(), 0.01, 10, Mat(), 3, 0, 0.04);
             for ( int i = 0; i < gfttPoints.size(); i++ ) {
-                prevPoints.pushBack(gfttPoints[i] + roiP);
+                prevPoints.push_back(gfttPoints[i] + roiP);
             }
         }
 
