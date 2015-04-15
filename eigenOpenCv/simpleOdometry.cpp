@@ -16,7 +16,7 @@ using namespace std;
 using namespace Eigen;
 
 template< typename Type >
-Matrix<Type,2,1> featureUndistort( const Matrix<Type,2,1> &src, const &Calib calib, unsigned int itterations = 3 )
+Matrix<Type,2,1> featureUndistort( const Matrix<Type,2,1> &src, const Calib &calib, unsigned int itterations = 3 )
 {
 	Matrix<Type,2,1> beta( 
 		( src( 0 ) - calib.o_x ) / calib.f_x,
