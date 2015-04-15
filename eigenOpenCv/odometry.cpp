@@ -87,7 +87,7 @@ Matrix4d Omega( const Vector3d& v ){
 //
 // Project a point from camera coordinates to pixel position
 //
-Vector2d cameraProject( double X, double Y, double Z, Calib* calib ) {
+Vector2d cameraProject( double X, double Y, double Z, const Calib* calib ) {
 	double& o_x = calib->o_x;
 	double& o_y = calib->o_y;
 	double& f_x = calib->f_x;
@@ -112,7 +112,7 @@ Vector2d cameraProject( double X, double Y, double Z, Calib* calib ) {
 //
 // Jacobian of h (camera model)
 //
-Matrix<double,2,3> jacobianH( double X, double Y, double Z, Calib* calib ) {
+Matrix<double,2,3> jacobianH( double X, double Y, double Z, const Calib* calib ) {
 	double& o_x = calib->o_x;
 	double& o_y = calib->o_y;
 	double& f_x = calib->f_x;

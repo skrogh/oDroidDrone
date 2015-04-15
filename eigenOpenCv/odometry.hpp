@@ -116,8 +116,8 @@ public:
 //
 // TODO: move to file with utility functions
 //
-Matrix<double,2,3> jacobianH( double X, double Y, double Z, Calib* calib );
-Vector2d cameraProject( double X, double Y, double Z, Calib* calib );
+Matrix<double,2,3> jacobianH( double X, double Y, double Z, const Calib* calib );
+Vector2d cameraProject( double X, double Y, double Z, const Calib* calib );
 Matrix4d Omega( const Vector3d& v );
 Matrix3d crossMat( const Vector3d& v );
 
