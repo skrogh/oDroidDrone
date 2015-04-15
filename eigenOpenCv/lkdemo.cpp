@@ -85,7 +85,9 @@ int main( int argc, char** argv )
             break;
 
         cvtColor(frame, gray, COLOR_BGR2GRAY);
-
+        if(prevGray.empty())
+                gray.copyTo(prevGray);
+            
         // Check if we need to add more points
         if ( prevPoints.size() < N_OPTIMAL ) {
             // get region of interest
@@ -106,8 +108,6 @@ int main( int argc, char** argv )
         {
             vector<uchar> status;
             vector<float> err;
-            if(prevGray.empty())
-                gray.copyTo(prevGray);
             calcOpticalFlowPyrLK(prevGray, gray, prevPoints, points, status, err, winSize,
                                  3, termcrit, 0, 0.001);
             size_t i, k;
