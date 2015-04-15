@@ -15,9 +15,9 @@ using namespace cv;
 using namespace std;
 using namespace Eigen;
 
-Matrix<double,2,1> featureUndistort( const Matrix<double,2,1> &src, const Calib &calib, unsigned int itterations = 3 )
+Vector2d featureUndistort( const Vector2d &src, const Calib &calib, unsigned int itterations = 3 )
 {
-	Matrix<double,2,1> beta( 
+	Vector2d beta( 
 		( src( 0 ) - calib.o_x ) / calib.f_x,
 		( src( 1 ) - calib.o_y ) / calib.f_y
 	);
@@ -77,6 +77,8 @@ int main( int argc, char** argv )
 
 
 	VideoCapture cap;
+	cap.open(0);
+
 	// size
 	cap.set( CV_CAP_PROP_FRAME_WIDTH, 640 );
 	cap.set( CV_CAP_PROP_FRAME_HEIGHT, 480 );
@@ -89,7 +91,6 @@ int main( int argc, char** argv )
 	{
 		Mat frame;
 		cap.grab();
-		cap.grab();
 		cap.retrieve(frame);
 
 		cvtColor(frame, gray, COLOR_BGR2GRAY);
@@ -97,6 +98,22 @@ int main( int argc, char** argv )
 			gray.copyTo(prevGray);
 
 		tracker.detectFeatures( gray, prevGray );
+
+		//
+		// undistort points
+		//
+
+		// Initialize
+		Matrix2Xd points(2, tracker.points.size());
+		Matrix2Xd prevPoints(2, tracker.points.size());
+
+		// Undistort
+		for ( int i = 0; i < points.cols(); i++ )
+		{
+			points.col(i) = featureUndistort( Vector2d( tracker.points[i].x, tracker.points[i].y ), MSCKF.calib);
+			prevPoints.col(i) = featureUndistort( Vector2d( tracker.prevPoints[i].x, tracker.prevPoints[i].y ), MSCKF.calib);
+		}
+
 
 		imshow("LK Demo", frame);
 		char c = (char)waitKey(1);
