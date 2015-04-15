@@ -21,15 +21,6 @@
 using namespace Eigen;
 
 
-//
-// TODO: move to file with utility functions
-//
-Matrix<double,2,3> jacobianH( double X, double Y, double Z, Calib* calib );
-Vector2d cameraProject( double X, double Y, double Z, Calib* calib );
-Matrix4d Omega( const Vector3d& v );
-Matrix3d crossMat( const Vector3d& v );
-
-
 class Calib {
 public:
 	// 
@@ -122,5 +113,12 @@ public:
 	void updateInit( double height );
 };
 
+//
+// TODO: move to file with utility functions
+//
+Matrix<double,2,3> jacobianH( double X, double Y, double Z, Calib* calib );
+Vector2d cameraProject( double X, double Y, double Z, Calib* calib );
+Matrix4d Omega( const Vector3d& v );
+Matrix3d crossMat( const Vector3d& v );
 
 #endif //_ODOMETRY_H_
