@@ -95,7 +95,7 @@ int main( int argc, char** argv )
             vector<Point2f> gfttPoints;
             goodFeaturesToTrack(roi, gfttPoints, N_OPTIMAL-prevPoints.size(), 0.01, 10, Mat(), 3, 0, 0.04);
             for ( int i = 0; i < gfttPoints.size(); i++ ) {
-                prevPoints.push(gfttPoints[i] + roiP);
+                prevPoints.pushBack(gfttPoints[i] + roiP);
             }
         }
 
@@ -116,7 +116,7 @@ int main( int argc, char** argv )
 
                 // Add it if it is valid (since i>k it is safe to use the poins vector for this)
                 points[k++] = points[i];
-                circle( image, points[i], 3, Scalar(0,255,0), -1, 8);
+                circle( gray, points[i], 3, Scalar(0,255,0), -1, 8);
             }
             // k is the number of valid points
             points.resize(k);
