@@ -15,10 +15,9 @@ using namespace cv;
 using namespace std;
 using namespace Eigen;
 
-template< typename Type >
-Matrix<Type,2,1> featureUndistort( const Matrix<Type,2,1> &src, const Calib &calib, unsigned int itterations = 3 )
+Matrix<double,2,1> featureUndistort( const Matrix<double,2,1> &src, const Calib &calib, unsigned int itterations = 3 )
 {
-	Matrix<Type,2,1> beta( 
+	Matrix<double,2,1> beta( 
 		( src( 0 ) - calib.o_x ) / calib.f_x,
 		( src( 1 ) - calib.o_y ) / calib.f_y
 	);
@@ -26,13 +25,13 @@ Matrix<Type,2,1> featureUndistort( const Matrix<Type,2,1> &src, const Calib &cal
 	// itterate:
 	while( itterations-- ) {
 		// Residual
-		Matrix<Type,2,1> r = src - cameraProject( beta(0), beta(1), 1, calib );
+		Matrix<double,2,1> r = src - cameraProject( beta(0), beta(1), 1, &calib );
 		// Jacobian
-		Matrix<Type,2,2> Jf = jacobianH( beta(0), beta(1), 1, calib ).block<2,2>(0,0);
+		Matrix<double,2,2> Jf = jacobianH( beta(0), beta(1), 1, &calib ).block<2,2>(0,0);
 		// New estimate
 		beta = beta + (Jf.transpose()*Jf).inverse() * Jf.transpose() * r;
 	}
-	return Matrix<Type,2,1>( beta(0), beta(1) );
+	return Matrix<double,2,1>( beta(0), beta(1) );
 }
 
 int main( int argc, char** argv )
