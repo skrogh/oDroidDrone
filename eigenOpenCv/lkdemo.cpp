@@ -45,7 +45,7 @@ int main( int argc, char** argv )
     Size subPixWinSize(10,10), winSize(31,31);
 
     const int MAX_COUNT = 200;
-    const int N_OPTIMAL = 20;
+    const int N_OPTIMAL = 50;
     bool needToInit = false;
     bool nightMode = false;
 
@@ -71,6 +71,7 @@ int main( int argc, char** argv )
     std::default_random_engine generator;
     std::uniform_int_distribution<int> roiDistX(0,640-1-100);
     std::uniform_int_distribution<int> roiDistY(0,480-1-100);
+    std::uniform_int_distribution<int> deadDist(0,N_OPTIMAL/3);
 
 
     for(;;)
@@ -98,7 +99,7 @@ int main( int argc, char** argv )
             Mat roi(gray, Rect(roiX,roiY,100,100));
 
             vector<Point2f> gfttPoints;
-            goodFeaturesToTrack(roi, gfttPoints, N_OPTIMAL-prevPoints.size(), 0.01, 10, Mat(), 3, 0, 0.04);
+            goodFeaturesToTrack(roi, gfttPoints, (N_OPTIMAL-prevPoints.size())/2, 0.01, 10, Mat(), 3, 0, 0.04);
             for ( int i = 0; i < gfttPoints.size(); i++ ) {
                 prevPoints.push_back(gfttPoints[i] + roiP);
             }
@@ -116,7 +117,7 @@ int main( int argc, char** argv )
             for( i = k = 0; i < points.size(); i++ )
             {
                 //´Skip this point, if it is invalid
-                if( !status[i] )
+                if( !status[i] || (deadDist(generator)==0) )
                     continue;
 
                 // Add it if it is valid (since i>k it is safe to use the poins vector for this)
