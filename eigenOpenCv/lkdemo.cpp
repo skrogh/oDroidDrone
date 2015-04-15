@@ -80,6 +80,8 @@ int main( int argc, char** argv )
     for(;;)
     {
         Mat frame;
+        cap.grab();
+        cap.grab()
         cap >> frame;
         if( frame.empty() )
             break;
