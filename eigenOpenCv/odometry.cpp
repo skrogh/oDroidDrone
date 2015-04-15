@@ -113,15 +113,15 @@ Vector2d cameraProject( double X, double Y, double Z, const Calib* calib ) {
 // Jacobian of h (camera model)
 //
 Matrix<double,2,3> jacobianH( double X, double Y, double Z, const Calib* calib ) {
-	double& o_x = calib->o_x;
-	double& o_y = calib->o_y;
-	double& f_x = calib->f_x;
-	double& f_y = calib->f_y;
-	double& k1 = calib->k1;
-	double& k2 = calib->k2;
+	const double& o_x = calib->o_x;
+	const double& o_y = calib->o_y;
+	const double& f_x = calib->f_x;
+	const double& f_y = calib->f_y;
+	const double& k1 = calib->k1;
+	const double& k2 = calib->k2;
 	double k3 = 0;
-	double& t1 = calib->t1;
-	double& t2 = calib->t2;
+	const double& t1 = calib->t1;
+	const double& t2 = calib->t2;
 
 
 	Matrix<double,2,3> m;
