@@ -58,8 +58,8 @@ int main( int argc, char** argv )
         return 0;
     }
     // size
-    cap.set( CV_CAP_PROP_FRAME_WIDTH, 320 );
-    cap.set( CV_CAP_PROP_FRAME_HEIGHT, 240 );
+    cap.set( CV_CAP_PROP_FRAME_WIDTH, 640 );
+    cap.set( CV_CAP_PROP_FRAME_HEIGHT, 480 );
 
     namedWindow( "LK Demo", 1 );
     setMouseCallback( "LK Demo", onMouse, 0 );
