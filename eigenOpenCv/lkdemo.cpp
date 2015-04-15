@@ -125,7 +125,7 @@ int main( int argc, char** argv )
 
                 // Add it if it is valid (since i>k it is safe to use the poins vector for this)
                 points[k++] = points[i];
-                line( gray, points[i], prevPoints[i], Scalar(0,255,0) )
+                line( gray, points[i], prevPoints[i], Scalar(0,255,0) );
                 circle( gray, points[i], 2, Scalar(0,255,0) );
             }
             // k is the number of valid points
