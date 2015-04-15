@@ -85,7 +85,7 @@ Matrix4d Omega( const Vector3d& v ){
 
 
 //
-//
+// Project a point from camera coordinates to pixel position
 //
 Vector2d cameraProject( double X, double Y, double Z, Calib* calib ) {
 	double& o_x = calib->o_x;

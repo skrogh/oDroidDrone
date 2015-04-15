@@ -31,5 +31,8 @@ matlabUnitTest: matlabUnitTest.o $(OBJ) $(DEPS)
 lkdemo: lkdemo.o $(OBJ) $(DEPS)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
+simpleOdometry: simpleOdometry.o $(OBJ) $(DEPS)
+	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
+
 clean: 
 	$(RM) test egienTest opencvTest imuTest *.o
