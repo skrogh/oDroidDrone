@@ -3,6 +3,12 @@
 #include "common.hpp"
 
 
+using namespace cv;
+using namespace std;
+
+default_random_engine generator;
+
+
 LKTracker::LKTracker( void )
 {
 	MAX_COUNT = 200;
@@ -10,6 +16,9 @@ LKTracker::LKTracker( void )
 	ROI_Y_SIZE = 480/4;
 	ROI_X_SIZE = 640/4;
 	termcrit = TermCriteria(TermCriteria::COUNT|TermCriteria::EPS,20,0.03);
+	roiDistX = uniform_int_distribution<int>(0,640-ROI_X_SIZE);
+	roiDistY = uniform_int_distribution<int>(0,480-ROI_Y_SIZE);
+	deadDist = deadDist(0,N_OPTIMAL/3); 
 	subPixWinSize =  Size(10,10);
 	winSize = Size(31,31);
 }
@@ -42,7 +51,7 @@ void LKTracker::detectFeatures( const Mat& image, const Mat& prevImage )
 	{
 		vector<uchar> status;
 		vector<float> err;
-		if(previmage.empty())
+		if(prevImage.empty())
 			image.copyTo(previmage);
 		calcOpticalFlowPyrLK(prevImage, image, prevPoints, points, status, err, winSize,
 							 3, termcrit, 0, 0.001);
