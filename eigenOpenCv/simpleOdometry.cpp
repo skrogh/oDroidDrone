@@ -15,7 +15,7 @@ using namespace cv;
 using namespace std;
 using namespace Eigen;
 
-template< Type >
+template< typename Type >
 Matrix<Type,2,1> featureUndistort( const Matrix<Type,2,1> &src, const &Calib calib, unsigned int itterations = 3 )
 {
 	Matrix<Type,2,1> beta( 
