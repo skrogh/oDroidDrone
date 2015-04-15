@@ -62,7 +62,7 @@ int main( int argc, char** argv )
     setMouseCallback( "LK Demo", onMouse, 0 );
 
     Mat gray, prevGray;
-    LKTracker tracker();
+    LKTracker tracker;
 
     for(;;)
     {
