@@ -49,8 +49,6 @@ int main( int argc, char** argv )
     const int ROI_Y_SIZE = 480/4;
     const int ROI_X_SIZE = 640/4;
 
-    bool needToInit = false;
-    bool nightMode = false;
 
     if( argc == 1 || (argc == 2 && strlen(argv[1]) == 1 && isdigit(argv[1][0])))
         cap.open(argc == 2 ? argv[1][0] - '0' : 0);
@@ -88,24 +86,17 @@ int main( int argc, char** argv )
 
         cvtColor(frame, gray, COLOR_BGR2GRAY);
 
-        /*
-            // automatic initialization
-            Mat roi(gray, Rect(0,0,100,100));
-            goodFeaturesToTrack(roi, points, MAX_COUNT, 0.01, 10, Mat(), 3, 0, 0.04);
-            //cornerSubPix(gray, points, subPixWinSize, Size(-1,-1), termcrit);
-            addRemovePt = false;
-        */
         // Check if we need to add more points
         if ( prevPoints.size() < N_OPTIMAL ) {
             // get region of interest
             int roiX = roiDistX(generator);
             int roiY = roiDistY(generator);
             Point2f roiP( roiX, roiY );
-            Mat roi(gray, Rect(roiX,roiY,ROI_X_SIZE,ROI_Y_SIZE));
+            Mat roi(prevGray, Rect(roiX,roiY,ROI_X_SIZE,ROI_Y_SIZE));
 
             vector<Point2f> gfttPoints;
             goodFeaturesToTrack(roi, gfttPoints, (N_OPTIMAL-prevPoints.size())/2, 0.01, 10, Mat(), 3, 0, 0.04);
-            cornerSubPix(gray, gfttPoints, subPixWinSize, Size(-1,-1), termcrit);
+            cornerSubPix(prevGray, gfttPoints, subPixWinSize, Size(-1,-1), termcrit);
             for ( int i = 0; i < gfttPoints.size(); i++ ) {
                 prevPoints.push_back(gfttPoints[i] + roiP);
             }
