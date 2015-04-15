@@ -130,6 +130,12 @@ int main( int argc, char** argv )
 			C.row( i*2 + 1) <<  x,  y,  1,  0, -x_;
 		}
 
+		JacobiSVD<MatrixXd> svd( C, ComputeThinV );
+		VectorXd V = svd.matrixV().rightCols<1>();
+
+		VectorXd h = V.head<4>() / V(4);
+
+		cout << "Moved: " << h(2) << ", " << h(3) << endl;
 
 		imshow("LK Demo", frame);
 		char c = (char)waitKey(1);
