@@ -122,10 +122,10 @@ int main( int argc, char** argv )
 		Matrix<double, Dynamic, 5> C( points.cols()*2, 5 );
 		for ( int i = 0; i < points.cols(); i++ )
 		{
-			const double &x = points(1,i);
-			const double &y = points(2,i);
-			const double &x_ = prevPoints(1,i);
-			const double &y_ = prevPoints(2,i);
+			const double &x = points(0,i);
+			const double &y = points(1,i);
+			const double &x_ = prevPoints(0,i);
+			const double &y_ = prevPoints(1,i);
 			C.row( i*2 )    << -y,  x,  0, -1,  y_;
 			C.row( i*2 + 1) <<  x,  y,  1,  0, -x_;
 		}
