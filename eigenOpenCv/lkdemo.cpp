@@ -46,6 +46,9 @@ int main( int argc, char** argv )
 
     const int MAX_COUNT = 200;
     const int N_OPTIMAL = 50;
+    const int ROI_Y_SIZE = 480/4;
+    const int ROI_X_SIZE = 640/4;
+
     bool needToInit = false;
     bool nightMode = false;
 
@@ -69,8 +72,8 @@ int main( int argc, char** argv )
     Mat gray, prevGray;
     vector<Point2f> points, prevPoints;
     std::default_random_engine generator;
-    std::uniform_int_distribution<int> roiDistX(0,640-1-100);
-    std::uniform_int_distribution<int> roiDistY(0,480-1-100);
+    std::uniform_int_distribution<int> roiDistX(0,640-ROI_X_SIZE);
+    std::uniform_int_distribution<int> roiDistY(0,480-ROI_Y_SIZE);
     std::uniform_int_distribution<int> deadDist(0,N_OPTIMAL/3);
 
 
@@ -96,7 +99,7 @@ int main( int argc, char** argv )
             int roiX = roiDistX(generator);
             int roiY = roiDistY(generator);
             Point2f roiP( roiX, roiY );
-            Mat roi(gray, Rect(roiX,roiY,100,100));
+            Mat roi(gray, Rect(roiX,roiY,ROI_X_SIZE,ROI_Y_SIZE));
 
             vector<Point2f> gfttPoints;
             goodFeaturesToTrack(roi, gfttPoints, (N_OPTIMAL-prevPoints.size())/2, 0.01, 10, Mat(), 3, 0, 0.04);
