@@ -79,7 +79,7 @@ int main( int argc, char** argv )
     {
         Mat frame;
         cap.grab();
-        cap.grab()
+        cap.grab();
         cap >> frame;
         if( frame.empty() )
             break;
