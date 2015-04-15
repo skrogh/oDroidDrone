@@ -103,6 +103,7 @@ int main( int argc, char** argv )
 
             vector<Point2f> gfttPoints;
             goodFeaturesToTrack(roi, gfttPoints, (N_OPTIMAL-prevPoints.size())/2, 0.01, 10, Mat(), 3, 0, 0.04);
+            cornerSubPix(gray, gfttPoints, subPixWinSize, Size(-1,-1), termcrit);
             for ( int i = 0; i < gfttPoints.size(); i++ ) {
                 prevPoints.push_back(gfttPoints[i] + roiP);
             }
