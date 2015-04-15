@@ -51,8 +51,6 @@ void LKTracker::detectFeatures( const Mat& image, const Mat& prevImage )
 	{
 		vector<uchar> status;
 		vector<float> err;
-		if(prevImage.empty())
-			image.copyTo(previmage);
 		calcOpticalFlowPyrLK(prevImage, image, prevPoints, points, status, err, winSize,
 							 3, termcrit, 0, 0.001);
 		size_t i, k;
