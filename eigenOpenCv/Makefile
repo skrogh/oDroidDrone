@@ -4,7 +4,7 @@ LIBS = $(shell pkg-config --libs opencv ) -pthread
 
 
 DEPS = feature.hpp odometry.hpp common.hpp imu.hpp quaternionAlias.hpp imuFromFile.hpp ikTracker.hpp
-OBJ = feature.o odometry.o common.o imu.o imuFromFile.o ikTraker.o
+OBJ = feature.o odometry.o common.o imu.o imuFromFile.o ikTracker.o
 
 
 
