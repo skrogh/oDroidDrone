@@ -6,6 +6,8 @@
 #include <iostream>
 #include <ctype.h>
 #include <random>
+#include "lkTracker.hpp"
+
 
 using namespace cv;
 using namespace std;
@@ -41,14 +43,6 @@ int main( int argc, char** argv )
     help();
 
     VideoCapture cap;
-    TermCriteria termcrit(TermCriteria::COUNT|TermCriteria::EPS,20,0.03);
-    Size subPixWinSize(10,10), winSize(31,31);
-
-    const int MAX_COUNT = 200;
-    const int N_OPTIMAL = 50;
-    const int ROI_Y_SIZE = 480/4;
-    const int ROI_X_SIZE = 640/4;
-
 
     if( argc == 1 || (argc == 2 && strlen(argv[1]) == 1 && isdigit(argv[1][0])))
         cap.open(argc == 2 ? argv[1][0] - '0' : 0);
@@ -68,12 +62,7 @@ int main( int argc, char** argv )
     setMouseCallback( "LK Demo", onMouse, 0 );
 
     Mat gray, prevGray;
-    vector<Point2f> points, prevPoints;
-    std::default_random_engine generator;
-    std::uniform_int_distribution<int> roiDistX(0,640-ROI_X_SIZE);
-    std::uniform_int_distribution<int> roiDistY(0,480-ROI_Y_SIZE);
-    std::uniform_int_distribution<int> deadDist(0,N_OPTIMAL/3);
-
+    LKTracker tracker();
 
     for(;;)
     {
@@ -86,49 +75,18 @@ int main( int argc, char** argv )
 
         cvtColor(frame, gray, COLOR_BGR2GRAY);
         if(prevGray.empty())
-                gray.copyTo(prevGray);
-            
-        // Check if we need to add more points
-        if ( prevPoints.size() < N_OPTIMAL ) {
-            // get region of interest
-            int roiX = roiDistX(generator);
-            int roiY = roiDistY(generator);
-            Point2f roiP( roiX, roiY );
-            Mat roi(prevGray, Rect(roiX,roiY,ROI_X_SIZE,ROI_Y_SIZE));
+            gray.copyTo(prevGray);
 
-            vector<Point2f> gfttPoints;
-            goodFeaturesToTrack(roi, gfttPoints, (N_OPTIMAL-prevPoints.size())/2, 0.01, 10, Mat(), 3, 0, 0.04);
-            cornerSubPix(prevGray, gfttPoints, subPixWinSize, Size(-1,-1), termcrit);
-            for ( int i = 0; i < gfttPoints.size(); i++ ) {
-                prevPoints.push_back(gfttPoints[i] + roiP);
-            }
-        }
+        tracker.detectFeatures( gray, prevGray );
 
-        if( !prevPoints.empty() )
+        for( int i = 0; i < tracker.points.size(); i++ )
         {
-            vector<uchar> status;
-            vector<float> err;
-            calcOpticalFlowPyrLK(prevGray, gray, prevPoints, points, status, err, winSize,
-                                 3, termcrit, 0, 0.001);
-            size_t i, k;
-            for( i = k = 0; i < points.size(); i++ )
-            {
-                //´Skip this point, if it is invalid
-                if( !status[i] || (deadDist(generator)==0) )
-                    continue;
-
-                // Add it if it is valid (since i>k it is safe to use the poins vector for this)
-                points[k++] = points[i];
-                line( gray, points[i], prevPoints[i], Scalar(0,255,0) );
-                circle( gray, points[i], 2, Scalar(0,255,0) );
-            }
-            // k is the number of valid points
-            points.resize(k);
+            line( frame, tracker.points[i], tracker.prevPoints[i], Scalar(0,255,0) );
+            circle( frame, tracker.points[i], 2, Scalar(0,255,0) );
         }
-
-
-
-        imshow("LK Demo", gray);
+        //line( gray, points[i], prevPoints[i], Scalar(0,255,0) );
+        //circle( gray, points[i], 2, Scalar(0,255,0) );
+        imshow("LK Demo", frame);
 
         char c = (char)waitKey(1);
         if( c == 27 )
@@ -136,12 +94,11 @@ int main( int argc, char** argv )
         switch( c )
         {
         case 'c':
-            prevPoints.clear();
-            points.clear();
+            tracker.prevPoints.clear();
+            tracker.points.clear();
             break;
         }
 
-        std::swap(points, prevPoints);
         cv::swap(prevGray, gray);
     }
 
