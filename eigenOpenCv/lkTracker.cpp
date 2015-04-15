@@ -64,6 +64,9 @@ void LKTracker::detectFeatures( const Mat& image, const Mat& prevImage )
 			points[k++] = points[i];
 			prevPoints[k++] = prevPoints[i];
 		}
+		cout << "points: " << points.size() <<
+		"prevPoints: " << prevPoints.size() <<
+		"k: " << k << endl;
 		// k is the number of valid points
 		points.resize(k);
 		prevPoints.resize(k);
