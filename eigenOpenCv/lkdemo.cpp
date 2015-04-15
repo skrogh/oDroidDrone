@@ -79,10 +79,10 @@ int main( int argc, char** argv )
 
         tracker.detectFeatures( gray, prevGray );
 
-        for( int i = 0; i < tracker.prevPoints.size(); i++ )
+        for( int i = 0; i < tracker.points.size(); i++ )
         {
             line( frame, tracker.points[i], tracker.prevPoints[i], Scalar(0,255,0) );
-            circle( frame, tracker.prevPoints[i], 2, Scalar(0,255,0) );
+            circle( frame, tracker.points[i], 2, Scalar(0,255,0) );
         }
         //line( gray, points[i], prevPoints[i], Scalar(0,255,0) );
         //circle( gray, points[i], 2, Scalar(0,255,0) );

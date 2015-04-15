@@ -62,9 +62,11 @@ void LKTracker::detectFeatures( const Mat& image, const Mat& prevImage )
 
 			// Add it if it is valid (since i>k it is safe to use the poins vector for this)
 			points[k++] = points[i];
+			prevPoints[k++] = prevPoints[i];
 		}
 		// k is the number of valid points
 		points.resize(k);
+		prevPoints.resize(k);
 	}
 }
 
