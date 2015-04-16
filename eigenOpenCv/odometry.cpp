@@ -439,6 +439,11 @@ void MSCKF::removeOldStates( int n ) {
 	//
 	if ( n < 1 )
 		return;
+	//
+	// Remove at most the number of frames we have
+	//
+	if ( n > (x.rows() - ODO_STATE_SIZE)/ODO_STATE_FRAME_SIZE )
+		n = (x.rows() - ODO_STATE_SIZE)/ODO_STATE_FRAME_SIZE;
 
 
 	/*

@@ -46,12 +46,12 @@ int main( int argc, char** argv )
 	calib.t1 = -0.0003;
 	calib.t2 = 0.0014;
 	calib.CI_q = Eigen::QuaternionAlias<double>(
-			0.000000000000000,
-			-0.000000000000000,
-			0.382683432365090,
-			-0.923879532511287
+			 0.000000000000000
+			-0.707106781186548
+			 0.707106781186548
+			 0.000000000000000
 	);
-	calib.C_p_I = Eigen::Vector3d( 0.0, 0.0, -0.056 );
+	calib.C_p_I = Eigen::Vector3d( 0.0, -0.044, -0.037 );
 	calib.g = 9.82;
 	calib.delta_t = 0.0025;
 	calib.imageOffset.tv_sec = 0;
@@ -117,6 +117,34 @@ int main( int argc, char** argv )
 		}
 
 		//
+		// Project on ground
+		//
+		for ( int i = 0; i < points.cols(); i++ )
+		{
+			// Calculate camera state
+			QuaternionAlias<double> IG_q( x.block<4,1>( 0, 0 ) );
+			QuaternionAlias<double> CG_q = calib->CI_q * IG_q;
+			Vector3d G_p_I = x.block<3,1>( 4, 0 );
+			// force x and y to 0 to get points relative to position
+			G_p_I(0) = G_p_I(1) = 0;
+			Vector3d G_p_C = G_p_I - CG_q.conjugate()._transformVector( calib->C_p_I );
+
+			// Calculate previous camera state
+			QuaternionAlias<double> IpG_q( x.block<4,1>( ODO_STATE_SIZE + 0, 0 ) );
+			QuaternionAlias<double> CpG_q = calib->CI_q * IpG_q;
+			Vector3d G_p_Ip = x.block<3,1>( ODO_STATE_SIZE + 4, 0 );
+			// force x and y to 0 to get points relative to position
+			G_p_Ip(0) = G_p_Ip(1) = 0;
+			Vector3d G_p_Cp = G_p_Ip - CpG_q.conjugate()._transformVector( calib->C_p_I );
+
+			// Calculate feature position estimate
+			Vector3d Cp_theta_i( prevPoints(0,i), prevPoints(1,i), 1 );
+			Vector3d Gp_theta_i = CpG_q.conjugate()._transformVector( Cp_theta_i );
+			double t_pi = - G_p_Cp( 2 ) / Gp_theta_i( 2 );
+			prevPoints.col( i ) = ( t_pi * Gp_theta_i + G_p_Cp );
+		}
+
+		//
 		// Find geometric transform
 		//
 
@@ -148,12 +176,21 @@ int main( int argc, char** argv )
 			cout << "Total: " << pX << ", " << pY << endl;
 		}
 
+		//
+		// Calculate kalman gain
+		//
+
+		// calculate residual
+
+
+
+
 		for( int i = 0; i < tracker.points.size(); i++ )
 		{
 			line( frame, tracker.points[i], tracker.prevPoints[i], Scalar(0,255,0) );
 			circle( frame, tracker.points[i], 2, Scalar(0,255,0) );
 		}
-		imshow("LK Demo", frame);
+		imshow("Features", frame);
 
 		char c = (char)waitKey(1);
 		if( c == 27 )
