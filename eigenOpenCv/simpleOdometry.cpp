@@ -285,12 +285,15 @@ int main( int argc, char** argv )
 			R << 0.05*0.05, 0, 0, 0.05*0.05; // TODO: make dependant on number of features
 
 			// calculate Measurement jacobian
-			Matrix<double,1,Dynamic> H( 1, sigma.cols() );
-			H << MatrixXd::Zero( 1, 3 ), 1, 1, MatrixXd::Zero( 1, sigma.cols() - 5 );
+			Matrix<double,2,Dynamic> H( 1, sigma.cols() );
+			H <<
+				MatrixXd::Zero( 1, 3 ), 1, 0, MatrixXd::Zero( 1, sigma.cols() - 5 ),
+				MatrixXd::Zero( 1, 3 ), 0, 1, MatrixXd::Zero( 1, sigma.cols() - 5 );
 
 			// TODO: inlier?
 
 			// Calculate kalman gain
+			MatrixXd A = MatrixXd::Identity( K.rows(), H.cols() ) - K * H;
 			MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
 
 			// apply kalman gain
