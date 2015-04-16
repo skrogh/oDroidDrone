@@ -190,7 +190,7 @@ int main( int argc, char** argv )
 
 
 			msckf.x.block<2,1>(4,0) += Vector2d( h(2), h(3) );
-			double dAngle = atan2( h(1), h(0) );
+			double dAngle = -atan2( h(1), h(0) );
 			msckf.x.block<4,1>(0,0) = 
 				( QuaternionAlias<double>( cos(dAngle/2), 0, 0, sin(dAngle/2) )
 				* QuaternionAlias<double>( msckf.x.block<4,1>(0,0) ) ).normalized().coeffs();
