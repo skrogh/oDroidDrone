@@ -6,6 +6,7 @@
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 
+#include <cmath>
 #include <ctype.h>
 #include <random>
 #include "lkTracker.hpp"
@@ -161,8 +162,6 @@ int main( int argc, char** argv )
 		//
 		// Find geometric transform
 		//
-		msckf.removeOldStates( 1 );
-		msckf.augmentState( );
 
 		// construct constraints
 		Matrix<double, Dynamic, 5> C( points.cols()*2, 5 );
@@ -176,15 +175,26 @@ int main( int argc, char** argv )
 			C.row( i*2 + 1) <<  x,  y,  1,  0, -x_;
 		}
 
-		if ( points.cols() > 0 )
+
+		if ( points.cols() >= 3 ) // only if 3 or more points (2 is needed, 1 extra for redundancy)
 		{
 			JacobiSVD<MatrixXd> svd( C, ComputeThinV );
 			VectorXd V = svd.matrixV().rightCols<1>();
-
+			// find transformation
 			VectorXd h = V.head<4>() / V(4);
+			// remove scaling
+			h.block<2,1>(0,0).normalize();
 
 			pX += h(2);
 			pY += h(3);
+
+
+			msckf.x.block<2,1>(4,0) += Vector2d( h(2), h(3) );
+			double dAngle = atan2( h2, h1 );
+			msckf.x.block<4,1>(0,0) = 
+				( QuaternionAlias<double>( cos(dAngle/2), 0, 0, sin(dAngle/2) )
+				* QuaternionAlias<double>( msckf.x.block<4,1>(0,0) ) ).normalized();
+
 			cout << endl;
 			cout << endl;
 			cout << "n Points: " << points.cols() << endl;
@@ -199,6 +209,9 @@ int main( int argc, char** argv )
 		// calculate residual
 
 
+		// update state fifo
+		msckf.removeOldStates( 1 );
+		msckf.augmentState( );
 
 
 		for( int i = 0; i < tracker.points.size(); i++ )
@@ -218,6 +231,10 @@ int main( int argc, char** argv )
 			tracker.points.clear();
 			pX = 0;
 			pY = 0;
+			// Start upside down
+			msckf.x.block<4,1>(0,0) << 0, 0, 0, 1; // upright
+			// Start 10cm off the ground
+			msckf.x.block<3,1>(4,0) << 0, 0, 0.5; // 50cm from ground
 			break;
 		}
 		cv::swap(prevGray, gray);
