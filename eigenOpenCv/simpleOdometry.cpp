@@ -126,13 +126,13 @@ int main( int argc, char** argv )
 			// Calculate camera state
 			QuaternionAlias<double> IG_q( x.block<4,1>( 0, 0 ) );
 			QuaternionAlias<double> CG_q = calib->CI_q * IG_q;
-			/*
 			Vector3d G_p_I = x.block<3,1>( 4, 0 );
 			// force x and y to 0 to get points relative to position
 			G_p_I(0) = 0;
 			G_p_I(1) = 0;
 			Vector3d G_p_C = G_p_I - CG_q.conjugate()._transformVector( calib->C_p_I );
 
+			/*
 			// Calculate previous camera state
 			QuaternionAlias<double> IpG_q( x.block<4,1>( ODO_STATE_SIZE + 0, 0 ) );
 			QuaternionAlias<double> CpG_q = calib->CI_q * IpG_q;
