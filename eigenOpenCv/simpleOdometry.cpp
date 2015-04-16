@@ -123,10 +123,10 @@ int main( int argc, char** argv )
 		{
 			const Calib* calib = msckf.calib;
 			VectorXd &x = msckf.x;
-			/*
 			// Calculate camera state
 			QuaternionAlias<double> IG_q( x.block<4,1>( 0, 0 ) );
 			QuaternionAlias<double> CG_q = calib->CI_q * IG_q;
+			/*
 			Vector3d G_p_I = x.block<3,1>( 4, 0 );
 			// force x and y to 0 to get points relative to position
 			G_p_I(0) = 0;
