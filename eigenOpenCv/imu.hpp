@@ -56,7 +56,7 @@ private:
 	//
 
 	// Clear SPI interrupt
-	void inline clearSpiInt( void );
+	char inline clearSpiInt( void );
 	// Interrupt handler
 	void gpioIntHandler( const struct timeval& tv );
 	// Interrupt thread

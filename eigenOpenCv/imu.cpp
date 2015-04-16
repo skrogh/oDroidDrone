@@ -118,11 +118,12 @@ Imu::~Imu( ) {
 	close(spiFd);
 }
 
-void inline Imu::clearSpiInt( void ) {
+char inline Imu::clearSpiInt( void ) {
 	// clear interrupt
 	char c;
 	lseek ( gpioFd, 0, SEEK_SET);
 	read( gpioFd, &c, 1);
+	return c;
 }
 
 void* Imu::imuThread( void ) {
@@ -146,8 +147,8 @@ void* Imu::imuThread( void ) {
 
 		// start waiting for next interrupt
 		rc = poll( &fdset, 1, timeout );
-		// clear interrupt
-		this->clearSpiInt();
+		// clear interrupt, read status
+		char value = this->clearSpiInt();
 		// Get time
 		gettimeofday( &tv, &tz );
 
@@ -157,7 +158,12 @@ void* Imu::imuThread( void ) {
 		}
 
 		// Check if timed out
-		if (rc == 0) {
+		if (rc == 0){
+			// check if interrupt is high, if it is we previously missed a read/write so take it now
+			if ( value = '1' ) {
+				this->gpioIntHandler( tv );
+				continue;
+			}
 		}
 
 		// Check if correct interrupt
