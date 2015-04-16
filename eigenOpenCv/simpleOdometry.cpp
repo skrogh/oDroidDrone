@@ -293,11 +293,13 @@ int main( int argc, char** argv )
 			// TODO: inlier?
 
 			// Calculate kalman gain
-			MatrixXd A = MatrixXd::Identity( K.rows(), H.cols() ) - K * H;
 			MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
 
 			// apply kalman gain
+			// state
 			VectorXd delta_x = K * r;
+			// covariance
+			MatrixXd A = MatrixXd::Identity( K.rows(), H.cols() ) - K * H;
 			sigma = A * sigma * A.transpose() + K * R * K.transpose();
 
 			// apply d_x
