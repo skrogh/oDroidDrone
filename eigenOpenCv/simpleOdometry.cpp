@@ -304,8 +304,8 @@ int main( int argc, char** argv )
 			// calculate Measurement jacobian
 			Matrix<double,2,Dynamic> H( 2, sigma.cols() );
 			H <<
-				MatrixXd::Zero( 1, 3 ), 1, 0, MatrixXd::Zero( 1, 1+9 ), -1, 0, MatrixXd::Zero( 1, sigma.cols() - 15 ),
-				MatrixXd::Zero( 1, 3 ), 0, 1, MatrixXd::Zero( 1, 1+9 ), 0, -1, MatrixXd::Zero( 1, sigma.cols() - 15 );
+				MatrixXd::Zero( 1, 3 ), 1, 0, MatrixXd::Zero( 1, 1+9+3 ), -1, 0, MatrixXd::Zero( 1, sigma.cols() - 15 ),
+				MatrixXd::Zero( 1, 3 ), 0, 1, MatrixXd::Zero( 1, 1+9+3 ), 0, -1, MatrixXd::Zero( 1, sigma.cols() - 15 );
 
 			// TODO: inlier?
 
