@@ -129,7 +129,8 @@ int main( int argc, char** argv )
 			QuaternionAlias<double> CG_q = calib->CI_q * IG_q;
 			Vector3d G_p_I = x.block<3,1>( 4, 0 );
 			// force x and y to 0 to get points relative to position
-			G_p_I(0) = G_p_I(1) = 0;
+			G_p_I(0) = 0;
+			G_p_I(1) = 0;
 			Vector3d G_p_C = G_p_I - CG_q.conjugate()._transformVector( calib->C_p_I );
 
 			// Calculate previous camera state
@@ -137,7 +138,8 @@ int main( int argc, char** argv )
 			QuaternionAlias<double> CpG_q = calib->CI_q * IpG_q;
 			Vector3d G_p_Ip = x.block<3,1>( ODO_STATE_SIZE + 4, 0 );
 			// force x and y to 0 to get points relative to position
-			G_p_Ip(0) = G_p_Ip(1) = 0;
+			G_p_Ip(0) = 0;
+			G_p_Ip(1) = 0;
 			Vector3d G_p_Cp = G_p_Ip - CpG_q.conjugate()._transformVector( calib->C_p_I );
 
 			// Calculate feature position estimate
