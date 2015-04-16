@@ -11,6 +11,7 @@
 #include <random>
 #include "lkTracker.hpp"
 #include "odometry.hpp"
+#include "imu.hpp"
 
 using namespace cv;
 using namespace std;
@@ -56,7 +57,7 @@ int main( int argc, char** argv )
 	calib.g = 9.82;
 	calib.delta_t = 0.0025;
 	calib.imageOffset.tv_sec = 0;
-	calib.imageOffset.tv_usec = 33000;
+	calib.imageOffset.tv_usec = 33000*5; // delay of 5 images
 	calib.sigma_gc = 0.001;//5.0e-04;
 	calib.sigma_ac = 0.008;//5.0e-04;
 	calib.sigma_wgc = 0.0001;
@@ -86,23 +87,95 @@ int main( int argc, char** argv )
 
 	namedWindow( "Features", 1 );
 
+	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
+	struct timeval tv;
+	struct timezone tz = {};
+		tz.tz_minuteswest = 0;
+		tz.tz_dsttime = 0;
+	//
+	// Clear Imu buffer
+	//
+	gettimeofday( &tv, &tz );
+	{
+		ImuMeas_t element;
+		while( imu.fifoPop( element ) )
+		{
+			// Get time of image without delay
+			struct timeval imageTime;
+			timersub( &tv, &(calib.imageOffset), &imageTime );
+
+			// If image is older that now
+			if ( timercmp( &imageTime, &(element.timeStamp), < ) )
+			{
+				timersub( &(element.timeStamp), &imageTime, &imageTime );
+				break;
+			}
+		}
+	}
+
 	Mat gray, prevGray;
 	LKTracker tracker;
 	double pX=0, pY=0;
 
+	ignoredHeights = 0;
 	for(;;)
 	{
 		Mat frame;
 		cap.grab();
+		gettimeofday( &tv, &tz );
 		cap.retrieve(frame);
 
 		cvtColor(frame, gray, COLOR_BGR2GRAY);
-		if(prevGray.empty()) {
+		if(prevGray.empty())
+		{
 			gray.copyTo(prevGray);
 			// skip first image
 			msckf.augmentState( );
 			continue;
 		}
+
+		//
+		// Propagate up to new image ( can be run in parallel with feature detection)
+		//
+		while( 1 ) {
+			ImuMeas_t element;
+			// Wait for at least one imu measurement
+			while( !imu.fifoPop( element ) );
+			resetCovar++;
+
+			// Propagate
+			msckf.propagate( element.acc, element.gyro );
+
+			// If valid distance measurement, update with that
+			if ( element.distValid )
+			{
+				if ( ignoredHeights >= 0 )
+				{
+					msckf.updateHeight( element.dist );
+					ignoredHeights = 0;
+				}
+				else
+				{
+					ignoredHeights++;
+				}
+			}
+
+			// Get time of image without delay
+			struct timeval imageTime;
+			timersub( &tv, &(calib.imageOffset), &imageTime );
+
+			// If image is older that propagated point, update
+			if ( timercmp( &imageTime, &(element.timeStamp), < ) ) {
+				timersub( &(element.timeStamp), &imageTime, &imageTime );
+				std::cout << "Image/IMU time difference: " <<
+				imageTime.tv_sec << "." << std::setfill('0') << std::setw(6) << imageTime.tv_usec << "s" << std::setfill(' ') << std::endl;
+				break;
+			}
+		}
+
+		//
+		// Update from camera
+		//
 
 		tracker.detectFeatures( gray, prevGray );
 
