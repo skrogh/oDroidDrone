@@ -80,7 +80,7 @@ int main( int argc, char** argv )
 	msckf.x.block<3,1>(4+3+3+3,0) << 0, 0, 0;
 
 	// Set initial uncertancy
-	msckf.sigma.diagonal().block<3,1>(0,0) << 0.00, 0.00, 0.00;
+	msckf.sigma.diagonal().block<3,1>(0,0) << 0.05, 0.05, 0.05;
 	msckf.sigma.diagonal().block<3,1>(3,0) << 0, 0, 0.2;
 	msckf.sigma.diagonal().block<3,1>(6,0) << 0, 0, 0;
 	msckf.sigma.diagonal().block<3,1>(9,0) << 0.1, 0.1, 0.1;
