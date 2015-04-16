@@ -143,7 +143,7 @@ int main( int argc, char** argv )
 			pY += h(3);
 			cout << endl;
 			cout << endl;
-			cout << "n Points: " << points.cols() << endl
+			cout << "n Points: " << points.cols() << endl;
 			cout << "Moved: " << h(2) << ", " << h(3) << endl;
 			cout << "Total: " << pX << ", " << pY << endl;
 		}
