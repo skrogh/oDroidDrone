@@ -132,6 +132,12 @@ int main( int argc, char** argv )
 			G_p_I(1) = 0;
 			Vector3d G_p_C = G_p_I - CG_q.conjugate()._transformVector( calib->C_p_I );
 
+			// Calculate feature position estimate
+			Vector3d C_theta_i( points(0,i), points(1,i), 1 );
+			Vector3d G_theta_i = CG_q.conjugate()._transformVector( C_theta_i );
+			double t_i = - G_p_C( 2 ) / G_theta_i( 2 );
+			points.col( i ) = ( t_i * G_theta_i + G_p_C ).block<2,1>(0,0);
+
 			/*
 			// Calculate previous camera state
 			QuaternionAlias<double> IpG_q( x.block<4,1>( ODO_STATE_SIZE + 0, 0 ) );
