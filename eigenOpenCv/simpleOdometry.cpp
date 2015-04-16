@@ -87,6 +87,8 @@ int main( int argc, char** argv )
 
 	Mat gray, prevGray;
 	LKTracker tracker;
+	double pX=0, pY=0;
+
 	for(;;)
 	{
 		Mat frame;
@@ -137,7 +139,10 @@ int main( int argc, char** argv )
 
 			VectorXd h = V.head<4>() / V(4);
 
+			pX += h(2);
+			pY += h(3);
 			cout << "Moved: " << h(2) << ", " << h(3) << endl;
+			cout << "Total: " << pX << ", " << pY << endl;
 		}
 
 		for( int i = 0; i < tracker.points.size(); i++ )
@@ -146,7 +151,7 @@ int main( int argc, char** argv )
 			circle( frame, tracker.points[i], 2, Scalar(0,255,0) );
 		}
 		imshow("LK Demo", frame);
-		
+
 		char c = (char)waitKey(1);
 		if( c == 27 )
 			break;
@@ -155,6 +160,8 @@ int main( int argc, char** argv )
 		case 'c':
 			tracker.prevPoints.clear();
 			tracker.points.clear();
+			pX = 0;
+			pY = 0;
 			break;
 		}
 		cv::swap(prevGray, gray);
