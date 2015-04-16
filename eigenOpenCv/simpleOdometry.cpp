@@ -96,8 +96,12 @@ int main( int argc, char** argv )
 		cap.retrieve(frame);
 
 		cvtColor(frame, gray, COLOR_BGR2GRAY);
-		if(prevGray.empty())
+		if(prevGray.empty()) {
 			gray.copyTo(prevGray);
+			// skip first image
+			msckf.augmentState( );
+			continue;
+		}
 
 		tracker.detectFeatures( gray, prevGray );
 
@@ -122,7 +126,7 @@ int main( int argc, char** argv )
 		for ( int i = 0; i < points.cols(); i++ )
 		{
 			const Calib* calib = msckf.calib;
-			VectorXd &x = msckf.x;
+			const VectorXd &x = msckf.x;
 			// Calculate camera state
 			QuaternionAlias<double> IG_q( x.block<4,1>( 0, 0 ) );
 			QuaternionAlias<double> CG_q = calib->CI_q * IG_q;
@@ -157,6 +161,8 @@ int main( int argc, char** argv )
 		//
 		// Find geometric transform
 		//
+		msckf.removeOldStates( 1 );
+		msckf.augmentState( );
 
 		// construct constraints
 		Matrix<double, Dynamic, 5> C( points.cols()*2, 5 );
