@@ -138,7 +138,6 @@ int main( int argc, char** argv )
 			double t_i = - G_p_C( 2 ) / G_theta_i( 2 );
 			points.col( i ) = ( t_i * G_theta_i + G_p_C ).block<2,1>(0,0);
 
-			/*
 			// Calculate previous camera state
 			QuaternionAlias<double> IpG_q( x.block<4,1>( ODO_STATE_SIZE + 0, 0 ) );
 			QuaternionAlias<double> CpG_q = calib->CI_q * IpG_q;
@@ -152,8 +151,7 @@ int main( int argc, char** argv )
 			Vector3d Cp_theta_i( prevPoints(0,i), prevPoints(1,i), 1 );
 			Vector3d Gp_theta_i = CpG_q.conjugate()._transformVector( Cp_theta_i );
 			double t_pi = - G_p_Cp( 2 ) / Gp_theta_i( 2 );
-			prevPoints.col( i ) = ( t_pi * Gp_theta_i + G_p_Cp );
-			*/
+			prevPoints.col( i ) = ( t_pi * Gp_theta_i + G_p_Cp ).block<2,1>(0,0);
 		}
 
 		//
