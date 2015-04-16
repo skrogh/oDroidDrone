@@ -123,7 +123,7 @@ int main( int argc, char** argv )
 		{
 			const Calib* calib = msckf.calib;
 			VectorXd &x = msckf.x;
-
+			/*
 			// Calculate camera state
 			QuaternionAlias<double> IG_q( x.block<4,1>( 0, 0 ) );
 			QuaternionAlias<double> CG_q = calib->CI_q * IG_q;
@@ -147,6 +147,7 @@ int main( int argc, char** argv )
 			Vector3d Gp_theta_i = CpG_q.conjugate()._transformVector( Cp_theta_i );
 			double t_pi = - G_p_Cp( 2 ) / Gp_theta_i( 2 );
 			prevPoints.col( i ) = ( t_pi * Gp_theta_i + G_p_Cp );
+			*/
 		}
 
 		//
