@@ -305,10 +305,10 @@ int main( int argc, char** argv )
 			Matrix<double,2,Dynamic> H( 2, sigma.cols() );
 			H <<
 				/*  xyz rotation        px py  pz v(xyz) bg(xyz) ba(xyz) */
-				MatrixXd::Zero( 1, 3 ), 1, 0, MatrixXd::Zero( 1, 1+9 )
+				MatrixXd::Zero( 1, 3 ), 1, 0, MatrixXd::Zero( 1, 1+9 ),
 				/*  xyz rotation            px py                   all the rest*/
 					MatrixXd::Zero( 1, 3 ), -1, 0, MatrixXd::Zero( 1, sigma.cols() - 20 ),
-				MatrixXd::Zero( 1, 3 ), 0, 1, MatrixXd::Zero( 1, 1+9 )
+				MatrixXd::Zero( 1, 3 ), 0, 1, MatrixXd::Zero( 1, 1+9 ),
 					MatrixXd::Zero( 1, 3 ), 0, -1, MatrixXd::Zero( 1, sigma.cols() - 20 );
 
 			// TODO: inlier?
