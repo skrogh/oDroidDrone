@@ -117,7 +117,7 @@ int main( int argc, char** argv )
 	LKTracker tracker;
 	double pX=0, pY=0;
 
-	ignoredHeights = 0;
+	int ignoredHeights = 0;
 	for(;;)
 	{
 		Mat frame;
@@ -141,7 +141,6 @@ int main( int argc, char** argv )
 			ImuMeas_t element;
 			// Wait for at least one imu measurement
 			while( !imu.fifoPop( element ) );
-			resetCovar++;
 
 			// Propagate
 			msckf.propagate( element.acc, element.gyro );
