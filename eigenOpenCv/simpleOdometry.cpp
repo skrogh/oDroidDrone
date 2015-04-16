@@ -68,9 +68,9 @@ int main( int argc, char** argv )
 
 	MSCKF msckf( &calib );
 	// Start upside down
-	msckf.x.block<4,1>(0,0) << 0, 1, 0, 0;
+	msckf.x.block<4,1>(0,0) << 0, 0, 0, 1; // upright
 	// Start 10cm off the ground
-	msckf.x.block<3,1>(4,0) << 0, 0, 0.1;
+	msckf.x.block<3,1>(4,0) << 0, 0, 0.5; // 50cm from ground
 	//acc offset
 	msckf.x.block<3,1>(4+3+3+3,0) << 0, 0, 0;
 
