@@ -130,14 +130,23 @@ int main( int argc, char** argv )
 			C.row( i*2 + 1) <<  x,  y,  1,  0, -x_;
 		}
 
-		JacobiSVD<MatrixXd> svd( C, ComputeThinV );
-		VectorXd V = svd.matrixV().rightCols<1>();
+		if ( points.cols() > 0 )
+		{
+			JacobiSVD<MatrixXd> svd( C, ComputeThinV );
+			VectorXd V = svd.matrixV().rightCols<1>();
 
-		VectorXd h = V.head<4>() / V(4);
+			VectorXd h = V.head<4>() / V(4);
 
-		cout << "Moved: " << h(2) << ", " << h(3) << endl;
+			cout << "Moved: " << h(2) << ", " << h(3) << endl;
+		}
 
+		for( int i = 0; i < tracker.points.size(); i++ )
+		{
+			line( frame, tracker.points[i], tracker.prevPoints[i], Scalar(0,255,0) );
+			circle( frame, tracker.points[i], 2, Scalar(0,255,0) );
+		}
 		imshow("LK Demo", frame);
+		
 		char c = (char)waitKey(1);
 		if( c == 27 )
 			break;
