@@ -186,20 +186,23 @@ int main( int argc, char** argv )
 		Matrix2Xd points(2, tracker.points.size());
 		Matrix2Xd prevPoints(2, tracker.points.size());
 
+		const Calib* calib = msckf.calib;
+		VectorXd &x = msckf.x;
+		MatrixXd &sigma = msckf.sigma;
+
 		// Undistort
 		for ( int i = 0; i < points.cols(); i++ )
 		{
-			points.col(i) = featureUndistort( Vector2d( tracker.points[i].x, tracker.points[i].y ), msckf.calib);
-			prevPoints.col(i) = featureUndistort( Vector2d( tracker.prevPoints[i].x, tracker.prevPoints[i].y ), msckf.calib);
+			points.col(i) = featureUndistort( Vector2d( tracker.points[i].x, tracker.points[i].y ), calib);
+			prevPoints.col(i) = featureUndistort( Vector2d( tracker.prevPoints[i].x, tracker.prevPoints[i].y ), calib);
 		}
+
 
 		//
 		// Project on ground
 		//
 		for ( int i = 0; i < points.cols(); i++ )
 		{
-			const Calib* calib = msckf.calib;
-			const VectorXd &x = msckf.x;
 			// Calculate camera state
 			QuaternionAlias<double> IG_q( x.block<4,1>( 0, 0 ) );
 			QuaternionAlias<double> CG_q = calib->CI_q * IG_q;
@@ -260,29 +263,55 @@ int main( int argc, char** argv )
 			pX += h(2);
 			pY += h(3);
 
-
+			/*
 			msckf.x.block<2,1>(4,0) += Vector2d( h(2), h(3) );
 			double dAngle = -atan2( h(1), h(0) );
 			msckf.x.block<4,1>(0,0) = 
 				( QuaternionAlias<double>( cos(dAngle/2), 0, 0, sin(dAngle/2) )
 				* QuaternionAlias<double>( msckf.x.block<4,1>(0,0) ) ).normalized().coeffs();
+			*/
+		
+
+
+			// calculate residual
+			double dAngle = -atan2( h(1), h(0) );
+			Matrix<double,2,1> r;
+			r <<
+			/* this is: Previous (x,y) + measured movement - propageted (x,y) */
+			x.block<2,1>(4+ODO_STATE_SIZE,0) + Vector2d( h(2), h(3) ) - x.block<2,1>(4,0);
+
+			// Noise
+			Matrix<double,2,2> R;
+			R << 0.05*0.05, 0, 0, 0.05*0.05; // TODO: make dependant on number of features
+
+			// calculate Measurement jacobian
+			Matrix<double,1,Dynamic> H( 1, sigma.cols() );
+			H << MatrixXd::Zero( 1, 3 ), 1, 1, MatrixXd::Zero( 1, sigma.cols() - 5 );
+
+			// TODO: inlier?
+
+			// Calculate kalman gain
+			MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
+
+			// apply kalman gain
+			VectorXd delta_x = K * r;
+			sigma = A * sigma * A.transpose() + K * R * K.transpose();
+
+			// apply d_x
+			msckf.performUpdate( delta_x );
 
 			cout << endl;
 			cout << endl;
 			cout << "n Points: " << points.cols() << endl;
 			cout << "Moved: " << h(2) << ", " << h(3) << endl;
 			cout << "Total: " << pX << ", " << pY << endl;
+			cout << "State: " << x(4) << ", " << x(5) << ", " << x(6) << endl;
 		}
-
-		//
-		// Calculate kalman gain
-		//
-
-		// calculate residual
-
-
 		// update state fifo
 		msckf.removeOldStates( 1 );
+		// Make sure sigma is symetric
+		sigma = ( sigma + sigma.transpose() )/2;
+		// update state fifo
 		msckf.augmentState( );
 
 
