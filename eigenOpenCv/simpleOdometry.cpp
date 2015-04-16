@@ -121,6 +121,7 @@ int main( int argc, char** argv )
 		//
 		for ( int i = 0; i < points.cols(); i++ )
 		{
+			Calib* calib = msckf.calib;
 			// Calculate camera state
 			QuaternionAlias<double> IG_q( x.block<4,1>( 0, 0 ) );
 			QuaternionAlias<double> CG_q = calib->CI_q * IG_q;
