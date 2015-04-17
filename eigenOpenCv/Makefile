@@ -34,7 +34,7 @@ lkdemo: lkdemo.o $(OBJ) $(DEPS)
 simpleOdometry: simpleOdometry.o $(OBJ) $(DEPS)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
-videoIOTest: videoIOTest.o videoIO.0 videoIO.hpp
+videoIOTest: videoIOTest.o videoIO.o videoIO.hpp
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
 clean: 
