@@ -40,7 +40,7 @@ figure;
 subplot(2,2,1)
 %plot( t, log_odroid(1:e,q) );
 rotMat = quatern2rotMat(log_odroid(1:e,q));
-plot( t, squeeze( rotMat(:,1,1:e) ) );
+plot( t, squeeze( rotMat(:,3,1:e) ) );
 subplot(2,2,2)
 plot( t, log_odroid(1:e,b_g) );
 subplot(2,2,3)

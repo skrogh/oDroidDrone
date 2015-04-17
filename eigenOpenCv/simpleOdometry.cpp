@@ -300,30 +300,36 @@ int main( int argc, char** argv )
 			pX += h(2);
 			pY += h(3);
 
-			/*
-			msckf.x.block<2,1>(4,0) += Vector2d( h(2), h(3) );
-			double dAngle = -atan2( h(1), h(0) );
-			msckf.x.block<4,1>(0,0) = 
-				( QuaternionAlias<double>( cos(dAngle/2), 0, 0, sin(dAngle/2) )
-				* QuaternionAlias<double>( msckf.x.block<4,1>(0,0) ) ).normalized().coeffs();
-			*/
-		
-
-
 			// calculate residual
-			double dAngle = -atan2( h(1), h(0) );
-			Matrix<double,2,1> r;
+
+			// Measured rotation
+			double dTheta_m = -atan2( h(1), h(0) );
+			// Calculate estimated rotation
+			Vector3d dir(1,0,0); // vector orthogonal to Z axis
+			// Calculate quaternion of rotation
+			QuaternionAlias<double> IpG_q( x.block<4,1>(0+ODO_STATE_SIZE,0) );
+			QuaternionAlias<double> IG_q( x.block<4,1>(0,0) );
+			QuaternionAlias<double> IpI_q = IpG_q * IG_q.conjugate();
+			// rotate dir by IpI_q
+			dir = IpI_q._transformVector( dir );
+			double dTheta_e = atan2( dir(1), dir(0) );
+			Matrix<double,3,1> r;
 			r <<
+			dTheta_m - dTheta_e,
 			/* this is: Previous (x,y) + measured movement - propageted (x,y) */
 			x.block<2,1>(4+ODO_STATE_SIZE,0) + Vector2d( h(2), h(3) ) - x.block<2,1>(4,0);
 
 			// Noise
-			Matrix<double,2,2> R;
-			R << 0.05*0.05, 0, 0, 0.05*0.05; // TODO: make dependant on number of features
+			Matrix<double,3,3> R;
+			R << MatrixXd::Identity(3, 3) * 0.05*0.05; // TODO: make dependant on number of features
 
 			// calculate Measurement jacobian
-			Matrix<double,2,Dynamic> H( 2, sigma.cols() );
+			Matrix<double,3,Dynamic> H( 3, sigma.cols() );
 			H <<
+				/*  xy rotation      z rot     p(xyz) v(xyz) bg(xyz) ba(xyz) */
+				MatrixXd::Zero( 1, 2 ), 1, MatrixXd::Zero( 1, 12 ),
+				/*  xy rotation             z rot                all the rest*/
+					MatrixXd::Zero( 1, 2 ), -1, MatrixXd::Zero( 1, sigma.cols() - 18 ),
 				/*  xyz rotation        px py  pz v(xyz) bg(xyz) ba(xyz) */
 				MatrixXd::Zero( 1, 3 ), 1, 0, MatrixXd::Zero( 1, 1+9 ),
 				/*  xyz rotation            px py                   all the rest*/
