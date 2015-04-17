@@ -1,4 +1,4 @@
-%close all
+close all
 
 q = 1:4;
 G_p = 5:7;
@@ -38,8 +38,9 @@ plot( t, log_odroid(1:e,s_b_a) )
 
 figure;
 subplot(2,2,1)
-plot( t, log_odroid(1:e,q) );
-%plot( quaternVectRotate( repmat( [0,0,1], length(log_odroid) ), quaternConj(log_odroid(:,q)) ) );
+%plot( t, log_odroid(1:e,q) );
+rotMat = quatern2rotMat(log_odroid(1:e,q));
+plot( t, squeeze( rotMat(:,1,1:e) ) );
 subplot(2,2,2)
 plot( t, log_odroid(1:e,b_g) );
 subplot(2,2,3)
@@ -48,12 +49,27 @@ subplot(2,2,4)
 plot( t, log_odroid(1:e,s_b_g) );
 
 figure;
-plot( t(3:e), log_odroid(3:e,determinant) );
+plot3( log_odroid(1:e,G_p(1)), log_odroid(1:e,G_p(2)), log_odroid(1:e,G_p(3)) );
+axis equal
+hold on
+% plot orientation
+for i = 1:200:e
+    p = log_odroid(i,G_p)';
+    mat = squeeze(rotMat(:,:,i))' * 0.2;
+    h = plot3( [p(1), p(1) + mat(1,1)], [p(2), p(2) + mat(2,1)], [p(3), p(3) + mat(3,1)] );
+    h.Color = 'red';
+    h = plot3( [p(1), p(1) + mat(1,2)], [p(2), p(2) + mat(2,2)], [p(3), p(3) + mat(3,2)] );
+    h.Color = 'green';
+    h = plot3( [p(1), p(1) + mat(1,3)], [p(2), p(2) + mat(2,3)], [p(3), p(3) + mat(3,3)] );
+    h.Color = 'blue';
+end
+% figure;
+% plot( t(3:e), log_odroid(3:e,determinant) );
+% 
+% figure;
+% plot( t(3:e), log_odroid(3:e,meanSigma) );
+% 
+% figure;
+% plot( t(3:e), log_odroid(3:e,sumSymSigma) );
 
-
-figure;
-plot( t(3:e), log_odroid(3:e,meanSigma) );
-
-figure;
-plot( t(3:e), log_odroid(3:e,sumSymSigma) );
 

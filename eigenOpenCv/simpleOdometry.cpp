@@ -203,6 +203,15 @@ int main( int argc, char** argv )
 		tracker.detectFeatures( gray, prevGray );
 
 		//
+		// Debug draw detected features: (TODO: draw where features would have moved)
+		//
+		for( int i = 0; i < tracker.points.size(); i++ )
+		{
+			line( frame, tracker.points[i], tracker.prevPoints[i], Scalar(0,255,0) );
+			circle( frame, tracker.points[i], 2, Scalar(0,255,0) );
+		}
+
+		//
 		// undistort points
 		//
 
@@ -348,11 +357,6 @@ int main( int argc, char** argv )
 		msckf.augmentState( );
 
 
-		for( int i = 0; i < tracker.points.size(); i++ )
-		{
-			line( frame, tracker.points[i], tracker.prevPoints[i], Scalar(0,255,0) );
-			circle( frame, tracker.points[i], 2, Scalar(0,255,0) );
-		}
 		imshow("Features", frame);
 
 		char c = (char)waitKey(1);
