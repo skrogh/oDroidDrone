@@ -69,5 +69,5 @@ void VideoIn::requestImage( cv::Mat &image, timeval& tv )
 	tv = timeStamp;
 	pthread_mutex_unlock( &capMutex );
 	std::unique_lock<std::mutex> lck( doneRequestingImageMtx );
-	doneRequestingImage.notify_all( lck );
+	doneRequestingImage.notify_all( );
 }
