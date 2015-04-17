@@ -60,7 +60,7 @@ int main( int argc, char** argv )
 	calib.g = 9.82;
 	calib.delta_t = 0.0025;
 	calib.imageOffset.tv_sec = 0;
-	calib.imageOffset.tv_usec = 33000*5; // delay of 5 images
+	calib.imageOffset.tv_usec = 33000; // delay of 1 images
 	calib.sigma_gc = 0.001;//5.0e-04;
 	calib.sigma_ac = 0.008;//5.0e-04;
 	calib.sigma_wgc = 0.0001;
@@ -139,6 +139,8 @@ int main( int argc, char** argv )
 	for(;;)
 	{
 		Mat frame;
+		cap.grab();
+		cap.grab();
 		cap.grab();
 		gettimeofday( &tv, &tz );
 		cap.retrieve(frame);
