@@ -54,6 +54,7 @@ void* VideoIn::videoThread( void )
 		// If an image was requested, make sure the requester gets time
 		if ( requestingImage )
 		{
+			requestingImage = false;
 			std::unique_lock<std::mutex> lck( doneRequestingImageMtx );
 			doneRequestingImage.wait( lck );
 		}
