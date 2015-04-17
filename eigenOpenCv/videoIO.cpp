@@ -26,7 +26,7 @@ VideoIn::VideoIn( int dev )
 	pthread_attr_setschedpolicy( &attr, policy );
 	pthread_attr_setschedparam( &attr, &param );
 
-	ret = pthread_create( &thread, &attr, &VideoIn::videoThreadWrapper, this );
+	int ret = pthread_create( &thread, &attr, &VideoIn::videoThreadWrapper, this );
 	if (ret == -1) {
 		perror("Creating thread");
 	}
