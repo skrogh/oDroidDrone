@@ -9,7 +9,8 @@ int main( int argc, char** argv )
 
 	while(1)
 	{
-		cv::imshow("Features", frame);
+		if( !frame.empty() )
+			cv::imshow("Features", frame);
 
 		char c = (char)cv::waitKey(1);
 		if( c == 27 )
