@@ -6,6 +6,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <atomic> 
 #include <getopt.h>
 #include <fcntl.h>
 #include <poll.h>
@@ -43,7 +44,7 @@ private:
 	// Thread handing
 	//
 	pthread_t thread;
-	bool volatile endThread;
+	std::atomic<bool> endThread;
 	pthread_mutex_t fifoMutex;
 
 	//
