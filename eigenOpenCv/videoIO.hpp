@@ -28,7 +28,7 @@ class VideoIn
 
 	void* videoThread( void );
 	static void * videoThreadWrapper( void *This )
-			{ return ( ( (Imu *) This )->videoThread() ); }
+			{ return ( ( (VideoIn *) This )->videoThread() ); }
 
 
 
