@@ -12,6 +12,7 @@
 #include "lkTracker.hpp"
 #include "odometry.hpp"
 #include "imu.hpp"
+#include "videoIO.hpp"
 
 using namespace cv;
 using namespace std;
@@ -88,12 +89,7 @@ int main( int argc, char** argv )
 
 
 
-	VideoCapture cap;
-	cap.open(0);
-
-	// size
-	cap.set( CV_CAP_PROP_FRAME_WIDTH, 640 );
-	cap.set( CV_CAP_PROP_FRAME_HEIGHT, 480 );
+	VideoIn videoIn( 0 );
 
 	namedWindow( "Features", 1 );
 
@@ -127,25 +123,10 @@ int main( int argc, char** argv )
 	LKTracker tracker;
 	double pX=0, pY=0;
 
-	// clear camera fifo
-	cap.grab();
-	cap.grab();
-	cap.grab();
-	cap.grab();
-	cap.grab();
-	cap.grab();
-
 	int ignoredHeights = 0;
 	for(;;)
 	{
-		Mat frame;
-		cap.grab();
-		cap.grab();
-		cap.grab();
-		cap.grab();
-		cap.grab();
-		gettimeofday( &tv, &tz );
-		cap.retrieve(frame);
+		videoIn.requestImage( frame, tv );
 
 		cvtColor(frame, gray, COLOR_BGR2GRAY);
 		if(prevGray.empty())

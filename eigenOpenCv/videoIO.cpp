@@ -4,6 +4,8 @@ VideoIn::VideoIn( int dev )
 {
 	// open capture device
 	cap = cv::VideoCapture(dev);
+	cap.set( CV_CAP_PROP_FRAME_WIDTH, 640 );
+	cap.set( CV_CAP_PROP_FRAME_HEIGHT, 480 );
 
 	// setup mutex
 	pthread_mutex_init( &capMutex, NULL );
