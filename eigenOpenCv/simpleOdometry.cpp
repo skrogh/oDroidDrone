@@ -90,6 +90,7 @@ int main( int argc, char** argv )
 
 
 	VideoIn videoIn( 0 );
+	cv::Mat frame;
 
 	namedWindow( "Features", 1 );
 
