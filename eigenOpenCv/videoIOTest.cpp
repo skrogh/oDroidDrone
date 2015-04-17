@@ -7,9 +7,12 @@ int main( int argc, char** argv )
 
 	namedWindow( "Features", 1 );
 
-	imshow("Features", frame);
+	while(1)
+	{
+		imshow("Features", frame);
 
-	char c = (char)waitKey(1);
-	if( c == 27 )
-		break;
+		char c = (char)waitKey(1);
+		if( c == 27 )
+			break;
+	}
 }
