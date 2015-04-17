@@ -366,6 +366,18 @@ int main( int argc, char** argv )
 		// update state fifo
 		msckf.augmentState( );
 
+		// Estimate projection of old features in new image
+		for ( int i = 0; i < prevPoints.cols(); i++ ) {
+			Vector3d G_p_f;
+			G_p_f << prevPoints.col(i) + x.block<2,1>( 4+ODO_STATE_SIZE, 0 ), 0;
+			const QuaternionAlias<double> &IG_q = x.block<4,1>(0,0);
+			const QuaternionAlias<double> &CI_q = calib->CI_q;
+			const QuaternionAlias<double> &G_p_I = x.block<3,1>(4,0);
+			const QuaternionAlias<double> &C_p_I = calib->C_p_I;
+			Vector3d C_p_f = CG_q._transformVector( G_p_f - G_p_I + (CI_q * IG_q).conjugate()._transformVector( C_p_I ) );
+			prevPoints.col(i) = cameraProject( C_p_f(0), C_p_f(1), C_p_f(2), calib );
+			circle( frame, Point2f( prevPoints(0,i), prevPoints(1,i) ), 2, Scalar(0,0,255) );
+		}
 
 		imshow("Features", frame);
 
