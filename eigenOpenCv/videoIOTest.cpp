@@ -12,7 +12,7 @@ int main( int argc, char** argv )
 		if( !frame.empty() )
 			cv::imshow("Features", frame);
 
-		char c = (char)cv::waitKey(1);
+		char c = (char)cv::waitKey(10);
 		if( c == 27 )
 			break;
 		struct timeval tv;
