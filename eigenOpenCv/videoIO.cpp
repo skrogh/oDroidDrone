@@ -51,8 +51,8 @@ void* VideoIn::videoThread( void )
 		// If an image was requested, make sure the requester gets time
 		if ( requestingImage )
 		{
-			// Wait for end of request
-			doneRequestingImage.wait();
+			std::unique_lock<std::mutex> lck( doneRequestingImageMtx );
+			doneRequestingImage.wait( lck );
 		}
 		pthread_mutex_lock( &capMutex );
 		cap.grab();
@@ -68,5 +68,6 @@ void VideoIn::requestImage( cv::Mat &image, timeval& tv )
 	cap.retrieve( image );
 	tv = timeStamp;
 	pthread_mutex_unlock( &capMutex );
-	doneRequestingImage.notify_all();
+	std::unique_lock<std::mutex> lck( doneRequestingImageMtx );
+	doneRequestingImage.notify_all( lck );
 }

@@ -2,6 +2,7 @@
 #define _VIDEOIO_H_
 
 #include <pthread.h>
+#include <mutex>
 #include <condition_variable>
 #include <stdint.h>
 #include <sys/time.h>
@@ -19,6 +20,7 @@ class VideoIn
 	pthread_mutex_t capMutex;
 	std::atomic<bool> requestingImage;
 	std::condition_variable doneRequestingImage;
+	std::mutex doneRequestingImageMtx;
 
 	//
 	// Capture device and timing
