@@ -4,6 +4,8 @@ int main( int argc, char** argv )
 {
 	VideoIn videoIn( 0 );
 	cv::Mat frame;
+	struct timeval tv;
+	videoIn.requestImage( frame, tv );
 
 	cv::namedWindow( "Features", 1 );
 
