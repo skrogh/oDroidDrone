@@ -48,7 +48,7 @@ void* VideoIn::videoThread( void )
 {
 	printf("Image server: Started\n");
 	while( !endThread ) {
-		// construct timezone struct
+		/*// construct timezone struct
 		struct timezone tz = {};
 		tz.tz_minuteswest = 0;
 		tz.tz_dsttime = 0;
@@ -65,6 +65,7 @@ void* VideoIn::videoThread( void )
 		gettimeofday( &timeStamp, &tz );
 		std::cout << "got Image" << std::endl;
 		pthread_mutex_unlock( &capMutex );
+		*/
 	}
 	printf("Image server: Ended\n");
 }
