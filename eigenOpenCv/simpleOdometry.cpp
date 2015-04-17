@@ -127,7 +127,7 @@ int main( int argc, char** argv )
 	int ignoredHeights = 0;
 	for(;;)
 	{
-		//videoIn.requestImage( frame, tv );
+		videoIn.requestImage( frame, tv );
 
 		cvtColor(frame, gray, COLOR_BGR2GRAY);
 		if(prevGray.empty())
@@ -149,12 +149,13 @@ int main( int argc, char** argv )
 			// Propagate
 			msckf.propagate( element.acc, element.gyro );
 			// log
+			/*
 			logFile << msckf.x.block<16,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.diagonal().block<15,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.determinant() << "\t";
 			logFile << msckf.sigma.diagonal().mean() << "\t";
 			logFile << ( msckf.sigma - msckf.sigma.transpose() ).sum() << "\n";
-
+			*/
 			// If valid distance measurement, update with that
 			if ( element.distValid )
 			{
