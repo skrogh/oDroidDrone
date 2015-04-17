@@ -15,5 +15,8 @@ int main( int argc, char** argv )
 		char c = (char)cv::waitKey(1);
 		if( c == 27 )
 			break;
+		struct timeval tv;
+		if( c == 'q')
+			videoIn.requestImage( frame, tv );
 	}
 }
