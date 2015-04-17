@@ -9,7 +9,7 @@ VideoIn::VideoIn( int dev )
 
 	// setup mutex
 	pthread_mutex_init( &capMutex, NULL );
-	requestedImage = false;
+	requestingImage = false;
 	endThread = false;
 
 	//
