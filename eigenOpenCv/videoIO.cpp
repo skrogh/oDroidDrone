@@ -1,5 +1,6 @@
 #include "videoIO.hpp"
 #include <iostream>
+#include <stdio.h>
 
 VideoIn::VideoIn( int dev )
 {
@@ -45,7 +46,7 @@ VideoIn::~VideoIn( )
 
 void* VideoIn::videoThread( void )
 {
-	std::cout << "Image server: Started" << std::endl;
+	printf("Image server: Started\n");
 	while( !endThread ) {
 		// construct timezone struct
 		struct timezone tz = {};
@@ -65,7 +66,7 @@ void* VideoIn::videoThread( void )
 		std::cout << "got Image" << std::endl;
 		pthread_mutex_unlock( &capMutex );
 	}
-	std::cout << "Image server: Ended" << std::endl;
+	printf("Image server: Ended\n");
 }
 
 void VideoIn::requestImage( cv::Mat &image, timeval& tv )
