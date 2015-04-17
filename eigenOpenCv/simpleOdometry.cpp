@@ -127,7 +127,7 @@ int main( int argc, char** argv )
 	int ignoredHeights = 0;
 	for(;;)
 	{
-		videoIn.requestImage( frame, tv );
+		//videoIn.requestImage( frame, tv );
 
 		cvtColor(frame, gray, COLOR_BGR2GRAY);
 		if(prevGray.empty())
