@@ -1,4 +1,5 @@
 #include "videoIO.hpp"
+#include <iostream>
 
 VideoIn::VideoIn( int dev )
 {
@@ -35,8 +36,10 @@ VideoIn::VideoIn( int dev )
 }
 VideoIn::~VideoIn( )
 {
+	std::cout << "Requesting to stop image server" << std::endl;
 	endThread = true;
 	pthread_join( thread, NULL );
+	std::cout << "Image server stopped" << std::endl;
 }
 
 
@@ -57,12 +60,14 @@ void* VideoIn::videoThread( void )
 		pthread_mutex_lock( &capMutex );
 		cap.grab();
 		gettimeofday( &timeStamp, &tz );
+		std::cout << "got Image" << std::endl;
 		pthread_mutex_unlock( &capMutex );
 	}
 }
 
 void VideoIn::requestImage( cv::Mat &image, timeval& tv )
 {
+	std::cout << "requesting Image" << std::endl;
 	requestingImage = true;
 	pthread_mutex_lock( &capMutex );
 	cap.retrieve( image );
@@ -70,4 +75,5 @@ void VideoIn::requestImage( cv::Mat &image, timeval& tv )
 	pthread_mutex_unlock( &capMutex );
 	std::unique_lock<std::mutex> lck( doneRequestingImageMtx );
 	doneRequestingImage.notify_all( );
+	std::cout << "done requesting Image" << std::endl;
 }
