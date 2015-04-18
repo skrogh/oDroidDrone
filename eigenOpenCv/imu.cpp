@@ -160,7 +160,7 @@ void* Imu::imuThread( void ) {
 		// Check if timed out
 		if (rc == 0){
 			// check if interrupt is high, if it is we previously missed a read/write so take it now
-			if ( value = '1' ) {
+			if ( value == '1' ) {
 				this->gpioIntHandler( tv );
 				continue;
 			}

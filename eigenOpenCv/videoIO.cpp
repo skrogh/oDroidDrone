@@ -66,6 +66,7 @@ void* VideoIn::videoThread( void )
 		pthread_mutex_unlock( &capMutex );
 	}
 	std::cout << "Image server: Ended" << std::endl;
+	return (NULL);
 }
 
 void VideoIn::requestImage( cv::Mat &image, timeval& tv )
