@@ -53,7 +53,7 @@ int main( int argc, char** argv )
 	calib.t2 = 0.0014;
 	calib.CI_q = Eigen::QuaternionAlias<double>(
 			 0.000000000000000,
-			-0.707106781186548,
+			 0.707106781186548,
 			 0.707106781186548,
 			 0.000000000000000
 	);
