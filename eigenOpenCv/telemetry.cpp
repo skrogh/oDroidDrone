@@ -111,6 +111,7 @@ void* Telemetry::telemetryThread( void )
 				printf( "Here is the message: %s\n", buffer );
 				*/
 		}
+		std::cout << "Telemetry server: Closing socket" << std::endl;
 		close(newsockfd);
 	}
 	close(sockfd);
