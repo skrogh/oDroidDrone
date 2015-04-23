@@ -1,7 +1,6 @@
 #include "telemetry.hpp"
 #include <iostream>
 
-
 static void error( const char *msg )
 {
 	perror(msg);
@@ -10,8 +9,16 @@ static void error( const char *msg )
 
 Telemetry::Telemetry( int portno_ )
 {
-	endThread = false;
 	portno = portno_;
+
+	requestSend = false;
+	endThread = false;
+
+	countInBuffer = 0;
+
+	// setup mutex
+	pthread_mutex_init( &bufferMutex, NULL );
+
 	//
 	// start thread
 	//
@@ -65,8 +72,21 @@ void* Telemetry::telemetryThread( void )
 
 		std::cout << "Telemetry server: Connected" << std::endl;
 
-		// Print all recieved data
+		// send data
 		while( !endThread ) {
+			//If not already signaled to send, wait for signal
+			if ( !requestSend )
+			{
+				std::unique_lock<std::mutex> lck( requestSendSignalMtx );
+				requestSendSignal.wait( lck );
+				requestSend = false;
+			}
+
+			pthread_mutex_lock( &bufferMutex );
+			write( newsockfd, buffer, countInBuffer );
+			countInBuffer = count;
+			pthread_mutex_unlock( &bufferMutex );
+			/*
 			char buffer[256] = {0};
 			int n = read( newsockfd, buffer, 255 );
 			if ( n < 0 ) {
@@ -77,10 +97,25 @@ void* Telemetry::telemetryThread( void )
 			}
 			else
 				printf( "Here is the message: %s\n", buffer );
+				*/
 		}
 	}
 	close(newsockfd);
 	close(sockfd);
 	std::cout << "Telemetry server: Ended" << std::endl;
 	return (NULL);
+}
+
+bool Telemetry::send( const void *buf, size_t count ) {
+	if( count > TELEMETRY_BUFFER_SIZE )
+		return true;
+	pthread_mutex_lock( &bufferMutex );
+	memcpy ( buffer, buf, count );
+	countInBuffer = count;
+	pthread_mutex_unlock( &bufferMutex );
+	requestSend = true;
+	std::unique_lock<std::mutex> lck( requestSendSignalMtx );
+	requestSendSignal.notify_all( );
+
+	return false;
 }

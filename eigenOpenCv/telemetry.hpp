@@ -14,6 +14,8 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+#define TELEMETRY_BUFFER_SIZE (256)
+
 
 class Telemetry
 {
@@ -22,14 +24,19 @@ class Telemetry
 	//
 	pthread_t thread;
 	std::atomic<bool> endThread;
-	std::condition_variable doneRequestingImage;
-	std::mutex doneRequestingImageMtx;
+	pthread_mutex_t bufferMutex;
+
+	std::atomic<bool> requestSend;
+	std::condition_variable requestSendSignal;
+	std::mutex requestSendSignalMtx;
 
 	//
 	// Socket handling
 	//
 	int newsockfd;
 	int portno;
+	uint8_t buffer[TELEMETRY_BUFFER_SIZE];
+	int countInBuffer;
 	
 
 
@@ -42,6 +49,9 @@ class Telemetry
 public:
 	Telemetry( int portno_ );
 	~Telemetry( void );
+
+	// Sends a message, returns true on error (message too long)
+	bool send( const void *buf, size_t count );
 
 };
 
