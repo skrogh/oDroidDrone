@@ -77,12 +77,12 @@ void* Telemetry::telemetryThread( void )
 		// send data
 		while( !endThread ) {
 			//If not already signaled to send, wait for signal
-			if ( !requestSend )
-			{
+			//if ( !requestSend )
+			//{
 				std::unique_lock<std::mutex> lck( requestSendSignalMtx );
 				requestSendSignal.wait( lck );
 				requestSend = false;
-			}
+			//}
 
 			pthread_mutex_lock( &bufferMutex );
 			int n = ::send( newsockfd, buffer, countInBuffer, MSG_NOSIGNAL );
