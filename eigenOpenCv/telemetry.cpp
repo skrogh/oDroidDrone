@@ -31,7 +31,7 @@ Telemetry::~Telemetry( )
 }
 
 
-void* Telemetry::TelemetryThread( void )
+void* Telemetry::telemetryThread( void )
 {
 	std::cout << "Telemetry server: Started" << std::endl;
 
