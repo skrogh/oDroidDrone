@@ -28,8 +28,7 @@ class Telemetry
 	//
 	// Socket handling
 	//
-	int sockfd, newsockfd, portno;
-	char buffer[256];
+	int newsockfd;
 	int portno;
 	
 
