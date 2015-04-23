@@ -85,7 +85,7 @@ void* Telemetry::telemetryThread( void )
 			}
 
 			pthread_mutex_lock( &bufferMutex );
-			int n = send( newsockfd, buffer, countInBuffer, MSG_NOSIGNAL );
+			int n = ::send( newsockfd, buffer, countInBuffer, MSG_NOSIGNAL );
 			countInBuffer = 0;
 			pthread_mutex_unlock( &bufferMutex );
 			if ( n < 0 ) {
