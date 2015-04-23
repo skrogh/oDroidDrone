@@ -72,17 +72,17 @@ void* Telemetry::telemetryThread( void )
 
 		if( tcp )
 		{
-		// Block and wait for connection
-		newsockfd = accept(sockfd, 
-				(struct sockaddr *) &cli_addr, 
-				&clilen);
-		if (newsockfd < 0) 
-				error("ERROR on accept");
+			// Block and wait for connection
+			newsockfd = accept(sockfd, 
+					(struct sockaddr *) &cli_addr, 
+					&clilen);
+			if (newsockfd < 0) 
+					error("ERROR on accept");
 		}
 		else
 		{
 			char tmp[1];
-			recvfrom( newsockfd, tmp, 1, 0,
+			recvfrom( sockfd, tmp, 1, 0,
 						(struct sockaddr *) &cli_addr, &clilen );
 		}
 
@@ -99,7 +99,7 @@ void* Telemetry::telemetryThread( void )
 			if ( tcp )
 				n = ::send( newsockfd, buffer, countInBuffer, MSG_NOSIGNAL );
 			else
-				n = sendto( newsockfd, buffer, countInBuffer, 0,
+				n = sendto( sockfd, buffer, countInBuffer, 0,
 						(struct sockaddr *) &cli_addr, clilen );
 			countInBuffer = 0;
 			pthread_mutex_unlock( &bufferMutex );
