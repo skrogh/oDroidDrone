@@ -3,8 +3,8 @@ CPPFLAGS = $(shell pkg-config --cflags opencv )
 LIBS = $(shell pkg-config --libs opencv ) -pthread
 
 
-DEPS = feature.hpp odometry.hpp common.hpp imu.hpp quaternionAlias.hpp imuFromFile.hpp lkTracker.hpp videoIO.hpp
-OBJ  = feature.o   odometry.o   common.o   imu.o                       imuFromFile.o   lkTracker.o   videoIO.o  
+DEPS = feature.hpp odometry.hpp common.hpp imu.hpp quaternionAlias.hpp imuFromFile.hpp lkTracker.hpp videoIO.hpp telemetry.hpp
+OBJ  = feature.o   odometry.o   common.o   imu.o                       imuFromFile.o   lkTracker.o   videoIO.o   telemetry.o
 
 
 
@@ -35,6 +35,9 @@ simpleOdometry: simpleOdometry.o $(OBJ) $(DEPS)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
 videoIOTest: videoIOTest.o videoIO.o videoIO.hpp
+	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
+
+telemetryTest: telemetryTest.o videoIO.o videoIO.hpp
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
 clean: 
