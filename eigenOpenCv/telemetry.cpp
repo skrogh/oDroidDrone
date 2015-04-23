@@ -15,6 +15,7 @@ Telemetry::Telemetry( int portno_ )
 
 	requestSend = false;
 	endThread = false;
+	tcp = false;
 
 	countInBuffer = 0;
 
@@ -45,7 +46,11 @@ void* Telemetry::telemetryThread( void )
 
 	// 
 	// Create listing socket
-	int sockfd = socket( AF_INET, SOCK_DGRAM, 0 );
+	int sockfd;
+	if ( tcp )
+		sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+	else
+		sockfd = socket( AF_INET, SOCK_DGRAM, 0 );
 	if (sockfd < 0) 
 		error("ERROR opening socket");
 
@@ -65,12 +70,15 @@ void* Telemetry::telemetryThread( void )
 		struct sockaddr_in cli_addr;
 		socklen_t clilen = sizeof(cli_addr);
 
+		if( tcp )
+		{
 		// Block and wait for connection
 		newsockfd = accept(sockfd, 
 				(struct sockaddr *) &cli_addr, 
 				&clilen);
 		if (newsockfd < 0) 
 				error("ERROR on accept");
+		}
 
 		std::cout << "Telemetry server: Connected" << std::endl;
 

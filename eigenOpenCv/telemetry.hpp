@@ -37,6 +37,7 @@ class Telemetry
 	int portno;
 	uint8_t buffer[TELEMETRY_BUFFER_SIZE];
 	int countInBuffer;
+	bool tcp;
 	
 
 
