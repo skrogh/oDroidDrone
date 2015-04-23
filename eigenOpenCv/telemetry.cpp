@@ -84,7 +84,7 @@ void* Telemetry::telemetryThread( void )
 
 			pthread_mutex_lock( &bufferMutex );
 			int n = write( newsockfd, buffer, countInBuffer );
-			countInBuffer = count;
+			countInBuffer = 0;
 			pthread_mutex_unlock( &bufferMutex );
 			if ( n < 0 ) {
 				error( "ERROR reading from socket" );
@@ -92,7 +92,7 @@ void* Telemetry::telemetryThread( void )
 				std::cout << "Telemetry server: Disconnected" << std::endl;
 				break;
 			}
-			
+
 			/*
 			char buffer[256] = {0};
 			int n = read( newsockfd, buffer, 255 );
