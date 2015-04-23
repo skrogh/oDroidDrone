@@ -37,7 +37,7 @@ simpleOdometry: simpleOdometry.o $(OBJ) $(DEPS)
 videoIOTest: videoIOTest.o videoIO.o videoIO.hpp
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
-telemetryTest: telemetryTest.o videoIO.o videoIO.hpp
+telemetryTest: telemetryTest.o $(OBJ) $(DEPS)
 	$(CXX) $(CPPFLAGS) -o $@ $^ $(LIBS)
 
 clean: 
