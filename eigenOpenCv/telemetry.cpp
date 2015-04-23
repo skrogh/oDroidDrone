@@ -100,7 +100,7 @@ void* Telemetry::telemetryThread( void )
 				n = ::send( newsockfd, buffer, countInBuffer, MSG_NOSIGNAL );
 			else
 				n = sendto( newsockfd, buffer, countInBuffer, 0,
-						(struct sockaddr *) &cli_addr, &clilen );
+						(struct sockaddr *) &cli_addr, clilen );
 			countInBuffer = 0;
 			pthread_mutex_unlock( &bufferMutex );
 			if ( n < 0 ) {
