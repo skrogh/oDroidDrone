@@ -2,7 +2,7 @@
 #include <iostream>
 #include <errno.h>
 
-static void error( const char *msg )
+void Telemetry::error( const char *msg )
 {
 	perror(msg);
 	endThread = true;

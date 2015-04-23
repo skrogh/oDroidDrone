@@ -43,7 +43,7 @@ class Telemetry
 	void* telemetryThread( void );
 	static void * telemetryThreadWrapper( void *This )
 			{ return ( ( (Telemetry *) This )->telemetryThread() ); }
-
+	void error( const char *msg )
 
 
 public:
