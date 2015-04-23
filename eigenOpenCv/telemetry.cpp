@@ -50,30 +50,34 @@ void* Telemetry::telemetryThread( void )
 			sizeof( serv_addr) ) < 0 ) 
 		error("ERROR on binding");
 
-	// Start listening for connections
-	listen( sockfd, 1 );
-	struct sockaddr_in cli_addr;
-	socklen_t clilen = sizeof(cli_addr);
-
-	// Block and wait for connection
-	newsockfd = accept(sockfd, 
-			(struct sockaddr *) &cli_addr, 
-			&clilen);
-	if (newsockfd < 0) 
-			error("ERROR on accept");
-
-	std::cout << "Telemetry server: Connected" << std::endl;
-
-	// Print all recieved data
 	while( !endThread ) {
-		char buffer[256] = {0};
-		int n = read( newsockfd, buffer, 255 );
-		if ( n < 0 ) {
-			error( "ERROR reading from socket" );
-			endThread = true;
+		// Start listening for connections
+		listen( sockfd, 1 );
+		struct sockaddr_in cli_addr;
+		socklen_t clilen = sizeof(cli_addr);
+
+		// Block and wait for connection
+		newsockfd = accept(sockfd, 
+				(struct sockaddr *) &cli_addr, 
+				&clilen);
+		if (newsockfd < 0) 
+				error("ERROR on accept");
+
+		std::cout << "Telemetry server: Connected" << std::endl;
+
+		// Print all recieved data
+		while( !endThread ) {
+			char buffer[256] = {0};
+			int n = read( newsockfd, buffer, 255 );
+			if ( n < 0 ) {
+				error( "ERROR reading from socket" );
+			} else if ( n == 0 ) {
+				std::cout << "Telemetry server: Disconnected" << std::endl;
+				break;
+			}
+			else
+				printf( "Here is the message: %s\n", buffer );
 		}
-		else
-			printf( "Here is the message: %s\n", buffer );
 	}
 	close(newsockfd);
 	close(sockfd);
