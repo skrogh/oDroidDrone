@@ -76,13 +76,9 @@ void* Telemetry::telemetryThread( void )
 
 		// send data
 		while( !endThread ) {
-			//If not already signaled to send, wait for signal
-			//if ( !requestSend )
-			//{
-				std::unique_lock<std::mutex> lck( requestSendSignalMtx );
-				requestSendSignal.wait( lck );
-				requestSend = false;
-			//}
+			// Wait for message to be sent
+			std::unique_lock<std::mutex> lck( requestSendSignalMtx );
+			requestSendSignal.wait( lck );
 
 			pthread_mutex_lock( &bufferMutex );
 			int n = ::send( newsockfd, buffer, countInBuffer, MSG_NOSIGNAL );
@@ -102,14 +98,6 @@ void* Telemetry::telemetryThread( void )
 				std::cout << "Telemetry server: Disconnected" << std::endl;
 				break;
 			}
-
-			/*
-			char buffer[256] = {0};
-			int n = read( newsockfd, buffer, 255 );
-			
-			else
-				printf( "Here is the message: %s\n", buffer );
-				*/
 		}
 		std::cout << "Telemetry server: Closing socket" << std::endl;
 		close(newsockfd);
@@ -126,7 +114,6 @@ bool Telemetry::send( const void *buf, size_t count ) {
 	memcpy ( buffer, buf, count );
 	countInBuffer = count;
 	pthread_mutex_unlock( &bufferMutex );
-	requestSend = true;
 	std::unique_lock<std::mutex> lck( requestSendSignalMtx );
 	requestSendSignal.notify_all( );
 
