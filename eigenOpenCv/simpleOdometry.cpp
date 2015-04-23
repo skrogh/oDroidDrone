@@ -13,6 +13,8 @@
 #include "odometry.hpp"
 #include "imu.hpp"
 #include "videoIO.hpp"
+#include "telemetry.hpp"
+
 
 using namespace cv;
 using namespace std;
@@ -41,6 +43,8 @@ int main( int argc, char** argv )
 {
 	std::ofstream logFile;
 	logFile.open ("log.csv");
+	Telemetry telemetry( 55000 );
+
 
 	Calib calib;
 	calib.o_x = 300.8859;
@@ -148,12 +152,17 @@ int main( int argc, char** argv )
 
 			// Propagate
 			msckf.propagate( element.acc, element.gyro );
-			// log
+
+			// log to file
 			logFile << msckf.x.block<16,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.diagonal().block<15,1>(0,0).transpose() << "\t";
 			logFile << msckf.sigma.determinant() << "\t";
 			logFile << msckf.sigma.diagonal().mean() << "\t";
 			logFile << ( msckf.sigma - msckf.sigma.transpose() ).sum() << "\n";
+
+			// log over telemetry
+			telemetry.send( msckf.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
+
 			// If valid distance measurement, update with that
 			if ( element.distValid )
 			{

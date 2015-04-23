@@ -73,7 +73,7 @@ int main( int argc, char** argv )
 
 	std::ofstream logFile;
 	logFile.open ("log.csv");
-	Telemetry telemetry( 3000 );
+	Telemetry telemetry( 55000 );
 
 
 	cv::VideoCapture cap(0);
