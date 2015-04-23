@@ -83,18 +83,20 @@ void* Telemetry::telemetryThread( void )
 			}
 
 			pthread_mutex_lock( &bufferMutex );
-			write( newsockfd, buffer, countInBuffer );
+			int n = write( newsockfd, buffer, countInBuffer );
 			countInBuffer = count;
 			pthread_mutex_unlock( &bufferMutex );
-			/*
-			char buffer[256] = {0};
-			int n = read( newsockfd, buffer, 255 );
 			if ( n < 0 ) {
 				error( "ERROR reading from socket" );
 			} else if ( n == 0 ) {
 				std::cout << "Telemetry server: Disconnected" << std::endl;
 				break;
 			}
+			
+			/*
+			char buffer[256] = {0};
+			int n = read( newsockfd, buffer, 255 );
+			
 			else
 				printf( "Here is the message: %s\n", buffer );
 				*/
