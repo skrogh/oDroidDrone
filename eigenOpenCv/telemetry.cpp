@@ -1,9 +1,11 @@
 #include "telemetry.hpp"
 #include <iostream>
+#include <errno.h>
 
 static void error( const char *msg )
 {
 	perror(msg);
+	endThread = true;
 }
 
 
@@ -83,11 +85,19 @@ void* Telemetry::telemetryThread( void )
 			}
 
 			pthread_mutex_lock( &bufferMutex );
-			int n = write( newsockfd, buffer, countInBuffer );
+			int n = send( newsockfd, buffer, countInBuffer, MSG_NOSIGNAL );
 			countInBuffer = 0;
 			pthread_mutex_unlock( &bufferMutex );
 			if ( n < 0 ) {
-				error( "ERROR reading from socket" );
+				if ( n = EPIPE )
+				{
+					std::cout << "Telemetry server: Disconnected" << std::endl;
+				}
+				else
+				{
+					error( "ERROR writing to socket" );
+				}
+				break;
 			} else if ( n == 0 ) {
 				std::cout << "Telemetry server: Disconnected" << std::endl;
 				break;
@@ -101,8 +111,8 @@ void* Telemetry::telemetryThread( void )
 				printf( "Here is the message: %s\n", buffer );
 				*/
 		}
+		close(newsockfd);
 	}
-	close(newsockfd);
 	close(sockfd);
 	std::cout << "Telemetry server: Ended" << std::endl;
 	return (NULL);
