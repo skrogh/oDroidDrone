@@ -45,7 +45,7 @@ void* Telemetry::telemetryThread( void )
 
 	// 
 	// Create listing socket
-	int sockfd = socket( AF_INET, SOCK_STREAM, 0 );
+	int sockfd = socket( AF_INET, SOCK_DGRAM, 0 );
 	if (sockfd < 0) 
 		error("ERROR opening socket");
 

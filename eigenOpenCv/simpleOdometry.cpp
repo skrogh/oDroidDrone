@@ -129,6 +129,7 @@ int main( int argc, char** argv )
 	double pX=0, pY=0;
 
 	int ignoredHeights = 0;
+	int telemetryCounter = 0;
 	for(;;)
 	{
 		videoIn.requestImage( frame, tv );
@@ -161,7 +162,10 @@ int main( int argc, char** argv )
 			logFile << ( msckf.sigma - msckf.sigma.transpose() ).sum() << "\n";
 
 			// log over telemetry
-			telemetry.send( msckf.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
+			if ( telemetryCounter++ > 40 ) {
+				telemetryCounter = 0;
+				telemetry.send( msckf.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
+			}
 
 			// If valid distance measurement, update with that
 			if ( element.distValid )
