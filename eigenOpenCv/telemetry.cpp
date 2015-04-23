@@ -62,6 +62,8 @@ void* Telemetry::telemetryThread( void )
 	if (newsockfd < 0) 
 			error("ERROR on accept");
 
+	std::cout << "Telemetry server: Connected" << std::endl;
+
 	// Print all recieved data
 	while( !endThread ) {
 		char buffer[256] = {0};
