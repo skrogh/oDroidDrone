@@ -19,9 +19,8 @@ Telemetry::Telemetry( int portno_ )
 	if (ret == -1) {
 		perror("Creating thread");
 	}
-
-	pthread_attr_destroy(&attr);
 }
+
 Telemetry::~Telemetry( )
 {
 	std::cout << "Requesting to stop telemetry server" << std::endl;
