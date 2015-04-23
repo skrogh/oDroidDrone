@@ -79,6 +79,12 @@ void* Telemetry::telemetryThread( void )
 		if (newsockfd < 0) 
 				error("ERROR on accept");
 		}
+		else
+		{
+			char tmp[1];
+			recvfrom( newsockfd, tmp, 1, 0,
+						(struct sockaddr *) &cli_addr, &clilen );
+		}
 
 		std::cout << "Telemetry server: Connected" << std::endl;
 
@@ -89,7 +95,12 @@ void* Telemetry::telemetryThread( void )
 			requestSendSignal.wait( lck );
 
 			pthread_mutex_lock( &bufferMutex );
-			int n = ::send( newsockfd, buffer, countInBuffer, MSG_NOSIGNAL );
+			int n;
+			if ( tcp )
+				n = ::send( newsockfd, buffer, countInBuffer, MSG_NOSIGNAL );
+			else
+				n = sendto( newsockfd, buffer, countInBuffer, 0,
+						(struct sockaddr *) &cli_addr, &clilen );
 			countInBuffer = 0;
 			pthread_mutex_unlock( &bufferMutex );
 			if ( n < 0 ) {
