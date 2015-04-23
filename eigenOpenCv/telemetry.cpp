@@ -15,7 +15,7 @@ Telemetry::Telemetry( int portno_ )
 	//
 	// start thread
 	//
-	int ret = pthread_create( &thread, NULL, &Telemetry::TelemetryThreadWrapper, this );
+	int ret = pthread_create( &thread, NULL, &Telemetry::telemetryThreadWrapper, this );
 	if (ret == -1) {
 		perror("Creating thread");
 	}
