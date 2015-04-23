@@ -66,9 +66,12 @@ void* Telemetry::telemetryThread( void )
 	while( !endThread ) {
 		char buffer[256] = {0};
 		int n = read( newsockfd, buffer, 255 );
-		if ( n < 0 )
+		if ( n < 0 ) {
 			error( "ERROR reading from socket" );
-		printf( "Here is the message: %s\n", buffer );
+			endThread = true;
+		}
+		else
+			printf( "Here is the message: %s\n", buffer );
 	}
 	close(newsockfd);
 	close(sockfd);
