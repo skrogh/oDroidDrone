@@ -22,7 +22,7 @@ using namespace Eigen;
 
 Vector2d featureUndistort( const Vector2d &src, const Calib *calib, unsigned int itterations = 3 )
 {
-	Vector2d beta( 
+	Vector2d beta(
 		( src( 0 ) - calib->o_x ) / calib->f_x,
 		( src( 1 ) - calib->o_y ) / calib->f_y
 	);
@@ -65,7 +65,7 @@ int main( int argc, char** argv )
 	calib.g = 9.82;
 	calib.delta_t = 0.0025;
 	calib.imageOffset.tv_sec = 0;
-	calib.imageOffset.tv_usec = 33000; // delay of 1 images
+	calib.imageOffset.tv_usec = 66000; // delay of 1 images
 	calib.sigma_gc = 0.001;//5.0e-04;
 	calib.sigma_ac = 0.008;//5.0e-04;
 	calib.sigma_wgc = 0.0001;

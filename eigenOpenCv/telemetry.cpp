@@ -35,6 +35,10 @@ Telemetry::~Telemetry( )
 {
 	std::cout << "Requesting to stop telemetry server" << std::endl;
 	endThread = true;
+	// Make sure we are not waiting for image request
+	std::unique_lock<std::mutex> lck( requestSendSignalMtx );
+	requestSendSignal.notify_all( );
+	
 	pthread_join( thread, NULL );
 	std::cout << "Telemetry server stopped" << std::endl;
 }
@@ -44,14 +48,14 @@ void* Telemetry::telemetryThread( void )
 {
 	std::cout << "Telemetry server: Started" << std::endl;
 
-	// 
+	//
 	// Create listing socket
 	int sockfd;
 	if ( tcp )
 		sockfd = socket( AF_INET, SOCK_STREAM, 0 );
 	else
 		sockfd = socket( AF_INET, SOCK_DGRAM, 0 );
-	if (sockfd < 0) 
+	if (sockfd < 0)
 		error("ERROR opening socket");
 
 	struct sockaddr_in serv_addr = {0};
@@ -61,7 +65,7 @@ void* Telemetry::telemetryThread( void )
 
 	// Bind listing socket to port
 	if ( bind( sockfd, (struct sockaddr *) &serv_addr,
-			sizeof( serv_addr) ) < 0 ) 
+			sizeof( serv_addr) ) < 0 )
 		error("ERROR on binding");
 
 	while( !endThread ) {
@@ -73,10 +77,10 @@ void* Telemetry::telemetryThread( void )
 		if( tcp )
 		{
 			// Block and wait for connection
-			newsockfd = accept(sockfd, 
-					(struct sockaddr *) &cli_addr, 
+			newsockfd = accept(sockfd,
+					(struct sockaddr *) &cli_addr,
 					&clilen);
-			if (newsockfd < 0) 
+			if (newsockfd < 0)
 					error("ERROR on accept");
 		}
 		else
