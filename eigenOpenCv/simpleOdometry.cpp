@@ -308,13 +308,10 @@ int main( int argc, char** argv )
 			// remove scaling
 			h.block<2,1>(0,0).normalize();
 
-			pX += h(2);
-			pY += h(3);
-
 			// calculate residual
 
 			// Measured rotation
-			double dTheta_m = -atan2( h(1), h(0) );
+			double dTheta_m = atan2( h(1), h(0) );
 			// Calculate estimated rotation
 			Vector3d dir(1,0,0); // vector orthogonal to Z axis
 			// Calculate quaternion of rotation
