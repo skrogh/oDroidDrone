@@ -65,7 +65,7 @@ int main( int argc, char** argv )
 	calib.g = 9.82;
 	calib.delta_t = 0.0025;
 	calib.imageOffset.tv_sec = 0;
-	calib.imageOffset.tv_usec = 660000; // delay of 1 images
+	calib.imageOffset.tv_usec = 49500; // delay of 1.5 frame period
 	calib.sigma_gc = 0.001;//5.0e-04;
 	calib.sigma_ac = 0.008;//5.0e-04;
 	calib.sigma_wgc = 0.0001;
@@ -266,6 +266,23 @@ int main( int argc, char** argv )
 		}
 
 		//
+		// Debug draw of estimated new position
+		//
+		// Estimate projection of old features in new image
+		for ( int i = 0; i < prevPoints.cols(); i++ ) {
+			Vector3d G_p_f;
+			G_p_f << prevPoints.col(i) + x.block<2,1>( 4+ODO_STATE_SIZE, 0 ), 0;
+			const QuaternionAlias<double> &IG_q = x.block<4,1>(0,0);
+			const QuaternionAlias<double> &CI_q = calib->CI_q;
+			const Vector3d &G_p_I = x.block<3,1>(4,0);
+			const Vector3d &C_p_I = calib->C_p_I;
+			QuaternionAlias<double> CG_q = (CI_q * IG_q);
+			Vector3d C_p_f = CG_q._transformVector( G_p_f - G_p_I + CG_q.conjugate()._transformVector( C_p_I ) );
+			Vector2d z = cameraProject( C_p_f(0), C_p_f(1), C_p_f(2), calib );
+			circle( frame, Point2f( z(0), z(1) ), 2, Scalar(0,0,255) );
+		}
+
+		//
 		// Find geometric transform
 		//
 
@@ -360,20 +377,10 @@ int main( int argc, char** argv )
 		// update state fifo
 		msckf.augmentState( );
 
-		// Estimate projection of old features in new image
-		for ( int i = 0; i < prevPoints.cols(); i++ ) {
-			Vector3d G_p_f;
-			G_p_f << prevPoints.col(i) + x.block<2,1>( 4+ODO_STATE_SIZE, 0 ), 0;
-			const QuaternionAlias<double> &IG_q = x.block<4,1>(0,0);
-			const QuaternionAlias<double> &CI_q = calib->CI_q;
-			const Vector3d &G_p_I = x.block<3,1>(4,0);
-			const Vector3d &C_p_I = calib->C_p_I;
-			QuaternionAlias<double> CG_q = (CI_q * IG_q);
-			Vector3d C_p_f = CG_q._transformVector( G_p_f - G_p_I + CG_q.conjugate()._transformVector( C_p_I ) );
-			prevPoints.col(i) = cameraProject( C_p_f(0), C_p_f(1), C_p_f(2), calib );
-			circle( frame, Point2f( prevPoints(0,i), prevPoints(1,i) ), 2, Scalar(0,0,255) );
-		}
 
+		//
+		// Window managing
+		//
 		imshow("Features", frame);
 
 		char c = (char)waitKey(1);
@@ -392,6 +399,10 @@ int main( int argc, char** argv )
 			msckf.x.block<3,1>(4,0) << 0, 0, 0.5; // 50cm from ground
 			break;
 		}
+
+		//
+		// Move current image to old one
+		//
 		cv::swap(prevGray, gray);
 	}
 	logFile.close();
