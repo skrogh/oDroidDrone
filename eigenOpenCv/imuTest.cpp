@@ -10,11 +10,14 @@ int main( int argc, char** argv )
 	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
 	std::ofstream file( "imudata.csv" );
 
+	/*
 	char wait;
 	std::cout << "Press a key..." << std::endl;
 	std::cin >> wait;
 	std::cout << "Got: " << imu.fifoSize() << " Imu samples" << std::endl;
+	*/
 
+	while (1) {
 	std::cout
 	<< std::fixed
 	<< std::setprecision(5);
@@ -44,6 +47,7 @@ int main( int argc, char** argv )
 		element.dist << "\n" << std::endl;
 		timePrev = timeNow;
 */
+	}
 	}
 	std::cout << "Progam ended" << std::endl;
 	return 0;
