@@ -170,7 +170,7 @@ int main( int argc, char** argv )
 			// If valid distance measurement, update with that
 			if ( element.distValid )
 			{
-				if ( ignoredHeights >= 0 )
+				if ( ignoredHeights >= 2 )
 				{
 					msckf.updateHeight( element.dist );
 					ignoredHeights = 0;
