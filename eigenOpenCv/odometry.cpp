@@ -906,10 +906,6 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 	//
 	if ( !debug.empty() )
 	for ( int i = 0; i < prevPoints.cols(); i++ ) {
-		// Debug draw detected features:
-		cv::line( debug, cv::Point2f( points(0,i), points(1,i) ), cv::Point2f( prevPoints(0,i), prevPoints(1,i) ), cv::Scalar(0,255,0) );
-		cv::circle( debug, cv::Point2f( points(0,i), points(1,i) ), 2, cv::Scalar(0,255,0) );
-
 		// Estimate projection of old features in new image:
 		Vector3d G_p_f;
 		G_p_f << prevPointsOnGround.col(i) + x.block<2,1>( 4+ODO_STATE_SIZE, 0 ), 0;

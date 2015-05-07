@@ -181,6 +181,15 @@ int main( int argc, char** argv )
 		tracker.detectFeatures( gray, prevGray );
 
 		//
+		// Debug print of tracked features
+		//
+		for( int i = 0; i < tracker.points.size(); i++ )
+		{
+			line( frame, tracker.points[i], tracker.prevPoints[i], Scalar(0,255,0) );
+			circle( frame, tracker.points[i], 2, Scalar(0,255,0) );
+		}
+
+		//
 		// undistort points
 		//
 
