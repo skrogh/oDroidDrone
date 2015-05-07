@@ -128,5 +128,6 @@ Matrix<double,2,3> jacobianH( double X, double Y, double Z, const Calib* calib )
 Vector2d cameraProject( double X, double Y, double Z, const Calib* calib );
 Matrix4d Omega( const Vector3d& v );
 Matrix3d crossMat( const Vector3d& v );
+Vector2d featureUndistort( const Vector2d &src, const Calib *calib, unsigned int itterations = 3 );
 
 #endif //_ODOMETRY_H_
