@@ -76,20 +76,20 @@ int main( int argc, char** argv )
 	std::cout << "calib is:\n" << calib << std::endl;
 
 
-	MSCKF msckf( &calib );
+	Odometry odometry( &calib );
 	// Start upside down
-	msckf.x.block<4,1>(0,0) << 0, 0, 0, 1; // upright
+	odometry.x.block<4,1>(0,0) << 0, 0, 0, 1; // upright
 	// Start 10cm off the ground
-	msckf.x.block<3,1>(4,0) << 0, 0, 0.15; // 50cm from ground
+	odometry.x.block<3,1>(4,0) << 0, 0, 0.15; // 50cm from ground
 	//acc offset
-	msckf.x.block<3,1>(4+3+3+3,0) << 0, 0, 0;
+	odometry.x.block<3,1>(4+3+3+3,0) << 0, 0, 0;
 
 	// Set initial uncertancy
-	msckf.sigma.diagonal().block<3,1>(0,0) << 0.05, 0.05, 0.05;
-	msckf.sigma.diagonal().block<3,1>(3,0) << 0, 0, 0.2;
-	msckf.sigma.diagonal().block<3,1>(6,0) << 0, 0, 0;
-	msckf.sigma.diagonal().block<3,1>(9,0) << 0.1, 0.1, 0.1;
-	msckf.sigma.diagonal().block<3,1>(12,0) << 0.1, 0.1, 0.1;
+	odometry.sigma.diagonal().block<3,1>(0,0) << 0.05, 0.05, 0.05;
+	odometry.sigma.diagonal().block<3,1>(3,0) << 0, 0, 0.2;
+	odometry.sigma.diagonal().block<3,1>(6,0) << 0, 0, 0;
+	odometry.sigma.diagonal().block<3,1>(9,0) << 0.1, 0.1, 0.1;
+	odometry.sigma.diagonal().block<3,1>(12,0) << 0.1, 0.1, 0.1;
 
 
 
@@ -139,7 +139,7 @@ int main( int argc, char** argv )
 		{
 			gray.copyTo(prevGray);
 			// skip first image
-			msckf.augmentState( );
+			odometry.augmentState( );
 			continue;
 		}
 
@@ -152,19 +152,19 @@ int main( int argc, char** argv )
 			while( !imu.fifoPop( element ) );
 
 			// Propagate
-			msckf.propagate( element.acc, element.gyro );
+			odometry.propagate( element.acc, element.gyro );
 
 			// log to file
-			logFile << msckf.x.block<16,1>(0,0).transpose() << "\t";
-			logFile << msckf.sigma.diagonal().block<15,1>(0,0).transpose() << "\t";
-			logFile << msckf.sigma.determinant() << "\t";
-			logFile << msckf.sigma.diagonal().mean() << "\t";
-			logFile << ( msckf.sigma - msckf.sigma.transpose() ).sum() << "\n";
+			logFile << odometry.x.block<16,1>(0,0).transpose() << "\t";
+			logFile << odometry.sigma.diagonal().block<15,1>(0,0).transpose() << "\t";
+			logFile << odometry.sigma.determinant() << "\t";
+			logFile << odometry.sigma.diagonal().mean() << "\t";
+			logFile << ( odometry.sigma - odometry.sigma.transpose() ).sum() << "\n";
 
 			// log over telemetry
 			if ( telemetryCounter++ > 40 ) {
 				telemetryCounter = 0;
-				telemetry.send( msckf.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
+				telemetry.send( odometry.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
 			}
 
 			// If valid distance measurement, update with that
@@ -172,7 +172,7 @@ int main( int argc, char** argv )
 			{
 				if ( ignoredHeights >= 0 )
 				{
-					msckf.updateHeight( element.dist );
+					odometry.updateHeight( element.dist );
 					ignoredHeights = 0;
 				}
 				else
@@ -217,9 +217,9 @@ int main( int argc, char** argv )
 		Matrix2Xd points(2, tracker.points.size());
 		Matrix2Xd prevPoints(2, tracker.points.size());
 
-		const Calib* calib = msckf.calib;
-		VectorXd &x = msckf.x;
-		MatrixXd &sigma = msckf.sigma;
+		const Calib* calib = odometry.calib;
+		VectorXd &x = odometry.x;
+		MatrixXd &sigma = odometry.sigma;
 
 		// Undistort
 		for ( int i = 0; i < points.cols(); i++ )
@@ -358,21 +358,21 @@ int main( int argc, char** argv )
 			sigma = A * sigma * A.transpose() + K * R * K.transpose();
 
 			// apply d_x
-			msckf.performUpdate( delta_x );
+			odometry.performUpdate( delta_x );
 
 			cout << endl;
 			cout << endl;
 			cout << "n Points: " << points.cols() << endl;
 			cout << "Moved: " << h(2) << ", " << h(3) << endl;
 			cout << "Total: " << pX << ", " << pY << endl;
-			cout << "State: " << msckf << endl;
+			cout << "State: " << odometry << endl;
 		}
 		// update state fifo
-		msckf.removeOldStates( 1 );
+		odometry.removeOldStates( 1 );
 		// Make sure sigma is symetric
 		sigma = ( sigma + sigma.transpose() )/2;
 		// update state fifo
-		msckf.augmentState( );
+		odometry.augmentState( );
 
 
 		//
@@ -391,9 +391,9 @@ int main( int argc, char** argv )
 			pX = 0;
 			pY = 0;
 			// Start upside down
-			msckf.x.block<4,1>(0,0) << 0, 0, 0, 1; // upright
+			odometry.x.block<4,1>(0,0) << 0, 0, 0, 1; // upright
 			// Start 10cm off the ground
-			msckf.x.block<3,1>(4,0) << 0, 0, 0.5; // 50cm from ground
+			odometry.x.block<3,1>(4,0) << 0, 0, 0.5; // 50cm from ground
 			break;
 		}
 
