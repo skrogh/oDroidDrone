@@ -110,7 +110,7 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 }
 
 Imu::~Imu( ) {
-	printf( "Signaling to end thread and join\n" );
+	printf( "Signaling to end imu thread and join\n" );
 	endThread = true;
 	pthread_join( thread, NULL );
 	printf( "Thread joined\n" );

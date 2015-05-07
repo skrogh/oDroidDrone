@@ -2,6 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
+#include <std/thead>
 #include <sys/time.h>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
@@ -20,13 +21,12 @@ using namespace cv;
 using namespace std;
 using namespace Eigen;
 
-int main( int argc, char** argv )
-{
-	std::ofstream logFile;
-	logFile.open ("log.csv");
-	Telemetry telemetry( 55000 );
+void estimator( ) {
+	//
+	// Initiate estimator
+	//
 
-
+	// Set calibration parameters:
 	Calib calib;
 	calib.o_x = 300.8859;
 	calib.o_y = 222.5206;
@@ -56,66 +56,60 @@ int main( int argc, char** argv )
 	calib.minFrame = 1;
 	std::cout << "calib is:\n" << calib << std::endl;
 
-
+	// make odometry obj and set initial conditions
 	GTEKF odometry( &calib );
-	// Start upside down
-	odometry.x.block<4,1>(0,0) << 0, 0, 0, 1; // upright
-	// Start 10cm off the ground
-	odometry.x.block<3,1>(4,0) << 0, 0, 0.15; // 50cm from ground
-	//acc offset
-	odometry.x.block<3,1>(4+3+3+3,0) << 0, 0, 0;
+	// Start upright
+		odometry.x.block<4,1>(0,0) << 0, 0, 0, 1; // upright
+	// Start 15cm off the ground
+	odometry.x.block<3,1>(4,0) << 0, 0, 0.15; // 15cm from ground
 
 	// Set initial uncertancy
-	odometry.sigma.diagonal().block<3,1>(0,0) << 0.05, 0.05, 0.05;
-	odometry.sigma.diagonal().block<3,1>(3,0) << 0, 0, 0.2;
-	odometry.sigma.diagonal().block<3,1>(6,0) << 0, 0, 0;
-	odometry.sigma.diagonal().block<3,1>(9,0) << 0.1, 0.1, 0.1;
-	odometry.sigma.diagonal().block<3,1>(12,0) << 0.1, 0.1, 0.1;
+	odometry.sigma.diagonal().block<3,1>(0,0) << 0.05, 0.05, 0.05; // Attitude
+	odometry.sigma.diagonal().block<3,1>(3,0) << 0, 0, 0.2;        // Position
+	odometry.sigma.diagonal().block<3,1>(6,0) << 0, 0, 0;          // Velocity
+	odometry.sigma.diagonal().block<3,1>(9,0) << 0.1, 0.1, 0.1;    // Gyro bias
+	odometry.sigma.diagonal().block<3,1>(12,0) << 0.1, 0.1, 0.1;   // Acc bias
 
 
-
+	//
+	// Initialize data IO objects
+	//
+	// Log for logging state at all steps (for plotting and stuff)
+	std::ofstream logFile;
+	logFile.open ("log.csv");
+	// Video server getter (TODO: WARNING MAX ONE CONSUMER)
 	VideoIn videoIn( 0 );
+	// Debug image out
 	cv::Mat frame;
-
 	namedWindow( "Features", 1 );
-
-	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
+	// IMU timestamping
 	struct timeval tv;
 	struct timezone tz = {};
 		tz.tz_minuteswest = 0;
 		tz.tz_dsttime = 0;
-	//
-	// Clear Imu buffer
-	//
-	gettimeofday( &tv, &tz );
-	{
-		ImuMeas_t element;
-		while( imu.fifoPop( element ) )
-		{
-			// Get time of image without delay
-			struct timeval imageTime;
-			timersub( &tv, &(calib.imageOffset), &imageTime );
 
-			// If image is older that now
-			if ( timercmp( &imageTime, &(element.timeStamp), < ) )
-			{
-				timersub( &(element.timeStamp), &imageTime, &imageTime );
-				break;
-			}
-		}
-	}
-
+	//
+	// Initialize other objects
+	//
+	// Containers for current and previous image
 	Mat gray, prevGray;
+	// Feature tracker
 	LKTracker tracker;
-	double pX=0, pY=0;
-
+	// Counter for ignoring heigth measurements to reduce computation time
 	int ignoredHeights = 0;
-	int telemetryCounter = 0;
+
+	//
+	// Estimation loop
+	//
 	for(;;)
 	{
+		//
+		// Get new image
+		//
 		videoIn.requestImage( frame, tv );
-
+		// convert to gray-tone
 		cvtColor(frame, gray, COLOR_BGR2GRAY);
+		// Fencepost fix, if no previous image, get one and skip ret of update
 		if(prevGray.empty())
 		{
 			gray.copyTo(prevGray);
@@ -142,12 +136,6 @@ int main( int argc, char** argv )
 			logFile << odometry.sigma.diagonal().mean() << "\t";
 			logFile << ( odometry.sigma - odometry.sigma.transpose() ).sum() << "\n";
 
-			// log over telemetry
-			if ( telemetryCounter++ > 40 ) {
-				telemetryCounter = 0;
-				telemetry.send( odometry.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
-			}
-
 			// If valid distance measurement, update with that
 			if ( element.distValid )
 			{
@@ -166,18 +154,17 @@ int main( int argc, char** argv )
 			struct timeval imageTime;
 			timersub( &tv, &(calib.imageOffset), &imageTime );
 
-			// If image is older that propagated point, update
+			// If image is older that propagated point, stop propagation and update
 			if ( timercmp( &imageTime, &(element.timeStamp), < ) ) {
-				timersub( &(element.timeStamp), &imageTime, &imageTime );
-				std::cout << "Image/IMU time difference: " <<
-				imageTime.tv_sec << "." << std::setfill('0') << std::setw(6) << imageTime.tv_usec << "s" << std::setfill(' ') << std::endl;
-				break;
+ 				break;
 			}
 		}
 
 		//
 		// Update from camera
 		//
+
+		// detect features
 		tracker.detectFeatures( gray, prevGray );
 
 		//
@@ -214,15 +201,7 @@ int main( int argc, char** argv )
 		// Window managing
 		//
 		imshow("Features", frame);
-
-		char c = (char)waitKey(1);
-		if( c == 27 )
-			break;
-		switch( c )
-		{
-		case 'c':
-			break;
-		}
+		waitKey(1);
 
 		//
 		// Move current image to old one
@@ -230,4 +209,51 @@ int main( int argc, char** argv )
 		cv::swap(prevGray, gray);
 	}
 	logFile.close();
+}
+
+
+int main( int argc, char** argv )
+{
+
+	/* TODO: readd telemetry
+	Telemetry telemetry( 55000 );
+	// log over telemetry
+	if ( telemetryCounter++ > 40 ) {
+		telemetryCounter = 0;
+		telemetry.send( odometry.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
+	}
+	int telemetryCounter = 0;
+	*/
+
+
+	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
+	struct timeval tv;
+	struct timezone tz = {};
+		tz.tz_minuteswest = 0;
+		tz.tz_dsttime = 0;
+	//
+	// Clear Imu buffer
+	//
+	gettimeofday( &tv, &tz );
+	{
+		ImuMeas_t element;
+		while( imu.fifoPop( element ) )
+		{
+			// Get time of image without delay
+			struct timeval imageTime;
+			timersub( &tv, &(calib.imageOffset), &imageTime );
+
+			// If image is older that now
+			if ( timercmp( &imageTime, &(element.timeStamp), < ) )
+			{
+				timersub( &(element.timeStamp), &imageTime, &imageTime );
+				break;
+			}
+		}
+	}
+
+	std::thread estimatorThread( estimator );
+	estimatorThread.join();
+
+
 }
