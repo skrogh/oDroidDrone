@@ -21,6 +21,10 @@ using namespace cv;
 using namespace std;
 using namespace Eigen;
 
+void trackerThreadHandler( Tracker* tracker, Mat* gray, Mat* prevGray ) {
+	tracker->detectFeatures( *gray, *prevGray );
+}
+
 void estimator( Imu* imuPt ) {
 	Imu& imu = *imuPt;
 
@@ -121,6 +125,11 @@ void estimator( Imu* imuPt ) {
 		}
 
 		//
+		// Start detect features in parallel with propagation
+		//
+		sdt:thread trackerThread( trackerThreadHandler, &tracker, &gray, &prevGray );
+
+		//
 		// Propagate up to new image ( can be run in parallel with feature detection)
 		//
 		while( 1 ) {
@@ -162,12 +171,12 @@ void estimator( Imu* imuPt ) {
 			}
 		}
 
+		// end detect features (wait for completion)
+		trackerThread.join();
+
 		//
 		// Update from camera
 		//
-
-		// detect features
-		tracker.detectFeatures( gray, prevGray );
 
 		//
 		// Debug print of tracked features
