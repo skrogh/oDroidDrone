@@ -341,12 +341,6 @@ int main( int argc, char** argv )
 			// apply d_x
 			odometry.performUpdate( delta_x );
 
-			cout << endl;
-			cout << endl;
-			cout << "n Points: " << points.cols() << endl;
-			cout << "Moved: " << h(2) << ", " << h(3) << endl;
-			cout << "Total: " << pX << ", " << pY << endl;
-			cout << "State: " << odometry << endl;
 		}
 		// update state fifo
 		odometry.removeOldStates( 1 );
