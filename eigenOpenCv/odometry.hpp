@@ -100,7 +100,7 @@ public:
 };
 
 
-class MSCKF : public Odometry {
+class MSCKF: public Odometry {
 public:
 	cv::Mat debugImg;
 
@@ -108,7 +108,7 @@ public:
 	// print
 	friend std::ostream& operator<<( std::ostream& out, const MSCKF& msckf );
 	// init
-	MSCKF( Calib* cal ) { Odometry( cal ); };
+	MSCKF( Calib* cal ): Odometry( cal ){};
 	// updateCamera
 	void updateCamera( CameraMeasurements &cameraMeasurements );
 	// 	triangulate
