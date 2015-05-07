@@ -1,6 +1,6 @@
 set tmargin 0
 set bmargin 0
-# set lmargin 0
+set lmargin 0.2
 set rmargin 0
 unset xtics
 
