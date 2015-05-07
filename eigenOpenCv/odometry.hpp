@@ -97,7 +97,7 @@ public:
 	bool isInlinerHeight( const double r, const MatrixXd &H );
 	// performUpdate
 	void performUpdate( const VectorXd &delta_x );
-}
+};
 
 class MSCKF : public Odometry{
 public:
