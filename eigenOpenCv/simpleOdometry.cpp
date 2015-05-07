@@ -2,7 +2,7 @@
 #include <iostream>
 #include <iomanip>
 #include <fstream>
-#include <std/thead>
+#include <std/thread>
 #include <sys/time.h>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
