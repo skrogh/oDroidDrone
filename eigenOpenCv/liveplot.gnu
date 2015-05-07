@@ -1,6 +1,6 @@
 set term x11
 
-set tmagin 0
+set tmargin 0
 set bmargin 0
 set lmargin 0
 set rmargin
