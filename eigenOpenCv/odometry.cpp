@@ -13,6 +13,12 @@ using namespace Eigen;
 std::default_random_engine randomGenerator;
 std::uniform_int_distribution<int> randomDistribution(1,10);
 
+/***
+**
+** Uility functions
+**
+***/
+
 //
 // Chi square lookup for 95% confidence. TODO: calculate at runtime so size fits with max frame fifo length
 //
@@ -145,15 +151,6 @@ Matrix<double,2,3> jacobianH( double X, double Y, double Z, const Calib* calib )
 		+ (4*t1*X*Y)/iPow(Z,3)
 	),
 
-/* Old
-	-f_x*(
-		t2*( ( 6*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) )
-		+ ( X*( k1*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) + 2*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) )*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) ) )/Z
-		+ ( X*( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1 ) )/iPow(Z,2)
-		+ ( 4*X*Y*t1 )/iPow(Z,3)
-	),
-*/
-
 	f_y*(
 		( Y*( ( 2*X*k1 )/iPow(Z,2) + ( 4*X*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) )/iPow(Z,2) ) )/Z
 		+ ( 2*X*t1 )/iPow(Z,2)
@@ -175,16 +172,14 @@ Matrix<double,2,3> jacobianH( double X, double Y, double Z, const Calib* calib )
 		+ (4*t2*X*Y)/iPow(Z,3)
 	);
 
-/* Old
-	-f_y*(
-		t1*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 6*iPow(Y,2) )/iPow(Z,3) )
-		+ ( Y*( k1*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) + 2*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) )*( ( 2*iPow(X,2) )/iPow(Z,3) + ( 2*iPow(Y,2) )/iPow(Z,3) ) ) )/Z
-		+ ( Y*( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2 ) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1 ) )/iPow(Z,2)
-		+ ( 4*X*Y*t2 )/iPow(Z,3)
-	);
-*/
 	return m;
 }
+
+/***
+**
+** General 6DOF odometry with gyro and accelerometer (+biases)
+**
+***/
 
 Calib::Calib( ) {
 	//
@@ -322,13 +317,6 @@ void Odometry::propagate( double a_m[3], double g_m[3], bool propagateError ) {
 	Vector3d s = calib->delta_t/2.0 * (
 			I1I_q.conjugate()._transformVector( I_a ) + I_a_dly
 	);
-/*	std::cout << "debug1: " << I1G_q.conjugate()._transformVector( I_a ) << std::endl;
-	std::cout << "debug2: " << I_a_dly << std::endl;
-	std::cout << "debug3: " << I1G_q.conjugate()._transformVector( I_a )  + I_a_dly << std::endl;
-	std::cout << "debug4: " << calib->delta_t/2.0 * ( I1G_q.conjugate()._transformVector( I_a )  + I_a_dly ) << std::endl;
-	std::cout << "debug5: " << calib->delta_t * ( I1G_q.conjugate()._transformVector( I_a )  + I_a_dly ) << std::endl;
-	std::cout << "debug6: " << calib->delta_t * ( I1G_q.conjugate()._transformVector( I_a )  + I_a_dly ) /2.0 << std::endl;
-	std::cout << "debug7: " << s << std::endl;*/
 
 	Vector3d y = calib->delta_t/2.0 * s;
 
@@ -445,15 +433,12 @@ void Odometry::removeOldStates( int n ) {
 	if ( n > (x.rows() - ODO_STATE_SIZE)/ODO_STATE_FRAME_SIZE )
 		n = (x.rows() - ODO_STATE_SIZE)/ODO_STATE_FRAME_SIZE;
 
-
 	/*
 	** Remove the n oldest frames from the state and covariance
 	*/
 	x.segment( ODO_STATE_SIZE, x.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE ) =
 		x.segment( ODO_STATE_SIZE + n * ODO_STATE_FRAME_SIZE, x.rows() - ODO_STATE_SIZE - n * ODO_STATE_FRAME_SIZE );
 	x.conservativeResize( x.rows() - n * ODO_STATE_FRAME_SIZE, NoChange );
-
-
 
 	sigma.block( ODO_SIGMA_SIZE, 0, sigma.rows() - ODO_SIGMA_SIZE - n * ODO_SIGMA_FRAME_SIZE, sigma.cols() ) =
 			sigma.block( ODO_SIGMA_SIZE + n * ODO_SIGMA_FRAME_SIZE, 0, sigma.rows() - ODO_SIGMA_SIZE - n * ODO_SIGMA_FRAME_SIZE, sigma.cols() );
@@ -462,9 +447,97 @@ void Odometry::removeOldStates( int n ) {
 			sigma.block( 0, ODO_SIGMA_SIZE + n * ODO_SIGMA_FRAME_SIZE, sigma.rows(), sigma.cols() - ODO_SIGMA_SIZE - n * ODO_SIGMA_FRAME_SIZE );
 
 	sigma.conservativeResize( sigma.rows() - n * ODO_SIGMA_FRAME_SIZE, sigma.cols() - n * ODO_SIGMA_FRAME_SIZE );
+}
+
+bool Odometry::isInlinerHeight( const double r, const MatrixXd &H ) {
+	/* unoptimized
+	double gamma = r * r * ( H * sigma * H.transpose() ).inverse();
+	*/
+	// optimized
+	double gamma = r * r / sigma(5,5);
+	return gamma <= chi2Inv[ 1 ];
+}
+
+void Odometry::updateHeight( double height ) {
+
+	//
+	// TODO: Optimize since H is very sparse (only one element)
+	//
+
+	// Sensor noise
+	Matrix<double,1,1> R;
+	R << calib->sigma_hc*calib->sigma_hc; // cause we need to add this to another one
+	// Sensor residual
+	double r = height - x(0+4+2); // x(0+4+3) is G_p(2)
+	// Sensor model
+	Matrix<double,1,Dynamic> H( 1, sigma.cols() );
+	H << MatrixXd::Zero( 1, 5 ), 1, MatrixXd::Zero( 1, sigma.cols() - 6 );
+
+	if ( this->isInlinerHeight( r, H ) )
+	{
+		// Kalman gain
+		MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
+
+		// Update to be appled to sf4ate
+		VectorXd delta_x = K * r;
+
+		// Update covariance
+		MatrixXd A = MatrixXd::Identity( K.rows(), H.cols() ) - K * H;
+		sigma = A * sigma * A.transpose() + K * R * K.transpose();
+
+		//
+		// apply feedback
+		//
+		this->performUpdate( delta_x );
+	}
 
 }
 
+void Odometry::performUpdate( const VectorXd &delta_x ) {
+	//
+	// apply feedback
+	//
+
+	// To inertial state
+	// IG_q
+	QuaternionAlias<double> delta_IG_q( 1, delta_x(0)/2.0, delta_x(1)/2.0, delta_x(2)/2.0 );
+	QuaternionAlias<double> IG_q = ( QuaternionAlias<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q );
+	IG_q.normalize();
+	x.block<4,1>( 0, 0 ) = IG_q.coeffs();
+	// G_p
+	x.block<3,1>( 0+4, 0 ) += delta_x.block<3,1>( 0+3, 0 );
+	// G_v
+	x.block<3,1>( 0+4+3, 0 ) += delta_x.block<3,1>( 0+3+3, 0 );
+	// b_g
+	x.block<3,1>( 0+4+3+3, 0 ) += delta_x.block<3,1>( 0+3+3+3, 0 );
+	// b_a
+	x.block<3,1>( 0+4+3+3+3, 0 ) += delta_x.block<3,1>( 0+3+3+3+3, 0 );
+
+	// to all the frames
+	for ( int i = 0; i < ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE; i++ ) {
+		unsigned int frameStart = ODO_STATE_SIZE + i * ODO_STATE_FRAME_SIZE;
+		unsigned int delta_frameStart = ODO_SIGMA_SIZE + i * ODO_SIGMA_FRAME_SIZE;
+		QuaternionAlias<double> delta_IiG_q( 1,
+				delta_x( delta_frameStart + 0 )/2.0,
+				delta_x( delta_frameStart + 1 )/2.0,
+				delta_x( delta_frameStart + 2 )/2.0
+		);
+		QuaternionAlias<double> IiG_q = ( QuaternionAlias<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q );
+		IiG_q.normalize();
+		x.block<4,1>( frameStart + 0, 0 ) = IiG_q.coeffs();
+		// G_p_i
+		x.block<3,1>( frameStart + 0+4, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3, 0 );
+		// G_v_i
+		x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
+	}
+}
+
+
+/***
+**
+** MSCKF specific functions
+**
+***/
 
 //
 // get the most likely 3d position of a feature
@@ -527,14 +600,6 @@ Vector3d MSCKF::triangulate( MatrixX2d z ) {
 	//
 	Vector3d G_p_f( G_p_fi.col(0).mean(), G_p_fi.col(1).mean(), G_p_fi.col(2).mean() );
 
-	/*
-	std::cout << " G_p_f: " << G_p_f.transpose();
-	if ( clearOutlier )
-		std::cout << "    clearOutlier" << std::endl;
-	else
-		std::cout << "    not clearOutlier" << std::endl;
-	*/
-
 	//
 	// Signal no solution
 	//
@@ -574,17 +639,6 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 		// Calculate feature position in camera frame
 		Vector3d C_p_f = CiG_q._transformVector( G_p_f - G_p_Ci );
 
-		/*
-		std::cout << "CiG_q: " << CiG_q.coeffs() << std::endl;
-		std::cout << "C_z1: " << CiG_q._transformVector( Vector3d(0,0,1) ) << std::endl;
-		std::cout << "C_z2: " << CiG_q.toRotationMatrix()*( Vector3d(0,0,1) ) << std::endl;
-		std::cout << "C_z3: " << QuaternionAlias<double>(-0.3806, 0.9247, -0.0021, 0.0040)._transformVector( Vector3d(0,0,1) ) << std::endl;
-		std::cout << "G_p_f: " << G_p_f << std::endl;
-		std::cout << "G_p_Ci: " << G_p_Ci << std::endl;
-		std::cout << "G_p_f - G_p_Ci: " << G_p_f - G_p_Ci << std::endl;
-		std::cout << "C_p_f: " << C_p_f << std::endl;
-		*/
-
 		r.block<2,1>( i*2, 0 ) = z.row( i ).transpose() - cameraProject( C_p_f(0), C_p_f(1), C_p_f(2), calib );
 		H_f.block<2,3>( i*2,0 ) = jacobianH( C_p_f(0), C_p_f(1), C_p_f(2), calib ) * CiG_q.toRotationMatrix();
 		H_x.block<2,9>( i*2, H_x.cols() - ODO_SIGMA_FRAME_SIZE*( z.rows() - i + 1 ) ) <<
@@ -592,10 +646,6 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 	}
 
 	// Find left null-space
-	/* Old
-	Eigen::FullPivLU<MatrixXd> LU( H_f.transpose() );
-	MatrixXd A = LU.kernel().transpose();
-	*/
 	JacobiSVD<MatrixXd> svd( H_f, Eigen::ComputeFullU );
 	MatrixXd A = svd.matrixU().rightCols( z.rows()*2 - 3 ).transpose();
 
@@ -611,8 +661,6 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 	}
 
 	// Marginalize
-	//r0.resize( A.rows(), NoChange );
-	//H0.resize( A.rows(), sigma.cols() );
 	r0 = A * r;
 	H0 = A * H_x;
 
@@ -740,96 +788,11 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 	if ( longestLiving < calib->minFrame )
 		longestLiving = calib->minFrame;
 	this->removeOldStates( ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE - longestLiving );
-
-
-}
-
-void Odometry::updateHeight( double height ) {
-
-	//
-	// TODO: Optimize since H is very sparse (only one element)
-	//
-
-	// Sensor noise
-	Matrix<double,1,1> R;
-	R << calib->sigma_hc*calib->sigma_hc; // cause we need to add this to another one
-	// Sensor residual
-	double r = height - x(0+4+2); // x(0+4+3) is G_p(2)
-	// Sensor model
-	Matrix<double,1,Dynamic> H( 1, sigma.cols() );
-	H << MatrixXd::Zero( 1, 5 ), 1, MatrixXd::Zero( 1, sigma.cols() - 6 );
-
-	if ( this->isInlinerHeight( r, H ) )
-	{
-		// Kalman gain
-		MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
-
-		// Update to be appled to sf4ate
-		VectorXd delta_x = K * r;
-
-		// Update covariance
-		MatrixXd A = MatrixXd::Identity( K.rows(), H.cols() ) - K * H;
-		sigma = A * sigma * A.transpose() + K * R * K.transpose();
-
-		//
-		// apply feedback
-		//
-		this->performUpdate( delta_x );
-	}
-
-}
-
-void Odometry::performUpdate( const VectorXd &delta_x ) {
-	//
-	// apply feedback
-	//
-
-	// To inertial state
-	// IG_q
-	QuaternionAlias<double> delta_IG_q( 1, delta_x(0)/2.0, delta_x(1)/2.0, delta_x(2)/2.0 );
-	QuaternionAlias<double> IG_q = ( QuaternionAlias<double>( x.block<4,1>( 0, 0 ) ) * delta_IG_q );
-	IG_q.normalize();
-	x.block<4,1>( 0, 0 ) = IG_q.coeffs();
-	// G_p
-	x.block<3,1>( 0+4, 0 ) += delta_x.block<3,1>( 0+3, 0 );
-	// G_v
-	x.block<3,1>( 0+4+3, 0 ) += delta_x.block<3,1>( 0+3+3, 0 );
-	// b_g
-	x.block<3,1>( 0+4+3+3, 0 ) += delta_x.block<3,1>( 0+3+3+3, 0 );
-	// b_a
-	x.block<3,1>( 0+4+3+3+3, 0 ) += delta_x.block<3,1>( 0+3+3+3+3, 0 );
-
-	// to all the frames
-	for ( int i = 0; i < ( x.rows() - ODO_STATE_SIZE ) / ODO_STATE_FRAME_SIZE; i++ ) {
-		unsigned int frameStart = ODO_STATE_SIZE + i * ODO_STATE_FRAME_SIZE;
-		unsigned int delta_frameStart = ODO_SIGMA_SIZE + i * ODO_SIGMA_FRAME_SIZE;
-		QuaternionAlias<double> delta_IiG_q( 1,
-				delta_x( delta_frameStart + 0 )/2.0,
-				delta_x( delta_frameStart + 1 )/2.0,
-				delta_x( delta_frameStart + 2 )/2.0
-		);
-		QuaternionAlias<double> IiG_q = ( QuaternionAlias<double>( x.block<4,1>( frameStart + 0, 0 ) ) * delta_IiG_q );
-		IiG_q.normalize();
-		x.block<4,1>( frameStart + 0, 0 ) = IiG_q.coeffs();
-		// G_p_i
-		x.block<3,1>( frameStart + 0+4, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3, 0 );
-		// G_v_i
-		x.block<3,1>( frameStart + 0+4+3, 0 ) += delta_x.block<3,1>( delta_frameStart + 0+3+3, 0 );
-	}
 }
 
 bool MSCKF::isInlinerCamera( const VectorXd &r0, const MatrixXd &H0 ) {
 	double gamma = r0.transpose() * ( H0 * sigma * H0.transpose() ).inverse() * r0;
 	return gamma <= chi2Inv[ r0.rows() ];
-}
-
-bool Odometry::isInlinerHeight( const double r, const MatrixXd &H ) {
-	/* unoptimized
-	double gamma = r * r * ( H * sigma * H.transpose() ).inverse();
-	*/
-	// optimized
-	double gamma = r * r / sigma(5,5);
-	return gamma <= chi2Inv[ 1 ];
 }
 
 void MSCKF::updateInit( double height ) {
