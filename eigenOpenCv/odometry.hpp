@@ -84,7 +84,7 @@ public:
 	// init
 	Odometry( Calib* cal );
 	// propagate
-	void propagate( double a_m[3], double g_m[3] );
+	void propagate( double a_m[3], double g_m[3], bool propagateError = true );
 	// TODO: -Propagate state <- used for pure prediction
 	// TODO: -Propagate sigma <- no use for this
 	// augment state
@@ -99,7 +99,8 @@ public:
 	void performUpdate( const VectorXd &delta_x );
 };
 
-class MSCKF : public Odometry{
+
+class MSCKF : public Odometry {
 public:
 	cv::Mat debugImg;
 
@@ -107,7 +108,7 @@ public:
 	// print
 	friend std::ostream& operator<<( std::ostream& out, const MSCKF& msckf );
 	// init
-	MSCKF( Calib* cal ) : Odometry( cal ){};
+	MSCKF( Calib* cal ) { Odometry( cal ); };
 	// updateCamera
 	void updateCamera( CameraMeasurements &cameraMeasurements );
 	// 	triangulate

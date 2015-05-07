@@ -264,7 +264,7 @@ std::ostream& operator<<( std::ostream& out, const MSCKF& msckf ) {
 	"b_a: " << msckf.x.segment<3>(0+4+3+3+3).transpose();
 }
 
-void Odometry::propagate( double a_m[3], double g_m[3] ) {
+void Odometry::propagate( double a_m[3], double g_m[3], bool propagateError ) {
 	/*
 	** Convert inputs
 	*/
