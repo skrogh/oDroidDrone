@@ -866,6 +866,8 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 	//
 	// Project on ground
 	//
+	Matrix2Xd pointsOnGround( 2,points.rows() );
+	Matrix2Xd prevPointsOnGround( 2,points.rows() );
 	for ( int i = 0; i < points.cols(); i++ )
 	{
 		// Calculate camera state
@@ -999,14 +1001,14 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 		sigma = A * sigma * A.transpose() + K * R * K.transpose();
 
 		// apply d_x
-		odometry.performUpdate( delta_x );
+		this->performUpdate( delta_x );
 
 	}
 	// update state fifo
-	odometry.removeOldStates( 1 );
+	this->removeOldStates( 1 );
 	// Make sure sigma is symetric
 	sigma = ( sigma + sigma.transpose() )/2;
 	// update state fifo
-	odometry.augmentState( );
+	this->augmentState( );
 
 }
