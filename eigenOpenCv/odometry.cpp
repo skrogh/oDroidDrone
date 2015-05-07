@@ -67,7 +67,6 @@ double iPow( double a, unsigned int i ) {
 	return res;
 }
 
-
 Matrix3d crossMat( const Vector3d& v ){
 	Matrix3d m;
 	m <<     0, -v(2),  v(1),
@@ -88,7 +87,6 @@ Matrix4d Omega( const Vector3d& v ){
 	     -v(0), -v(1), -v(2),     0;
 	return m;
 }
-
 
 //
 // Project a point from camera coordinates to pixel position
@@ -173,6 +171,29 @@ Matrix<double,2,3> jacobianH( double X, double Y, double Z, const Calib* calib )
 	);
 
 	return m;
+}
+
+//
+// Undistorts the set of measurements in src according to camera calibration in calib
+// To a set of x and y coordinates in the camera frame
+//
+Vector2d featureUndistort( const Vector2d &src, const Calib *calib, unsigned int itterations = 3 )
+{
+	Vector2d beta(
+		( src( 0 ) - calib->o_x ) / calib->f_x,
+		( src( 1 ) - calib->o_y ) / calib->f_y
+	);
+
+	// itterate:
+	while( itterations-- ) {
+		// Residual
+		Matrix<double,2,1> r = src - cameraProject( beta(0), beta(1), 1, calib );
+		// Jacobian
+		Matrix<double,2,2> Jf = jacobianH( beta(0), beta(1), 1, calib ).block<2,2>(0,0);
+		// New estimate
+		beta = beta + (Jf.transpose()*Jf).inverse() * Jf.transpose() * r;
+	}
+	return Matrix<double,2,1>( beta(0), beta(1) );
 }
 
 /***
