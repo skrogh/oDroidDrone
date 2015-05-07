@@ -15,10 +15,10 @@ LKTracker::LKTracker( void )
 	N_OPTIMAL = 50;
 	ROI_Y_SIZE = 480/4;
 	ROI_X_SIZE = 640/4;
-	termcrit = TermCriteria(TermCriteria::COUNT|TermCriteria::EPS,20,0.03);
+	termcrit = TermCriteria(TermCriteria::COUNT|TermCriteria::EPS,10,0.03);
 	roiDistX = uniform_int_distribution<int>(0,640-ROI_X_SIZE);
 	roiDistY = uniform_int_distribution<int>(0,480-ROI_Y_SIZE);
-	deadDist = uniform_int_distribution<int>(0,N_OPTIMAL/3); 
+	deadDist = uniform_int_distribution<int>(0,N_OPTIMAL/3);
 	subPixWinSize =  Size(10,10);
 	winSize = Size(31,31);
 }
@@ -46,7 +46,7 @@ void LKTracker::detectFeatures( const Mat& image, const Mat& prevImage )
 		}
 	}
 
-	// If 
+	// If
 	if( !prevPoints.empty() )
 	{
 		vector<uchar> status;
