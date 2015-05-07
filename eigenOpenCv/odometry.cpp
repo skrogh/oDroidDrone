@@ -862,7 +862,7 @@ void MSCKF::updateInit( double height ) {
 // Update estimatebased on featurepositions in previous image frame and current.
 // Coordinates for poinst are in undistorted u,v coordinates (u=X/Z v=Y/Z)
 //
-void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, cv:Mat debug ) {
+void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, cv::Mat debug ) {
 	//
 	// Project on ground
 	//

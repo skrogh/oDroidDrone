@@ -126,7 +126,7 @@ public:
 	// init
 	GTEKF( Calib* cal ): Odometry( cal ){};
 	// updateCamera
-	void updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, cv:Mat debug = cv:Mat() );
+	void updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, cv::Mat debug = cv::Mat() );
 };
 
 //
