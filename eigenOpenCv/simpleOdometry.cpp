@@ -21,7 +21,9 @@ using namespace cv;
 using namespace std;
 using namespace Eigen;
 
-void estimator( Imu &imu ) {
+void estimator( Imu* imuPt ) {
+	Imu& imu = *imuPt;
+
 	//
 	// Initiate estimator
 	//
@@ -237,7 +239,7 @@ int main( int argc, char** argv )
 	ImuMeas_t element;
 	while( imu.fifoPop( element ) );
 
-	std::thread estimatorThread( estimator, imu );
+	std::thread estimatorThread( estimator, &imu );
 	estimatorThread.join();
 
 
