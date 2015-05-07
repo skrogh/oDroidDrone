@@ -21,7 +21,7 @@ using namespace cv;
 using namespace std;
 using namespace Eigen;
 
-void estimator( ) {
+void estimator( Imu &imu ) {
 	//
 	// Initiate estimator
 	//
@@ -234,25 +234,10 @@ int main( int argc, char** argv )
 	//
 	// Clear Imu buffer
 	//
-	gettimeofday( &tv, &tz );
-	{
-		ImuMeas_t element;
-		while( imu.fifoPop( element ) )
-		{
-			// Get time of image without delay
-			struct timeval imageTime;
-			timersub( &tv, &(calib.imageOffset), &imageTime );
+	ImuMeas_t element;
+	while( imu.fifoPop( element ) );
 
-			// If image is older that now
-			if ( timercmp( &imageTime, &(element.timeStamp), < ) )
-			{
-				timersub( &(element.timeStamp), &imageTime, &imageTime );
-				break;
-			}
-		}
-	}
-
-	std::thread estimatorThread( estimator );
+	std::thread estimatorThread( estimator, imu );
 	estimatorThread.join();
 
 
