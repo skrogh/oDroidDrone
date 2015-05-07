@@ -101,7 +101,7 @@ Vector2d cameraProject( double X, double Y, double Z, const Calib* calib ) {
 	double v = Y/Z;
 	double r = u*u + v*v;
 	double dr = 1 + k1*r + k2*r*r;
-	Vector2d dt( 
+	Vector2d dt(
 		2*u*v*t1 + ( r + 2*u*u ) * t2,
 		2*u*v*t2 + ( r + 2*v*v ) * t1
 	);
@@ -126,13 +126,13 @@ Matrix<double,2,3> jacobianH( double X, double Y, double Z, const Calib* calib )
 
 	Matrix<double,2,3> m;
 	m <<
-	f_x*( 
+	f_x*(
 		( k2*iPow( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2), 2 ) + k1*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) + 1)/Z
 		+ ( X*( ( 2*X*k1 )/iPow(Z,2) + ( 4*X*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) )/iPow(Z,2) ) )/Z
 		+ ( 6*X*t2 )/iPow(Z,2)
 		+ ( 2*Y*t1 )/iPow(Z,2)
 	),
-	f_x*( 
+	f_x*(
 		( X*( ( 2*Y*k1 )/iPow(Z,2) + ( 4*Y*k2*( iPow(X,2)/iPow(Z,2) + iPow(Y,2)/iPow(Z,2) ) )/iPow(Z,2) ) )/Z
 		+ ( 2*X*t1 )/iPow(Z,2)
 		+ ( 2*Y*t2 )/iPow(Z,2)
@@ -187,7 +187,7 @@ Matrix<double,2,3> jacobianH( double X, double Y, double Z, const Calib* calib )
 }
 
 Calib::Calib( ) {
-	// 
+	//
 	// Camera calibration
 	//
 	/* Projection */
@@ -223,7 +223,7 @@ Calib::Calib( ) {
 }
 
 std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
-	return out << 
+	return out <<
 	"o_x: " << calib.o_x << " o_y: " << calib.o_y << "\n" <<
 	"f_x: " << calib.f_x << " f_y: " << calib.f_y << "\n" <<
 	"k1: " << calib.k1 << " k2: " << calib.k2 << "\n" <<
@@ -241,7 +241,7 @@ std::ostream& operator<<( std::ostream& out, const Calib& calib ) {
 }
 
 
-MSCKF::MSCKF( Calib* cal ) {
+Odometry::Odometry( Calib* cal ) {
 	calib = cal;
 	// init all states to 0;
 	x = VectorXd::Zero(16);
@@ -264,7 +264,7 @@ std::ostream& operator<<( std::ostream& out, const MSCKF& msckf ) {
 	"b_a: " << msckf.x.segment<3>(0+4+3+3+3).transpose();
 }
 
-void MSCKF::propagate( double a_m[3], double g_m[3] ) {
+void Odometry::propagate( double a_m[3], double g_m[3] ) {
 	/*
 	** Convert inputs
 	*/
@@ -403,7 +403,7 @@ void MSCKF::propagate( double a_m[3], double g_m[3] ) {
 	I_g_dly = I_g;
 }
 
-void MSCKF::augmentState( void ) {
+void Odometry::augmentState( void ) {
 	/*
 	** Resize state and sigma, so new data can fit
 	*/
@@ -411,7 +411,7 @@ void MSCKF::augmentState( void ) {
 	// State
 	x.conservativeResize( x.rows() + ODO_STATE_FRAME_SIZE, NoChange );
 	x.block<ODO_STATE_FRAME_SIZE,1>( x.rows() - ODO_STATE_FRAME_SIZE, 0 ) =
-			x.block<ODO_STATE_FRAME_SIZE,1>( 0, 0 ); 
+			x.block<ODO_STATE_FRAME_SIZE,1>( 0, 0 );
 
 	// Covariance
 	sigma.conservativeResize( sigma.rows() + ODO_SIGMA_FRAME_SIZE,
@@ -433,7 +433,7 @@ void MSCKF::augmentState( void ) {
 			sigma.block( 0, 0, ODO_SIGMA_FRAME_SIZE, sigma.cols() - ODO_SIGMA_FRAME_SIZE);
 }
 
-void MSCKF::removeOldStates( int n ) {
+void Odometry::removeOldStates( int n ) {
 	//
 	// Skip if n < 1
 	//
@@ -468,7 +468,7 @@ void MSCKF::removeOldStates( int n ) {
 
 //
 // get the most likely 3d position of a feature
-// 
+//
 // z is the observations of a feature
 //
 Vector3d MSCKF::triangulate( MatrixX2d z ) {
@@ -484,7 +484,7 @@ Vector3d MSCKF::triangulate( MatrixX2d z ) {
 		// undistort r to get beta = (u,v)
 		//
 		// initial guess:
-		Vector2d beta( 
+		Vector2d beta(
 			( z( i, 0 ) - calib->o_x ) / calib->f_x,
 			( z( i, 1 ) - calib->o_y ) / calib->f_y
 		);
@@ -504,7 +504,7 @@ Vector3d MSCKF::triangulate( MatrixX2d z ) {
 		//
 		// Get index of start of this frame in state
 		unsigned int frameStart = x.rows() - ODO_STATE_FRAME_SIZE*( z.rows() - i + 1 );
-		// Get inertial frame state at that time:	
+		// Get inertial frame state at that time:
 		QuaternionAlias<double> IiG_q( x.block<4,1>( frameStart + 0, 0 ) );
 		QuaternionAlias<double> CiG_q = calib->CI_q * IiG_q;
 		// Calculate camera state
@@ -552,7 +552,7 @@ Vector3d MSCKF::triangulate( MatrixX2d z ) {
 //
 void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 ) {
 	//
-	// calculate residuals and 
+	// calculate residuals and
 	//
 	VectorXd r( z.rows()*2 );
 	MatrixX3d H_f( z.rows()*2 ,3 );
@@ -564,7 +564,7 @@ void MSCKF::marginalize( const MatrixX2d &z , const Vector3d &G_p_f, Ref<VectorX
 		//
 		// Get index of start of this frame in state
 		unsigned int frameStart = x.rows() - ODO_STATE_FRAME_SIZE*( z.rows() - i + 1 );
-		// Get inertial frame state at that time:	
+		// Get inertial frame state at that time:
 		QuaternionAlias<double> IiG_q( x.block<4,1>( frameStart + 0, 0 ) );
 		QuaternionAlias<double> CiG_q = calib->CI_q * IiG_q;
 		// Calculate camera state
@@ -744,7 +744,7 @@ void MSCKF::updateCamera( CameraMeasurements &cameraMeasurements ) {
 
 }
 
-void MSCKF::updateHeight( double height ) {
+void Odometry::updateHeight( double height ) {
 
 	//
 	// TODO: Optimize since H is very sparse (only one element)
@@ -779,7 +779,7 @@ void MSCKF::updateHeight( double height ) {
 
 }
 
-void MSCKF::performUpdate( const VectorXd &delta_x ) {
+void Odometry::performUpdate( const VectorXd &delta_x ) {
 	//
 	// apply feedback
 	//
@@ -823,7 +823,7 @@ bool MSCKF::isInlinerCamera( const VectorXd &r0, const MatrixXd &H0 ) {
 	return gamma <= chi2Inv[ r0.rows() ];
 }
 
-bool MSCKF::isInlinerHeight( const double r, const MatrixXd &H ) {
+bool Odometry::isInlinerHeight( const double r, const MatrixXd &H ) {
 	/* unoptimized
 	double gamma = r * r * ( H * sigma * H.transpose() ).inverse();
 	*/

@@ -23,7 +23,7 @@ using namespace Eigen;
 
 class Calib {
 public:
-	// 
+	//
 	// Camera calibration
 	//
 	/* Projection */
@@ -60,9 +60,8 @@ public:
 	friend std::ostream& operator<<( std::ostream& out, const Calib& calib );
 };
 
-class MSCKF {
+class Odometry {
 public:
-	cv::Mat debugImg;
 	//
 	// Calibration object
 	//
@@ -82,11 +81,8 @@ public:
 	//
 	Vector3d I_a_dly, I_g_dly;
 
-//public:
-	// print
-	friend std::ostream& operator<<( std::ostream& out, const MSCKF& msckf );
 	// init
-	MSCKF( Calib* cal );
+	Odometry( Calib* cal );
 	// propagate
 	void propagate( double a_m[3], double g_m[3] );
 	// TODO: -Propagate state <- used for pure prediction
@@ -95,6 +91,23 @@ public:
 	void augmentState( void );
 	// remove n old states
 	void removeOldStates( int n );
+	// updateHeight
+	void updateHeight( double height );
+	// TODO: -isInlierHeight
+	bool isInlinerHeight( const double r, const MatrixXd &H );
+	// performUpdate
+	void performUpdate( const VectorXd &delta_x );
+}
+
+class MSCKF : public Odometry{
+public:
+	cv::Mat debugImg;
+
+//public:
+	// print
+	friend std::ostream& operator<<( std::ostream& out, const MSCKF& msckf );
+	// init
+	MSCKF( Calib* cal ) : Odometry( cal ){};
 	// updateCamera
 	void updateCamera( CameraMeasurements &cameraMeasurements );
 	// 	triangulate
@@ -103,12 +116,6 @@ public:
 	void marginalize( const MatrixX2d &z, const Vector3d &G_p_f, Ref<VectorXd> r0, Ref<MatrixXd> H0 );
 	// TODO: -isInlinerCamera
 	bool isInlinerCamera( const VectorXd &r0, const MatrixXd &H0 );
-	// updateHeight
-	void updateHeight( double height );
-	// TODO: -isInlierHeight
-	bool isInlinerHeight( const double r, const MatrixXd &H );
-	// performUpdate
-	void performUpdate( const VectorXd &delta_x );
 	// Initiate by running this for some time
 	void updateInit( double height );
 };
