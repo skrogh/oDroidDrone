@@ -866,8 +866,8 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 	//
 	// Project on ground
 	//
-	Matrix2Xd pointsOnGround( 2,points.rows() );
-	Matrix2Xd prevPointsOnGround( 2,points.rows() );
+	Matrix2Xd pointsOnGround( 2,points.cols() );
+	Matrix2Xd prevPointsOnGround( 2,points.cols() );
 	for ( int i = 0; i < points.cols(); i++ )
 	{
 		// Calculate camera state
