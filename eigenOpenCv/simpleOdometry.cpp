@@ -21,7 +21,7 @@ using namespace cv;
 using namespace std;
 using namespace Eigen;
 
-void trackerThreadHandler( Tracker* tracker, Mat* gray, Mat* prevGray ) {
+void trackerThreadHandler( LKtracker* tracker, Mat* gray, Mat* prevGray ) {
 	tracker->detectFeatures( *gray, *prevGray );
 }
 
