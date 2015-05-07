@@ -57,7 +57,7 @@ int main( int argc, char** argv )
 	std::cout << "calib is:\n" << calib << std::endl;
 
 
-	Odometry odometry( &calib );
+	GTEKF odometry( &calib );
 	// Start upside down
 	odometry.x.block<4,1>(0,0) << 0, 0, 0, 1; // upright
 	// Start 10cm off the ground

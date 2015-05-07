@@ -881,7 +881,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 		Vector3d C_theta_i( points(0,i), points(1,i), 1 );
 		Vector3d G_theta_i = CG_q.conjugate()._transformVector( C_theta_i );
 		double t_i = - G_p_C( 2 ) / G_theta_i( 2 );
-		points.col( i ) = ( t_i * G_theta_i + G_p_C ).block<2,1>(0,0);
+		pointsOnGround.col( i ) = ( t_i * G_theta_i + G_p_C ).block<2,1>(0,0);
 
 		// Calculate previous camera state
 		QuaternionAlias<double> IpG_q( x.block<4,1>( ODO_STATE_SIZE + 0, 0 ) );
@@ -896,7 +896,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 		Vector3d Cp_theta_i( prevPoints(0,i), prevPoints(1,i), 1 );
 		Vector3d Gp_theta_i = CpG_q.conjugate()._transformVector( Cp_theta_i );
 		double t_pi = - G_p_Cp( 2 ) / Gp_theta_i( 2 );
-		prevPoints.col( i ) = ( t_pi * Gp_theta_i + G_p_Cp ).block<2,1>(0,0);
+		prevPointsOnGround.col( i ) = ( t_pi * Gp_theta_i + G_p_Cp ).block<2,1>(0,0);
 	}
 
 	//
@@ -905,12 +905,12 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 	if ( !debug.empty() )
 	for ( int i = 0; i < prevPoints.cols(); i++ ) {
 		// Debug draw detected features:
-		cv::line( frame, cv::Point2f( points(0,i), points(1,i) ), cv::Point2f( prevPoints(0,i), prevPoints(1,i) ), cv::Scalar(0,255,0) );
-		cv::circle( frame, cv::Point2f( points(0,i), points(1,i) ), 2, cv::Scalar(0,255,0) );
+		cv::line( debug, cv::Point2f( points(0,i), points(1,i) ), cv::Point2f( prevPoints(0,i), prevPoints(1,i) ), cv::Scalar(0,255,0) );
+		cv::circle( debug, cv::Point2f( points(0,i), points(1,i) ), 2, cv::Scalar(0,255,0) );
 
 		// Estimate projection of old features in new image:
 		Vector3d G_p_f;
-		G_p_f << prevPoints.col(i) + x.block<2,1>( 4+ODO_STATE_SIZE, 0 ), 0;
+		G_p_f << prevPointsOnGround.col(i) + x.block<2,1>( 4+ODO_STATE_SIZE, 0 ), 0;
 		const QuaternionAlias<double> &IG_q = x.block<4,1>(0,0);
 		const QuaternionAlias<double> &CI_q = calib->CI_q;
 		const Vector3d &G_p_I = x.block<3,1>(4,0);
@@ -918,7 +918,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 		QuaternionAlias<double> CG_q = (CI_q * IG_q);
 		Vector3d C_p_f = CG_q._transformVector( G_p_f - G_p_I + CG_q.conjugate()._transformVector( C_p_I ) );
 		Vector2d z = cameraProject( C_p_f(0), C_p_f(1), C_p_f(2), calib );
-		cv::circle( frame, cv::Point2f( z(0), z(1) ), 2, cv::Scalar(0,0,255) );
+		cv::circle( debug, cv::Point2f( z(0), z(1) ), 2, cv::Scalar(0,0,255) );
 	}
 
 	//
@@ -935,10 +935,10 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 		Matrix<double, Dynamic, 5> C( points.cols()*2, 5 );
 		for ( int i = 0; i < points.cols(); i++ )
 		{
-			const double &x = points(0,i);
-			const double &y = points(1,i);
-			const double &x_ = prevPoints(0,i);
-			const double &y_ = prevPoints(1,i);
+			const double &x = pointsOnGround(0,i);
+			const double &y = pointsOnGround(1,i);
+			const double &x_ = prevPointsOnGround(0,i);
+			const double &y_ = prevPointsOnGround(1,i);
 			C.row( i*2 )    << -y,  x,  0, -1,  y_;
 			C.row( i*2 + 1) <<  x,  y,  1,  0, -x_;
 		}
