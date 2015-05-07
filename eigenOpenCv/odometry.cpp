@@ -905,8 +905,8 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 	if ( !debug.empty() )
 	for ( int i = 0; i < prevPoints.cols(); i++ ) {
 		// Debug draw detected features:
-		line( frame, Point2f( points(0,i), points(1,i) ), Point2f( prevPoints(0,i), prevPoints(1,i) ), Scalar(0,255,0) );
-		circle( frame, Point2f( points(0,i), points(1,i) ), 2, Scalar(0,255,0) );
+		cv::line( frame, cv::Point2f( points(0,i), points(1,i) ), cv::Point2f( prevPoints(0,i), prevPoints(1,i) ), cv::Scalar(0,255,0) );
+		cv::circle( frame, cv::Point2f( points(0,i), points(1,i) ), 2, cv::Scalar(0,255,0) );
 
 		// Estimate projection of old features in new image:
 		Vector3d G_p_f;
@@ -918,7 +918,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 		QuaternionAlias<double> CG_q = (CI_q * IG_q);
 		Vector3d C_p_f = CG_q._transformVector( G_p_f - G_p_I + CG_q.conjugate()._transformVector( C_p_I ) );
 		Vector2d z = cameraProject( C_p_f(0), C_p_f(1), C_p_f(2), calib );
-		circle( frame, Point2f( z(0), z(1) ), 2, Scalar(0,0,255) );
+		cv::circle( frame, cv::Point2f( z(0), z(1) ), 2, cv::Scalar(0,0,255) );
 	}
 
 	//

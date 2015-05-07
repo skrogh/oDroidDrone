@@ -199,7 +199,7 @@ int main( int argc, char** argv )
 			prevPoints.col(i) = featureUndistort( Vector2d( tracker.prevPoints[i].x, tracker.prevPoints[i].y ), calib);
 		}
 
-		odometry.cameraUpdate( points, prevPoints, frame );
+		odometry.updateCamera( points, prevPoints, frame );
 
 		//
 		// Window managing
