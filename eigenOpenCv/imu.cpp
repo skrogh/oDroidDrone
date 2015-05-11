@@ -126,6 +126,7 @@ char inline Imu::clearSpiInt( void ) {
 }
 
 void* Imu::imuThread( void ) {
+	printf( "Imu server: Started\n" );
 	int rc; // return code
 
 	// Poll struct
@@ -170,6 +171,7 @@ void* Imu::imuThread( void ) {
 			this->gpioIntHandler( tv );
 		}
 	}
+	printf( "Imu server: Ended\n" );
 	return (NULL);
 }
 
