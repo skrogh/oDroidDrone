@@ -27,13 +27,13 @@ void trackerThreadHandler( LKTracker* tracker, cv::Mat* gray, cv::Mat* prevGray 
 
 void estimator( ImuFifo* imuPt, Calib* calibPt,
 			std::atomic<bool>* catchupRunningPt, std::atomic<bool>* catchupDonePt,
-			ImuFifo* catchupImuFifoPt, Odometry* CatchupPredictorPt	) {
+			ImuFifo* catchupImuFifoPt, Odometry* catchupPredictorPt	) {
 	ImuFifo& imu = *imuPt;
 	Calib& calib = *calibPt;
 	std::atomic<bool>& catchupRunning = *catchupRunningPt;
-	std::atomic<bool>& catchupRunning = *catchupDonePt;
-	ImuFifo& catchupImuFifo = catchupImuFifoPt;
-	Odometry& CatchupPredictor = CatchupPredictorPt;
+	std::atomic<bool>& catchupDone = *catchupDonePt;
+	ImuFifo& catchupImuFifo = *catchupImuFifoPt;
+	Odometry& catchupPredictor = *catchupPredictorPt;
 
 	//
 	// Initiate estimator
@@ -290,7 +290,7 @@ int main( int argc, char** argv )
 	// Start estimator
 	//
 	std::thread estimatorThread( estimator, &estimatorImu, &calib,
-	 &catchupRunning, &catchupDone, &catchupImuFifo, &CatchupPredictor );
+	 &catchupRunning, &catchupDone, &catchupImuFifo, &catchupPredictor );
 
 	//
 	// Start controller loop
