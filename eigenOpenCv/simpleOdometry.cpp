@@ -26,7 +26,7 @@ void trackerThreadHandler( LKTracker* tracker, cv::Mat* gray, cv::Mat* prevGray 
 }
 
 void estimator( ImuFifo* imuPt ) {
-	Imu& imu = *imuPt;
+	ImuFifo& imu = *imuPt;
 
 	//
 	// Initiate estimator
