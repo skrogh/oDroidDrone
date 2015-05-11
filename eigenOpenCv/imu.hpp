@@ -60,7 +60,7 @@ public:
 	void waitNotEmpty( void );
 };
 
-class Imu: ImuFifo{
+class Imu: public ImuFifo{
 private:
 	// filedescriptors
 	int gpioFd, spiFd;

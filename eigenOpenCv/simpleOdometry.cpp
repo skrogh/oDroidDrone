@@ -259,7 +259,7 @@ int main( int argc, char** argv )
 	//
 	// Start controller loop
 	//
-	wile(1) {
+	while(1) {
 		imu.waitNotEmpty(); // wait for next sample
 		ImuMeas_t element;
 		// pass element to estimator
