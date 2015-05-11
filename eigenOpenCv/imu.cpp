@@ -239,7 +239,7 @@ bool ImuFifo::fifoPop( ImuMeas_t &element ) {
 }
 
 bool ImuFifo::fifoPeak( unsigned int n, ImuMeas_t &element ) {
-	pthread_mutex_unlock( &fifoMutex );
+	pthread_mutex_lock( &fifoMutex );
 	if( dataFifo.size() > n ) {
 		element = dataFifo.at( n );
 		pthread_mutex_unlock( &fifoMutex );
@@ -250,7 +250,7 @@ bool ImuFifo::fifoPeak( unsigned int n, ImuMeas_t &element ) {
 }
 
 unsigned int ImuFifo::fifoSize( void ) {
-	pthread_mutex_unlock( &fifoMutex );
+	pthread_mutex_lock( &fifoMutex );
 	unsigned int size = dataFifo.size();
 	pthread_mutex_unlock( &fifoMutex );
 	return size;
