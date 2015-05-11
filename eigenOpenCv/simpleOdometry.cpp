@@ -138,11 +138,9 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 			odometry.propagate( element.acc, element.gyro );
 
 			// log to file
-			logFile << odometry.x.block<16,1>(0,0).transpose() << "\t";
-			logFile << odometry.sigma.diagonal().block<15,1>(0,0).transpose() << "\t";
-			logFile << odometry.sigma.determinant() << "\t";
-			logFile << odometry.sigma.diagonal().mean() << "\t";
-			logFile << ( odometry.sigma - odometry.sigma.transpose() ).sum() << "\n";
+			lofFile << sprintf( "%d.%06d", element.timeStamp.tv_sec, element.timeStamp.tv_usec ) << "\t"
+			 				<< odometry.x.block<16,1>(0,0).transpose() << "\t"
+			 				<< odometry.sigma.diagonal().block<15,1>(0,0).transpose() << "\n";
 
 			// If valid distance measurement, update with that
 			if ( element.distValid )
@@ -321,6 +319,12 @@ int main( int argc, char** argv )
 	 &catchupRunning, &catchupDone, &catchupImuFifo, &catchupPredictor );
 
 	//
+	// Log for logging state at all steps (for plotting and stuff)
+	//
+	std::ofstream logFile;
+	logFile.open("logMain.csv");
+
+	//
 	// Start controller loop
 	//
 	while(1) {
@@ -342,8 +346,11 @@ int main( int argc, char** argv )
 		// predict
 		predictor.propagate( element.acc, element.gyro, false );
 		// controller goes here
+		// log to file
+		lofFile << sprintf( "%d.%06d", element.timeStamp.tv_sec, element.timeStamp.tv_usec ) << "\t"
+						<< predictor.x.block<16,1>(0,0).transpose() << "\n";
 	}
-
+	logFile.close();
 
 
 	estimatorThread.join();
