@@ -6,7 +6,7 @@
 #include <sys/time.h>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
-
+#include <atomic>
 #include <cmath>
 #include <ctype.h>
 #include <random>
@@ -182,6 +182,13 @@ void estimator( ImuFifo* imuPt, Calib* calibPt ) {
 		odometry.updateCamera( points, prevPoints, frame );
 
 		//
+		// Set up predictor catchup
+		//
+		/* copy estimated state to predictor catchup */
+		/* Copy rest of etimatorImuFifo to catchupImuFifo */
+
+
+		//
 		// Window managing
 		//
 		imshow("Features", frame);
@@ -252,7 +259,6 @@ int main( int argc, char** argv )
 	//	imu data buffers for estimation and propagation
 	//
 	ImuFifo estimatorImu;
-	ImuFifo predictorImu;
 
 	//
 	// Clear Imu buffer
@@ -261,8 +267,14 @@ int main( int argc, char** argv )
 	while( imu.fifoPop( element ) );
 
 	//
+	// Predictor
 	//
+	Odometry predictor( &calib );
+
 	//
+	// Predictor catchup
+	//
+
 
 	//
 	// Start estimator
@@ -278,8 +290,9 @@ int main( int argc, char** argv )
 		imu.fifoPop( element );
 		// pass element to estimator
 		estimatorImu.fifoPush( element );
-		// pass element to predictor
-		predictorImu.fifoPush( element );
+		// predict
+		predictor.propagate( element.acc, element.gyro );
+		// controller goes here
 	}
 
 

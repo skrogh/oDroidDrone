@@ -54,6 +54,9 @@ public:
 	// Peak at the n'th oldest element and copy it to element.
 	// Retruns true, if there was an element there.
 	bool fifoPeak( unsigned int n, ImuMeas_t &element );
+	//
+	//
+	void fifoCloneTo( ImuFifo& dest );
 	// Get size of fifo
 	unsigned int fifoSize( void );
 	// Wait for not empty (doesn't hog cpu)

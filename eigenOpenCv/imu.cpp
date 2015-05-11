@@ -251,6 +251,14 @@ bool ImuFifo::fifoPeak( unsigned int n, ImuMeas_t &element ) {
 	return false;
 }
 
+void ImuFifo::fifoCloneTo( ImuFifo& dest ) {
+	pthread_mutex_lock( &(dest.fifoMutex) );
+	pthread_mutex_lock( &fifoMutex );
+	dest.dataFifo = dataFifo;
+	pthread_mutex_unlock( &(dest.fifoMutex) );
+	pthread_mutex_unlock( &fifoMutex );
+}
+
 unsigned int ImuFifo::fifoSize( void ) {
 	pthread_mutex_lock( &fifoMutex );
 	unsigned int size = dataFifo.size();
