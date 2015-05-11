@@ -25,45 +25,15 @@ void trackerThreadHandler( LKTracker* tracker, cv::Mat* gray, cv::Mat* prevGray 
 	tracker->detectFeatures( *gray, *prevGray );
 }
 
-void estimator( ImuFifo* imuPt ) {
+void estimator( ImuFifo* imuPt, Calib* calib ) {
 	ImuFifo& imu = *imuPt;
 
 	//
 	// Initiate estimator
 	//
 
-	// Set calibration parameters:
-	Calib calib;
-	calib.o_x = 300.8859;
-	calib.o_y = 222.5206;
-	calib.f_x = 411.1170;
-	calib.f_y = 409.9516;
-	calib.k1 = -0.3453;
-	calib.k2 = 0.1012;
-	calib.t1 = -0.0003;
-	calib.t2 = 0.0014;
-	calib.CI_q = Eigen::QuaternionAlias<double>(
-			 0.000000000000000,
-			 0.707106781186548,
-			 0.707106781186548,
-			 0.000000000000000
-	);
-	calib.C_p_I = Eigen::Vector3d( 0.0, -0.044, -0.037 );
-	calib.g = 9.82;
-	calib.delta_t = 0.0025;
-	calib.imageOffset.tv_sec = 0;
-	calib.imageOffset.tv_usec = 33000 + 7000; // delay of 1 frame period + some
-	calib.sigma_gc = 0.001;//5.0e-04;
-	calib.sigma_ac = 0.008;//5.0e-04;
-	calib.sigma_wgc = 0.0001;
-	calib.sigma_wac = 0.0001;
-	calib.sigma_Im = 40;
-	calib.sigma_hc = 0.05;
-	calib.minFrame = 1;
-	std::cout << "calib is:\n" << calib << std::endl;
-
 	// make odometry obj and set initial conditions
-	GTEKF odometry( &calib );
+	GTEKF odometry( calib );
 	// Start upright
 		odometry.x.block<4,1>(0,0) << 0, 0, 0, 1; // upright
 	// Start 15cm off the ground
@@ -224,9 +194,43 @@ void estimator( ImuFifo* imuPt ) {
 	logFile.close();
 }
 
+void initCalib( Calib& calib ) {
+	// Set calibration parameters:
+	Calib calib;
+	calib.o_x = 300.8859;
+	calib.o_y = 222.5206;
+	calib.f_x = 411.1170;
+	calib.f_y = 409.9516;
+	calib.k1 = -0.3453;
+	calib.k2 = 0.1012;
+	calib.t1 = -0.0003;
+	calib.t2 = 0.0014;
+	calib.CI_q = Eigen::QuaternionAlias<double>(
+			 0.000000000000000,
+			 0.707106781186548,
+			 0.707106781186548,
+			 0.000000000000000
+	);
+	calib.C_p_I = Eigen::Vector3d( 0.0, -0.044, -0.037 );
+	calib.g = 9.82;
+	calib.delta_t = 0.0025;
+	calib.imageOffset.tv_sec = 0;
+	calib.imageOffset.tv_usec = 33000 + 7000; // delay of 1 frame period + some
+	calib.sigma_gc = 0.001;//5.0e-04;
+	calib.sigma_ac = 0.008;//5.0e-04;
+	calib.sigma_wgc = 0.0001;
+	calib.sigma_wac = 0.0001;
+	calib.sigma_Im = 40;
+	calib.sigma_hc = 0.05;
+	calib.minFrame = 1;
+	std::cout << "calib is:\n" << calib << std::endl;
+}
 
 int main( int argc, char** argv )
 {
+	// Set calibration parameters:
+	Calib calib;
+	initCalib( calib );
 
 	/* TODO: re-add telemetry
 	Telemetry telemetry( 55000 );
@@ -259,7 +263,7 @@ int main( int argc, char** argv )
 	//
 	// Start estimator
 	//
-	std::thread estimatorThread( estimator, &estimatorImu );
+	std::thread estimatorThread( estimator, &estimatorImu, &calib );
 
 	//
 	// Start controller loop
