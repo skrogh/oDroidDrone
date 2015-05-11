@@ -259,8 +259,8 @@ void initCalib( Calib& calib ) {
 	calib.imageOffset.tv_usec = 33000 + 7000; // delay of 1 frame period + some
 	calib.sigma_gc = 0.001;//5.0e-04;
 	calib.sigma_ac = 0.008;//5.0e-04;
-	calib.sigma_wgc = 0.0001;
-	calib.sigma_wac = 0.0001;
+	calib.sigma_wgc = 0.001;
+	calib.sigma_wac = 0.001;
 	calib.sigma_Im = 40;
 	calib.sigma_hc = 0.05;
 	calib.minFrame = 1;

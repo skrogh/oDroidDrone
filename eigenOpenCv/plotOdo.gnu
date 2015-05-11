@@ -1,5 +1,3 @@
-set terminal wxt
-
 set multiplot layout 2,1
 
 plot  "< tail -2000 logMain.csv" using 1:6  title 'pos x'  with lines , \
