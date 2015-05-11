@@ -6,6 +6,7 @@
 
 #include "odometry.hpp"
 #include "common.hpp"
+#include "geometricTransform.hpp"
 
 using namespace Eigen;
 
@@ -928,27 +929,12 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 		//
 		// Find geometric transform
 		//
-
-		// construct constraints
-		Matrix<double, Dynamic, 5> C( points.cols()*2, 5 );
-		for ( int i = 0; i < points.cols(); i++ )
-		{
-			const double &x = pointsOnGround(0,i);
-			const double &y = pointsOnGround(1,i);
-			const double &x_ = prevPointsOnGround(0,i);
-			const double &y_ = prevPointsOnGround(1,i);
-			C.row( i*2 )    << -y,  x,  0, -1,  y_;
-			C.row( i*2 + 1) <<  x,  y,  1,  0, -x_;
-		}
-		// solve for transformation
-		JacobiSVD<MatrixXd> svd( C, ComputeThinV );
-		VectorXd V = svd.matrixV().rightCols<1>();
-		// find transformation
-		VectorXd h = V.head<4>() / V(4);
-		// remove scaling
+		Vector4d h = estimateRigidTransform( prevPointsOnGround, pointsOnGround );
 		h.block<2,1>(0,0).normalize();
 
+		//
 		// calculate residual
+		//
 
 		// Measured rotation
 		double dTheta_m = atan2( h(1), h(0) );
