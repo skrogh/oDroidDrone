@@ -25,6 +25,24 @@ void trackerThreadHandler( LKTracker* tracker, cv::Mat* gray, cv::Mat* prevGray 
 	tracker->detectFeatures( *gray, *prevGray );
 }
 
+void catchupPredictorThread( std::atomic<bool>* catchupRunningPt, std::atomic<bool>* catchupDonePt,
+ImuFifo* catchupImuFifoPt, Odometry* catchupPredictorPt ) {
+	std::atomic<bool>& catchupRunning = *catchupRunningPt;
+	std::atomic<bool>& catchupDone = *catchupDonePt;
+	ImuFifo& catchupImuFifo = *catchupImuFifoPt;
+	Odometry& catchupPredictor = *catchupPredictorPt;
+
+	// Propagate all elements
+	ImuMeas_t element;
+	while( catchupImuFifo.fifoPop( element ) ) {
+		catchupPredictor.propagate( element.acc, element.gyro, false );
+	}
+
+	// done
+	catchupRunning = false; // Stop adding new values to fifo
+	catchupDone = true; // Signal that we are done
+}
+
 void estimator( ImuFifo* imuPt, Calib* calibPt,
 			std::atomic<bool>* catchupRunningPt, std::atomic<bool>* catchupDonePt,
 			ImuFifo* catchupImuFifoPt, Odometry* catchupPredictorPt	) {
@@ -191,8 +209,18 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 		// Set up predictor catchup
 		//
 		/* copy estimated state to predictor catchup */
+		catchupPredictor.x = odometry.x.block<ODO_STATE_SIZE,1>(0,0);
+		// dont copy covariance, we dont care about that
+		catchupPredictor.I_a_dly = odometry.I_a_dly;
+		catchupPredictor.G_a_dly = odometry.G_a_dly;
 		/* Copy rest of etimatorImuFifo to catchupImuFifo */
-
+		imu.fifoCloneTo( catchupImuFifo );
+		/* Tell main thread to add new measurements to catchupImuFifo (catchupRunning) */
+		catchupRunningPt = true;
+		/* Start and detach catchup thread */
+		std::thread catchupThread( catchupPredictorThread,
+			&catchupRunning, &catchupDone, &catchupImuFifo, &catchupPredictor );
+		catchupThread.detach();
 
 		//
 		// Window managing
@@ -301,8 +329,18 @@ int main( int argc, char** argv )
 		imu.fifoPop( element );
 		// pass element to estimator
 		estimatorImu.fifoPush( element );
+
+		// If new predictor caught up, replace current with that one
+		if ( catchupDone ) {
+			catchupDone = false;
+			predictor = catchupPredictor;
+		}
+
+		// pass element to catchup if running
+		if ( catchupRunning )
+			catchupImuFifo.fifoPush( element );
 		// predict
-		predictor.propagate( element.acc, element.gyro );
+		predictor.propagate( element.acc, element.gyro, false );
 		// controller goes here
 	}
 
