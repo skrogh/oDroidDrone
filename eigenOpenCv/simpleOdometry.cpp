@@ -25,15 +25,16 @@ void trackerThreadHandler( LKTracker* tracker, cv::Mat* gray, cv::Mat* prevGray 
 	tracker->detectFeatures( *gray, *prevGray );
 }
 
-void estimator( ImuFifo* imuPt, Calib* calib ) {
+void estimator( ImuFifo* imuPt, Calib* calibPt ) {
 	ImuFifo& imu = *imuPt;
+	Calib& calib = *calibPt;
 
 	//
 	// Initiate estimator
 	//
 
 	// make odometry obj and set initial conditions
-	GTEKF odometry( calib );
+	GTEKF odometry( &calib );
 	// Start upright
 		odometry.x.block<4,1>(0,0) << 0, 0, 0, 1; // upright
 	// Start 15cm off the ground
@@ -196,7 +197,6 @@ void estimator( ImuFifo* imuPt, Calib* calib ) {
 
 void initCalib( Calib& calib ) {
 	// Set calibration parameters:
-	Calib calib;
 	calib.o_x = 300.8859;
 	calib.o_y = 222.5206;
 	calib.f_x = 411.1170;
@@ -259,6 +259,10 @@ int main( int argc, char** argv )
 	//
 	ImuMeas_t element;
 	while( imu.fifoPop( element ) );
+
+	//
+	//
+	//
 
 	//
 	// Start estimator
