@@ -240,7 +240,7 @@ int main( int argc, char** argv )
 
 
 	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
-	ImuFifo estimatorImu();
+	ImuFifo estimatorImu;
 	struct timeval tv;
 	struct timezone tz = {};
 		tz.tz_minuteswest = 0;
