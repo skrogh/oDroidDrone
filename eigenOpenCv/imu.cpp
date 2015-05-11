@@ -28,7 +28,6 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	speed = 6000000;
 	delay = 0;
 	timeout = 500;
-	pthread_mutex_init( &fifoMutex, NULL );
 
 	//
 	// open I/O files
@@ -213,13 +212,21 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 	this->fifoPush( element );
 }
 
-void Imu::fifoPush( const ImuMeas_t &element ) {
+ImuFifo::ImuFifo( void ) {
+	pthread_mutex_init( &fifoMutex, NULL );
+}
+
+void ImuFifo::fifoPush( const ImuMeas_t &element ) {
+	// Lock and add element
 	pthread_mutex_lock( &fifoMutex );
 	dataFifo.push_back( element );
 	pthread_mutex_unlock( &fifoMutex );
+	// Notify that we are no longer empty
+	std::unique_lock<std::mutex> lck( notEmptyMtx );
+	notEmpty.notify_all( lck );
 }
 
-bool Imu::fifoPop( ImuMeas_t &element ) {
+bool ImuFifo::fifoPop( ImuMeas_t &element ) {
 	pthread_mutex_lock( &fifoMutex );
 	if( !dataFifo.empty() ) {
 		element = dataFifo.front( );
@@ -231,7 +238,7 @@ bool Imu::fifoPop( ImuMeas_t &element ) {
 	return false;
 }
 
-bool Imu::fifoPeak( unsigned int n, ImuMeas_t &element ) {
+bool ImuFifo::fifoPeak( unsigned int n, ImuMeas_t &element ) {
 	pthread_mutex_unlock( &fifoMutex );
 	if( dataFifo.size() > n ) {
 		element = dataFifo.at( n );
@@ -242,10 +249,20 @@ bool Imu::fifoPeak( unsigned int n, ImuMeas_t &element ) {
 	return false;
 }
 
-
-unsigned int Imu::fifoSize( void ) {
+unsigned int ImuFifo::fifoSize( void ) {
 	pthread_mutex_unlock( &fifoMutex );
 	unsigned int size = dataFifo.size();
 	pthread_mutex_unlock( &fifoMutex );
 	return size;
+}
+
+void ImuFifo::waitNotEmpty( void ) {
+	// If already not empty, simply return
+	if ( this->fifoSize() > 0 )
+		return;
+	// otherwise wait (TODO: possible non-fatl bug here. If element added
+	// right at this moment, the wait is not notified. Not fatal, since the next
+	// incomming data will unlock it)
+	std::unique_lock<std::mutex> lck( notEmptyMtx );
+	notEmpty.wait( lck );
 }

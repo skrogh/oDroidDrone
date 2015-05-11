@@ -135,7 +135,9 @@ void estimator( Imu* imuPt ) {
 		while( 1 ) {
 			ImuMeas_t element;
 			// Wait for at least one imu measurement
-			while( !imu.fifoPop( element ) );
+			imu.waitNotEmpty();
+			// get it
+			imu.fifoPop( element );
 
 			// Propagate
 			odometry.propagate( element.acc, element.gyro );
@@ -226,7 +228,7 @@ void estimator( Imu* imuPt ) {
 int main( int argc, char** argv )
 {
 
-	/* TODO: readd telemetry
+	/* TODO: re-add telemetry
 	Telemetry telemetry( 55000 );
 	// log over telemetry
 	if ( telemetryCounter++ > 40 ) {
@@ -238,6 +240,7 @@ int main( int argc, char** argv )
 
 
 	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
+	ImuFifo estimatorImu();
 	struct timeval tv;
 	struct timezone tz = {};
 		tz.tz_minuteswest = 0;
@@ -248,7 +251,24 @@ int main( int argc, char** argv )
 	ImuMeas_t element;
 	while( imu.fifoPop( element ) );
 
-	std::thread estimatorThread( estimator, &imu );
+	//
+	// Start estimator
+	//
+	std::thread estimatorThread( estimator, &estimatorImu );
+
+	//
+	// Start controller loop
+	//
+	wile(1) {
+		imu.waitNotEmpty(); // wait for next sample
+		ImuMeas_t element;
+		// pass element to estimator
+		estimatorImu.fifoPush( element );
+		// pass element to predictor
+	}
+
+
+
 	estimatorThread.join();
 
 
