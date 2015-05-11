@@ -223,7 +223,7 @@ void ImuFifo::fifoPush( const ImuMeas_t &element ) {
 	pthread_mutex_unlock( &fifoMutex );
 	// Notify that we are no longer empty
 	std::unique_lock<std::mutex> lck( notEmptyMtx );
-	notEmpty.notify_all( lck );
+	notEmpty.notify_all( );
 }
 
 bool ImuFifo::fifoPop( ImuMeas_t &element ) {
