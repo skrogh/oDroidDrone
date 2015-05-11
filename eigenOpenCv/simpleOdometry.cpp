@@ -212,11 +212,11 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 		catchupPredictor.x = odometry.x.block<ODO_STATE_SIZE,1>(0,0);
 		// dont copy covariance, we dont care about that
 		catchupPredictor.I_a_dly = odometry.I_a_dly;
-		catchupPredictor.G_a_dly = odometry.G_a_dly;
+		catchupPredictor.I_g_dly = odometry.I_g_dly;
 		/* Copy rest of etimatorImuFifo to catchupImuFifo */
 		imu.fifoCloneTo( catchupImuFifo );
 		/* Tell main thread to add new measurements to catchupImuFifo (catchupRunning) */
-		catchupRunningPt = true;
+		catchupRunning = true;
 		/* Start and detach catchup thread */
 		std::thread catchupThread( catchupPredictorThread,
 			&catchupRunning, &catchupDone, &catchupImuFifo, &catchupPredictor );
