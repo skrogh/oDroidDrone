@@ -280,8 +280,8 @@ int main( int argc, char** argv )
 	//
 	// Predictor catchup
 	//
-	std::atomic<bool> catchupRunning = false;
-	std::atomic<bool> catchupDone = false;
+	std::atomic<bool> catchupRunning(false);
+	std::atomic<bool> catchupDone(false);
 	ImuFifo catchupImuFifo;
 	Odometry catchupPredictor( &calib );
 
