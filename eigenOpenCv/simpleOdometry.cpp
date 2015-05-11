@@ -262,6 +262,7 @@ int main( int argc, char** argv )
 	while(1) {
 		imu.waitNotEmpty(); // wait for next sample
 		ImuMeas_t element;
+		imu.fifoPop( element );
 		// pass element to estimator
 		estimatorImu.fifoPush( element );
 		// pass element to predictor
