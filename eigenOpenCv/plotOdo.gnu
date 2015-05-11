@@ -1,9 +1,3 @@
-set tmargin 0
-set bmargin 0
-set lmargin 0.2
-set rmargin 0
-unset xtics
-
 set multiplot layout 2,1
 
 plot  "< tail -2000 logMain.csv" using 1:6  title 'pos x'  with lines , \
