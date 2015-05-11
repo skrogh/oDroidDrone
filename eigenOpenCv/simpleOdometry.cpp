@@ -283,7 +283,7 @@ int main( int argc, char** argv )
 	std::atomic<bool> catchupRunning = false;
 	std::atomic<bool> catchupDone = false;
 	ImuFifo catchupImuFifo;
-	Odometry CatchupPredictor( &calib );
+	Odometry catchupPredictor( &calib );
 
 
 	//
