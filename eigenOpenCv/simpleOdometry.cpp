@@ -240,11 +240,16 @@ int main( int argc, char** argv )
 
 
 	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
-	ImuFifo estimatorImu;
 	struct timeval tv;
 	struct timezone tz = {};
 		tz.tz_minuteswest = 0;
 		tz.tz_dsttime = 0;
+	//
+	//	imu data buffers for estimation and propagation
+	//
+	ImuFifo estimatorImu;
+	ImuFifo predictorImu;
+
 	//
 	// Clear Imu buffer
 	//
@@ -266,6 +271,7 @@ int main( int argc, char** argv )
 		// pass element to estimator
 		estimatorImu.fifoPush( element );
 		// pass element to predictor
+		predictorImu.fifoPush( element );
 	}
 
 
