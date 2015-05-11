@@ -13,4 +13,5 @@ plot  "< tail -2000 logMain.csv" using 1:9  title 'vel x'  with lines , \
       "< tail -2000 log.csv"     using 1:9  title 'vel est x'  with lines , \
       "< tail -2000 log.csv"     using 1:10 title 'vel est y'  with lines , \
       "< tail -2000 log.csv"     using 1:11 title 'vel est z'  with lines
-pause -1
+
+unset multiplot
