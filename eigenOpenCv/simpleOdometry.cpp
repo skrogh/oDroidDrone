@@ -138,7 +138,9 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 			odometry.propagate( element.acc, element.gyro );
 
 			// log to file
-			lofFile << sprintf( "%d.%06d", element.timeStamp.tv_sec, element.timeStamp.tv_usec ) << "\t"
+			lofFile << element.timeStamp.tv_sec << "."
+							<< std::setfill('0') << std::setw(6)
+							<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
 			 				<< odometry.x.block<16,1>(0,0).transpose() << "\t"
 			 				<< odometry.sigma.diagonal().block<15,1>(0,0).transpose() << "\n";
 
@@ -347,7 +349,7 @@ int main( int argc, char** argv )
 		predictor.propagate( element.acc, element.gyro, false );
 		// controller goes here
 		// log to file
-		lofFile << element.timeStamp.tv_sec << "."
+		logFile << element.timeStamp.tv_sec << "."
 						<< std::setfill('0') << std::setw(6)
 						<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
 						<< predictor.x.block<16,1>(0,0).transpose() << "\n";
