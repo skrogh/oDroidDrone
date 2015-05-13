@@ -273,15 +273,10 @@ int main( int argc, char** argv )
 	Calib calib;
 	initCalib( calib );
 
-	/* TODO: re-add telemetry
+
 	Telemetry telemetry( 55000 );
-	// log over telemetry
-	if ( telemetryCounter++ > 40 ) {
-		telemetryCounter = 0;
-		telemetry.send( odometry.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
-	}
 	int telemetryCounter = 0;
-	*/
+
 
 
 	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
@@ -348,6 +343,12 @@ int main( int argc, char** argv )
 		// predict
 		predictor.propagate( element.acc, element.gyro, false );
 		// controller goes here
+		// log over telemetry
+		if ( telemetryCounter++ > 40 ) {
+			telemetryCounter = 0;
+			telemetry.send( odometry.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
+		}
+
 		// log to file
 		logFile << element.timeStamp.tv_sec << "."
 						<< std::setfill('0') << std::setw(6)
