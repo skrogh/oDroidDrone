@@ -149,7 +149,7 @@ Matrix3d msac( const Eigen::Matrix2Xd& pointsFrom, const Eigen::Matrix2Xd& point
       bestDist = accDis;
       bestT = T;
     }
-    idxTrials++;
+    idxTrial++;
   }
   VectorXd dis = evaluateTform( pointsFrom, pointsTo, bestT, threshold );
   int numInliers = 0;
