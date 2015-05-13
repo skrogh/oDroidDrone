@@ -54,7 +54,7 @@ Matrix3d computeTform(
   Matrix3d T = computeSimilarity(
     normalizePoints( pointsFrom, indices, normMatFrom ),
     normalizePoints( pointsFrom, indices, normMatTo ) );
-  return normMatFrom.transpose() * ( T / normMatTo.transpose() );
+  return normMatFrom.transpose() * ( T * normMatTo.transpose().inverse() );
 }
 
 
