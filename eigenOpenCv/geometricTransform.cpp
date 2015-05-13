@@ -84,7 +84,7 @@ Matrix3d computeTform(
   Matrix3d normMatTo;
   Matrix3d T = computeSimilarity(
     normalizePoints( pointsFrom, indices, normMatFrom ),
-    normalizePoints( pointsFrom, indices, normMatTo ) );
+    normalizePoints( pointsTo, indices, normMatTo ) );
   return normMatFrom.transpose() * ( T * normMatTo.transpose().inverse() );
 }
 
@@ -174,7 +174,7 @@ Eigen::Matrix<double,4,1> estimateSimilarTransform(
   for ( int i = 0; i < indices.rows(); i++ ) {
     indices(i) = i;
   }
-  Matrix3d T = msac( pointsFrom, pointsTo, 20, 99, 2 );
+  Matrix3d T = computeTform( pointsFrom, pointsTo );//, 20, 99, 2 );
 
   h(0) = T(0,0);
   h(1) = T(1,0);
