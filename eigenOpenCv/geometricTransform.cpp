@@ -174,7 +174,7 @@ Eigen::Matrix<double,4,1> estimateSimilarTransform(
   for ( int i = 0; i < indices.rows(); i++ ) {
     indices(i) = i;
   }
-  Matrix3d T = computeTform( pointsTo, pointsFrom, indices );//, 20, 99, 2 );
+  Matrix3d T = msac( pointsTo, pointsFrom, 20, 99, 2 );
 
   h(0) = T(0,0);
   h(1) = T(1,0);
