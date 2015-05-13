@@ -929,7 +929,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 		//
 		// Find geometric transform
 		//
-		Vector4d h = estimateRigidTransform( prevPointsOnGround, pointsOnGround );
+		Vector4d h = estimateSimilarTransform( prevPointsOnGround, pointsOnGround );
 		// remove scaling
 		h.block<2,1>(0,0).normalize();
 
