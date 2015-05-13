@@ -62,7 +62,10 @@ Matrix2Xd normalizePoints( const Matrix2Xd& points, const VectorXd& indices,
 
   // scale points
   if ( points.cols() > 2 ) {
-    pointsOut = T * points;
+    pointsOut = T.block<2,2>(0,0) * points;
+    for( int i = 0; i < pointsOut.cols(); i++ ) {
+      pointsOut.col(i) += T.block<2,1>(0,2);
+    }
   } else {
     pointsOut *= scale;
   }
