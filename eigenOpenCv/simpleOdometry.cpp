@@ -346,7 +346,7 @@ int main( int argc, char** argv )
 		// log over telemetry
 		if ( telemetryCounter++ > 40 ) {
 			telemetryCounter = 0;
-			telemetry.send( odometry.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
+			telemetry.send( predictor.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
 		}
 
 		// log to file
