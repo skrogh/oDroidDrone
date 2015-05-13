@@ -92,7 +92,8 @@ Eigen::Matrix<double,4,1> estimateSimilarTransform(
   for ( int i = 0; i < indices.rows(); i++ ) {
     indices(i) = i;
   }
-  Matrix3d T = computeTform( pointsFrom, pointsTo, indices );
+  Matrix3d T = computeSimilarity( pointsFrom, pointsTo );
+
   h(0) = T(0,0);
   h(1) = T(1,0);
   h(2) = T(2,0);
