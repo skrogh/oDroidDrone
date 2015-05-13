@@ -93,7 +93,7 @@ VectorXd evaluateTform( const Matrix2Xd& pointsFrom, const Matrix2Xd& pointsTo,
   Matrix2Xd pt( pointsFrom.rows(), pointsFrom.cols() );
   pt = T.block<2,2>(0,0).transpose() * pointsFrom;
   for( int i = 0; i < pointsFrom.cols(); i++ ) {
-    pointsFrom.col(i) += T.block<2,1>(0,2);
+    pt.col(i) += T.block<2,1>(0,2);
   }
 
   pt = pt - pointsTo;
