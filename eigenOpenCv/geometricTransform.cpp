@@ -2,6 +2,26 @@
 
 using namespace Eigen;
 
+Matrix<double,4,1> computeSimilarityOld(
+    const Matrix2Xd& pointsFrom, const Matrix2Xd& pointsTo ) {
+  Matrix<double, Dynamic, 5> C( pointsTo.cols()*2, 5 );
+  for ( int i = 0; i < pointsTo.cols(); i++ ) {
+    const double &x = pointsTo(0,i);
+    const double &y = pointsTo(1,i);
+    const double &x_ = pointsFrom(0,i);
+    const double &y_ = pointsFrom(1,i);
+    C.row( i*2 )    << -y,  x,  0, -1,  y_;
+    C.row( i*2 + 1) <<  x,  y,  1,  0, -x_;
+  }
+  // solve for transformation
+  JacobiSVD<MatrixXd> svd( C, ComputeThinV );
+  VectorXd V = svd.matrixV().rightCols<1>();
+  // find transformation
+  Matrix<double,4,1> h = V.head<4>() / V(4);
+
+  return h;
+}
+
 Matrix3d computeSimilarity(
     const Matrix2Xd& pointsFrom, const Matrix2Xd& pointsTo ) {
   Matrix<double, Dynamic, 5> C( pointsTo.cols()*2, 5 );
@@ -94,8 +114,14 @@ Eigen::Matrix<double,4,1> estimateSimilarTransform(
   }
   Matrix3d T = computeSimilarity( pointsFrom, pointsTo );
 
+  T << h(0), -h(1), 0,
+       h(1),  h(0), 0,
+       h(2),  h(3), 1;
+
   h(0) = T(0,0);
   h(1) = T(1,0);
   h(2) = T(2,0);
   h(3) = T(2,1);
+
+  return h;
 }
