@@ -39,9 +39,9 @@ Matrix2Xd normalizePoints( const Matrix2Xd& points, const VectorXd& indices,
   // Calculate center
   Vector2d center(0,0);
   for ( int j = 0; j < indices.rows(); j++ ) {
-    int i =indices(j);
+    int i = indices(j);
     center += points.col(i);
-    pointsOut.col(i) = points.col(i);
+    pointsOut.col(j) = points.col(i);
   }
   center /= indices.rows();
 
@@ -123,20 +123,16 @@ Matrix3d msac( const Eigen::Matrix2Xd& pointsFrom, const Eigen::Matrix2Xd& point
 
   int index1;
   int index2;
-
+  // Get two random, different numbers in [0:pointsFrom.cols()-1]
+  std::uniform_int_distribution<int> distribution1( 0, pointsFrom.cols()-1 );
+  std::uniform_int_distribution<int> distribution2( 0, pointsFrom.cols()-2 );
   while ( idxTrial <= numTrials ) {
     // Get two random, different numbers in [0:pointsFrom.cols()-1]
-    std::uniform_int_distribution<int> distribution1( 0, pointsFrom.cols()-1 );
     index1 = distribution1( msacGenerator );
-    std::uniform_int_distribution<int> distribution2( 0, pointsFrom.cols()-2 );
     index2 = distribution2( msacGenerator );
     if ( index2 >= index1 )
       index2++;
     Vector2d indices( index1, index2 );
-
-    std::cout << "indices: " << indices
-    << "pointsFrom.cols: " << pointsFrom.cols()
-    << "pointsTo.cols: " << pointsTo.cols() << std::endl;
 
     // Get T form Calculated from this set of points
     Matrix3d T = computeTform( pointsFrom, pointsTo, indices );
