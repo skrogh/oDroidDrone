@@ -123,5 +123,7 @@ Eigen::Matrix<double,4,1> estimateSimilarTransform(
   h(2) = T(2,0);
   h(3) = T(2,1);
 
+  h = computeSimilarityOld( pointsFrom, pointsTo );
+
   return h;
 }
