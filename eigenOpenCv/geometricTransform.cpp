@@ -114,16 +114,10 @@ Eigen::Matrix<double,4,1> estimateSimilarTransform(
   }
   Matrix3d T = computeSimilarity( pointsFrom, pointsTo );
 
-  T << h(0), -h(1), 0,
-       h(1),  h(0), 0,
-       h(2),  h(3), 1;
-
   h(0) = T(0,0);
   h(1) = T(1,0);
   h(2) = T(2,0);
   h(3) = T(2,1);
-
-  h = computeSimilarityOld( pointsFrom, pointsTo );
 
   return h;
 }
