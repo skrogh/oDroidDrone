@@ -134,6 +134,10 @@ Matrix3d msac( const Eigen::Matrix2Xd& pointsFrom, const Eigen::Matrix2Xd& point
       index2++;
     Vector2d indices( index1, index2 );
 
+    std::cout << "indices: " << indices.transpose()
+    << " pointsFrom.cols: " << pointsFrom.cols()
+    << " pointsTo.cols: " << pointsTo.cols() << std::endl;
+
     // Get T form Calculated from this set of points
     Matrix3d T = computeTform( pointsFrom, pointsTo, indices );
 
