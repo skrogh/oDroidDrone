@@ -3,6 +3,8 @@
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <cmath>
+#include <iostream>
+
 
 using namespace Eigen;
 
