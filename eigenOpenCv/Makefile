@@ -1,4 +1,4 @@
-CXX = g++ -O3 -g -std=c++11 -frounding-math -fsignaling-nans
+CXX = g++ -O3 -g -std=c++11
 CPPFLAGS = $(shell pkg-config --cflags opencv )
 LIBS = $(shell pkg-config --libs opencv ) -pthread
 

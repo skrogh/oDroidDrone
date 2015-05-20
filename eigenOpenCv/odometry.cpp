@@ -930,62 +930,64 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 		// Find geometric transform
 		//
 		Vector4d h = estimateSimilarTransform( prevPointsOnGround, pointsOnGround );
-		// remove scaling
-		h.block<2,1>(0,0).normalize();
+		// only update, if estimated transform is finite
+		if ( std::isfinite(h(0)) && std::isfinite(h(1)) && std::isfinite(h(2)) && std::isfinite(h(3)) ) {
+			// remove scaling
+			h.block<2,1>(0,0).normalize();
 
-		//
-		// calculate residual
-		//
+			//
+			// calculate residual
+			//
 
-		// Measured rotation
-		double dTheta_m = atan2( h(1), h(0) );
-		// Calculate estimated rotation
-		Vector3d dir(1,0,0); // vector orthogonal to Z axis
-		// Calculate quaternion of rotation
-		QuaternionAlias<double> IpG_q( x.block<4,1>(0+ODO_STATE_SIZE,0) );
-		QuaternionAlias<double> IG_q( x.block<4,1>(0,0) );
-		QuaternionAlias<double> IpI_q = IpG_q * IG_q.conjugate();
-		// rotate dir by IpI_q
-		dir = IpI_q._transformVector( dir );
-		double dTheta_e = atan2( dir(1), dir(0) );
-		Matrix<double,3,1> r;
-		r << dTheta_m - dTheta_e,
-		/* this is: Previous (x,y) + measured movement - propageted (x,y) */
-		x.block<2,1>(4+ODO_STATE_SIZE,0) + Vector2d( h(2), h(3) ) - x.block<2,1>(4,0);
+			// Measured rotation
+			double dTheta_m = atan2( h(1), h(0) );
+			// Calculate estimated rotation
+			Vector3d dir(1,0,0); // vector orthogonal to Z axis
+			// Calculate quaternion of rotation
+			QuaternionAlias<double> IpG_q( x.block<4,1>(0+ODO_STATE_SIZE,0) );
+			QuaternionAlias<double> IG_q( x.block<4,1>(0,0) );
+			QuaternionAlias<double> IpI_q = IpG_q * IG_q.conjugate();
+			// rotate dir by IpI_q
+			dir = IpI_q._transformVector( dir );
+			double dTheta_e = atan2( dir(1), dir(0) );
+			Matrix<double,3,1> r;
+			r << dTheta_m - dTheta_e,
+			/* this is: Previous (x,y) + measured movement - propageted (x,y) */
+			x.block<2,1>(4+ODO_STATE_SIZE,0) + Vector2d( h(2), h(3) ) - x.block<2,1>(4,0);
 
-		// Noise
-		Matrix<double,3,3> R;
-		R << MatrixXd::Identity(3, 3) * 0.05*0.05; // TODO: make dependant on number of features
+			// Noise
+			Matrix<double,3,3> R;
+			R << MatrixXd::Identity(3, 3) * 0.05*0.05; // TODO: make dependant on number of features
 
-		// calculate Measurement jacobian
-		Matrix<double,3,Dynamic> H( 3, sigma.cols() );
-		H <<
-			/*  xy rotation      z rot     p(xyz) v(xyz) bg(xyz) ba(xyz) */
-			MatrixXd::Zero( 1, 2 ), 1, MatrixXd::Zero( 1, 12 ),
-			/*  xy rotation             z rot                all the rest*/
-				MatrixXd::Zero( 1, 2 ), -1, MatrixXd::Zero( 1, sigma.cols() - 18 ),
-			/*  xyz rotation        px py  pz v(xyz) bg(xyz) ba(xyz) */
-			MatrixXd::Zero( 1, 3 ), 1, 0, MatrixXd::Zero( 1, 1+9 ),
-			/*  xyz rotation            px py                   all the rest*/
-				MatrixXd::Zero( 1, 3 ), -1, 0, MatrixXd::Zero( 1, sigma.cols() - 20 ),
-			MatrixXd::Zero( 1, 3 ), 0, 1, MatrixXd::Zero( 1, 1+9 ),
-				MatrixXd::Zero( 1, 3 ), 0, -1, MatrixXd::Zero( 1, sigma.cols() - 20 );
+			// calculate Measurement jacobian
+			Matrix<double,3,Dynamic> H( 3, sigma.cols() );
+			H <<
+				/*  xy rotation      z rot     p(xyz) v(xyz) bg(xyz) ba(xyz) */
+				MatrixXd::Zero( 1, 2 ), 1, MatrixXd::Zero( 1, 12 ),
+				/*  xy rotation             z rot                all the rest*/
+					MatrixXd::Zero( 1, 2 ), -1, MatrixXd::Zero( 1, sigma.cols() - 18 ),
+				/*  xyz rotation        px py  pz v(xyz) bg(xyz) ba(xyz) */
+				MatrixXd::Zero( 1, 3 ), 1, 0, MatrixXd::Zero( 1, 1+9 ),
+				/*  xyz rotation            px py                   all the rest*/
+					MatrixXd::Zero( 1, 3 ), -1, 0, MatrixXd::Zero( 1, sigma.cols() - 20 ),
+				MatrixXd::Zero( 1, 3 ), 0, 1, MatrixXd::Zero( 1, 1+9 ),
+					MatrixXd::Zero( 1, 3 ), 0, -1, MatrixXd::Zero( 1, sigma.cols() - 20 );
 
-		// TODO: inlier?
+			// TODO: inlier?
 
-		// Calculate kalman gain
-		MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
+			// Calculate kalman gain
+			MatrixXd K = sigma * H.transpose() * ( H * sigma * H.transpose() + R ).inverse();
 
-		// apply kalman gain
-		// state
-		VectorXd delta_x = K * r;
-		// covariance
-		MatrixXd A = MatrixXd::Identity( K.rows(), H.cols() ) - K * H;
-		sigma = A * sigma * A.transpose() + K * R * K.transpose();
+			// apply kalman gain
+			// state
+			VectorXd delta_x = K * r;
+			// covariance
+			MatrixXd A = MatrixXd::Identity( K.rows(), H.cols() ) - K * H;
+			sigma = A * sigma * A.transpose() + K * R * K.transpose();
 
-		// apply d_x
-		this->performUpdate( delta_x );
-
+			// apply d_x
+			this->performUpdate( delta_x );
+		}
 	}
 	// update state fifo
 	this->removeOldStates( 1 );
