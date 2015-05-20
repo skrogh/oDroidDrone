@@ -56,6 +56,9 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 	Odometry& catchupPredictor = *catchupPredictorPt;
 
 	double volatile a = 0/0;
+	double volatile b = 0/a;
+	double volatile c = 0;
+	double volatile d = c/c;
 
 	//
 	// Initiate estimator
@@ -274,6 +277,10 @@ void initCalib( Calib& calib ) {
 int main( int argc, char** argv )
 {
 	feenableexcept( FE_ALL_EXCEPT );
+	double volatile a = 0/0;
+	double volatile b = 0/a;
+	double volatile c = 0;
+	double volatile d = c/c;
 	// Set calibration parameters:
 	Calib calib;
 	initCalib( calib );
