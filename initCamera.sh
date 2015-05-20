@@ -4,7 +4,7 @@
 
 # Set camera parameters through v4l2-ctl
 echo 'Setting camera parameters'
-v4l2-ctl --set-ctrl=<ctl>=<val>
+#v4l2-ctl --set-ctrl=<ctl>=<val>
 v4l2-ctl --set-ctrl=brightness=0
 v4l2-ctl --set-ctrl=contrast=32
 v4l2-ctl --set-ctrl=saturation=64
