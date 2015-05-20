@@ -278,7 +278,7 @@ int main( int argc, char** argv )
 {
 	feenableexcept( FE_ALL_EXCEPT );
 	/* testing multiple exceptions: */
-  fe = fetestexcept (FE_ALL_EXCEPT);
+  int fe = fetestexcept (FE_ALL_EXCEPT);
 
   puts ("The following exceptions are set:");
   if (fe & FE_DIVBYZERO) puts ("FE_DIVBYZERO");
@@ -300,7 +300,7 @@ int main( int argc, char** argv )
   if (fe & FE_INVALID)   puts ("FE_INVALID");
   if (fe & FE_OVERFLOW)  puts ("FE_OVERFLOW");
   if (fe & FE_UNDERFLOW) puts ("FE_UNDERFLOW");
-	
+
 	// Set calibration parameters:
 	Calib calib;
 	initCalib( calib );
