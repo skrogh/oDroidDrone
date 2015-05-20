@@ -55,11 +55,6 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 	ImuFifo& catchupImuFifo = *catchupImuFifoPt;
 	Odometry& catchupPredictor = *catchupPredictorPt;
 
-	double volatile a = 0/0;
-	double volatile b = 0/a;
-	double volatile c = 0;
-	double volatile d = c/c;
-
 	//
 	// Initiate estimator
 	//
@@ -276,6 +271,22 @@ void initCalib( Calib& calib ) {
 
 int main( int argc, char** argv )
 {
+	// Raise prioty to max of SCHED_OTHER
+	{
+		pthread_t thId = pthread_self();
+    pthread_attr_t thAttr;
+    int policy = 0;
+    int max_prio_for_policy = SCHED_OTHER;
+
+    pthread_attr_init(&thAttr);
+    pthread_attr_getschedpolicy(&thAttr, &policy);
+    max_prio_for_policy = sched_get_priority_max(policy);
+
+
+    pthread_setschedprio(thId, max_prio_for_policy);
+    pthread_attr_destroy(&thAttr);
+	}
+
 	// Set calibration parameters:
 	Calib calib;
 	initCalib( calib );

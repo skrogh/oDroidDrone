@@ -1,5 +1,5 @@
 %% Client for recieving data from drone.
-tcpipClient = udp('10.16.164.13',55000);
+tcpipClient = udp('10.16.160.118',55000);
 set(tcpipClient, 'inputbuffersize', 2^15 ) 
 fclose(tcpipClient)
 fopen(tcpipClient)                          % connect
@@ -9,6 +9,7 @@ lHandle = plot3(nan, nan, nan);             % get line handle
 view([0,90]);                               %set 2d view
 xlim([-1,1]);                               %set xlimit
 ylim([-1,1]);                               %set ylimit
+axis equal
 %% Main loop
 while 1                                     %keep going
     rawData = uint8( fread( tcpipClient, 8*10 ) );                %read data from buffer
