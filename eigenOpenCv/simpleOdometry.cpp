@@ -271,7 +271,7 @@ void initCalib( Calib& calib ) {
 
 int main( int argc, char** argv )
 {
-	feenableexcept(FE_INVALID | FE_OVERFLOW);
+	feenableexcept( FE_ALL_EXCEPT );
 	// Set calibration parameters:
 	Calib calib;
 	initCalib( calib );
