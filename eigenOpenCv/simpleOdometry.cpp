@@ -55,6 +55,8 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 	ImuFifo& catchupImuFifo = *catchupImuFifoPt;
 	Odometry& catchupPredictor = *catchupPredictorPt;
 
+	double volatile a = 0/0;
+
 	//
 	// Initiate estimator
 	//
@@ -327,6 +329,7 @@ int main( int argc, char** argv )
 	//
 	// Start controller loop
 	//
+
 	while(1) {
 		imu.waitNotEmpty(); // wait for next sample
 		ImuMeas_t element;
