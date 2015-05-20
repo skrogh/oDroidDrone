@@ -16,6 +16,8 @@
 #include "videoIO.hpp"
 #include "telemetry.hpp"
 
+// DEBUG:
+#include <fenv.h>
 
 using namespace cv;
 using namespace std;
@@ -269,6 +271,7 @@ void initCalib( Calib& calib ) {
 
 int main( int argc, char** argv )
 {
+	feenableexcept(FE_INVALID | FE_OVERFLOW);
 	// Set calibration parameters:
 	Calib calib;
 	initCalib( calib );
