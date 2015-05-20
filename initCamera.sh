@@ -11,7 +11,7 @@ v4l2-ctl --set-ctrl=saturation=64
 v4l2-ctl --set-ctrl=hue=0
 v4l2-ctl --set-ctrl=white_balance_automatic=0
 v4l2-ctl --set-ctrl=gain_automatic=1
-v4l2-ctl --set-ctrl=auto_exposure=1
+v4l2-ctl --set-ctrl=auto_exposure=0 # 1 is appaently off -_-
 v4l2-ctl --set-ctrl=horizontal_flip=0
 v4l2-ctl --set-ctrl=vertical_flip=0
 v4l2-ctl --set-ctrl=power_line_frequency=1 #50Hz
