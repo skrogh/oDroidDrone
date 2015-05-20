@@ -17,7 +17,7 @@
 #include "telemetry.hpp"
 
 // DEBUG:
-#include <fenv.h>
+#include <cfenv>
 
 using namespace cv;
 using namespace std;
@@ -277,10 +277,30 @@ void initCalib( Calib& calib ) {
 int main( int argc, char** argv )
 {
 	feenableexcept( FE_ALL_EXCEPT );
+	/* testing multiple exceptions: */
+  fe = fetestexcept (FE_ALL_EXCEPT);
+
+  puts ("The following exceptions are set:");
+  if (fe & FE_DIVBYZERO) puts ("FE_DIVBYZERO");
+  if (fe & FE_INEXACT)   puts ("FE_INEXACT");
+  if (fe & FE_INVALID)   puts ("FE_INVALID");
+  if (fe & FE_OVERFLOW)  puts ("FE_OVERFLOW");
+  if (fe & FE_UNDERFLOW) puts ("FE_UNDERFLOW");
+
 	double volatile a = 0/0;
 	double volatile b = 0/a;
 	double volatile c = 0;
 	double volatile d = c/c;
+	/* testing multiple exceptions: */
+  fe = fetestexcept (FE_ALL_EXCEPT);
+
+  puts ("The following exceptions are set:");
+  if (fe & FE_DIVBYZERO) puts ("FE_DIVBYZERO");
+  if (fe & FE_INEXACT)   puts ("FE_INEXACT");
+  if (fe & FE_INVALID)   puts ("FE_INVALID");
+  if (fe & FE_OVERFLOW)  puts ("FE_OVERFLOW");
+  if (fe & FE_UNDERFLOW) puts ("FE_UNDERFLOW");
+	
 	// Set calibration parameters:
 	Calib calib;
 	initCalib( calib );
