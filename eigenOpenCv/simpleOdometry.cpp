@@ -276,6 +276,7 @@ void initCalib( Calib& calib ) {
 
 int main( int argc, char** argv )
 {
+	
 	feenableexcept( FE_ALL_EXCEPT );
 	/* testing multiple exceptions: */
   int fe = fetestexcept (FE_ALL_EXCEPT);
