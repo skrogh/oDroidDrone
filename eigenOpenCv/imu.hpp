@@ -93,7 +93,7 @@ private:
 	// Output to flight controller
 	//
 	FlightControllerOut_t flightControllerOut;
-	std::mutex flightControllerOutMtx;
+	pthread_mutex_t flightControllerOutMtx;
 
 	//
 	// Functions
