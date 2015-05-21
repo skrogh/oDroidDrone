@@ -78,6 +78,9 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 	// Log for logging state at all steps (for plotting and stuff)
 	std::ofstream logFile;
 	logFile.open ("log.csv");
+	if ( !logFile ) {
+		printf( "logFile not opened!\n" );
+	}
 	// Video server getter (TODO: WARNING MAX ONE CONSUMER)
 	VideoIn videoIn( 0 );
 	// Debug image out
@@ -338,6 +341,9 @@ int main( int argc, char** argv )
 	//
 	std::ofstream logFile;
 	logFile.open("logMain.csv");
+	if ( !logFile ) {
+		printf( "logFile not opened!\n" );
+	}
 
 	//
 	// Start controller loop
