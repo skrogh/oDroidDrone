@@ -197,16 +197,9 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 		tr.bits_per_word = bits;
 
 	// Copy output to flightcontroller
-	printf( "Pre lock %d\n", pthread_self() );
-	int ret1;
-	int ret2;
-	if ( !(ret1 = pthread_mutex_lock( &flightControllerOutMtx ) ) ){
-		printf( "In lock\n" );
-		std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
-		ret2 = pthread_mutex_unlock( &flightControllerOutMtx );
-	}
-	printf( "error code lock: %d, unlock: %d\n", ret1, ret2 );
-	printf( "Post lock\n" );
+	pthread_mutex_lock( &flightControllerOutMtx ) ) )
+	std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
+	pthread_mutex_unlock( &flightControllerOutMtx );
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
 	if ( ret < 1 )
@@ -298,10 +291,10 @@ void ImuFifo::waitNotEmpty( void ) {
 }
 
 void Imu::setOutput( float x, float y, float yaw, float z ) {
-	//pthread_mutex_lock( &flightControllerOutMtx );
+	pthread_mutex_lock( &flightControllerOutMtx );
 	flightControllerOut.x = x;
 	flightControllerOut.y = y;
 	flightControllerOut.yaw = yaw;
 	flightControllerOut.z = z;
-	//pthread_mutex_unlock( &flightControllerOutMtx );
+	pthread_mutex_unlock( &flightControllerOutMtx );
 }
