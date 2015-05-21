@@ -34,7 +34,7 @@ typedef struct{
 	float y;
 	float yaw;
 	float z;
-} FlightControllerOut_t
+} FlightControllerOut_t;
 
 class ImuFifo {
 protected:
@@ -70,7 +70,7 @@ public:
 	void waitNotEmpty( void );
 };
 
-class Imu: public ImuFifo{
+class Imu: public ImuFifo {
 private:
 	// filedescriptors
 	int gpioFd, spiFd;
