@@ -195,8 +195,8 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 	if ( flightControllerOutMtx.try_lock() ) {
 		std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
 		flightControllerOutMtx.unlock();
+		printf( "OUT LOC NOT TAKEN!\n" );
 	} else {
-		printf( "OUT LOCK TAKEN!\n" );
 	}
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
