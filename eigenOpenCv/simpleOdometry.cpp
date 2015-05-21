@@ -376,7 +376,7 @@ int main( int argc, char** argv )
 		G_I_x.normalize();
 		double theta = atan2( G_I_x(1), G_I_x(2) );
 		QuaternionAlias<double> LG_q( cos(theta/2), 0, 0, sin(theta/2) );
-		Vector3d G_a_sp = -G_v*1.5 -G_p// acceleration setpoint
+		Vector3d G_a_sp = - G_v*1.5 - G_p; // acceleration setpoint
 		G_a_sp *= 2;
 		Vector3d L_a_sp = LG_q._transformVector( G_a_sp );
 
