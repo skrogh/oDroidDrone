@@ -29,6 +29,13 @@ typedef struct{
 	struct timeval timeStamp;
 } ImuMeas_t;
 
+typedef struct{
+	float x;
+	float y;
+	float yaw;
+	float z;
+} FlightControllerOut_t
+
 class ImuFifo {
 protected:
 	//
@@ -82,6 +89,11 @@ private:
 	pthread_t thread;
 	std::atomic<bool> endThread;
 
+	//
+	// Output to flight controller
+	//
+	std::atomic<FlightControllerOut_t> flightControllerOut;
+
 
 	//
 	// Functions
@@ -99,6 +111,7 @@ private:
 public:
 	Imu( const char *spiDevice, const char *gpioDevice );
 	~Imu( void );
+	void setOutput( float x, float y, float yaw, float z );
 };
 
 #endif//_IMU_H_

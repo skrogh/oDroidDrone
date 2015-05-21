@@ -28,6 +28,8 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	speed = 6000000;
 	delay = 0;
 	timeout = 500;
+	FlightControllerOut_t tmpZeroStruct = {0}
+	flightControllerOut = tmpZeroStruct;
 
 	//
 	// open I/O files
@@ -177,6 +179,7 @@ void* Imu::imuThread( void ) {
 
 void Imu::gpioIntHandler( const struct timeval& tv ) {
 	int ret;
+	// Create buffer and struct for SPI IO
 	uint8_t tx[MESSAGE_LENGTH] = { 0 };
 	uint8_t rx[MESSAGE_LENGTH] = { 0 };
 	struct spi_ioc_transfer tr = {};
@@ -186,6 +189,10 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 		tr.delay_usecs = delay;
 		tr.speed_hz = speed;
 		tr.bits_per_word = bits;
+
+	// Copy output to flightcontroller
+	FlightControllerOut_t tmpFlightCtrlStruct = flightControllerOut;
+	memcpy( tx, &tmpFlightCtrlStruct, sizeof(tmpFlightCtrlStruct) );
 
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
@@ -275,4 +282,13 @@ void ImuFifo::waitNotEmpty( void ) {
 	// incomming data will unlock it)
 	std::unique_lock<std::mutex> lck( notEmptyMtx );
 	notEmpty.wait( lck );
+}
+
+void Imu::setOutput( float x, float y, float yaw, float z ) {
+	FlightControllerOut_t tmpFlightCtrlStruct;
+		tmpFlightCtrlStruct.x = x;
+		tmpFlightCtrlStruct.y = y;
+		tmpFlightCtrlStruct.yaw = yaw;
+		tmpFlightCtrlStruct.z = z;
+	flightControllerOut = tmpFlightCtrlStruct;	
 }
