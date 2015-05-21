@@ -9,6 +9,9 @@ int main( int argc, char** argv )
 {
 	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
 	std::ofstream file( "imudata.csv" );
+	if ( !file ) {
+		std::std::cout << "ERROR file not opend" << std::endl;
+	}
 
 	/*
 	char wait;
@@ -25,7 +28,7 @@ int main( int argc, char** argv )
 	int timePrev = 0;
 	while( imu.fifoPop( element ) ) {
 		int timeNow = element.timeStamp.tv_usec;
-		file << 
+		file <<
 		element.timeStamp.tv_sec << "." << std::setfill('0') << std::setw(6) << element.timeStamp.tv_usec << ", " <<
 		element.acc[0] << ", " << element.acc[1] << ", " <<  element.acc[2] <<  ", " <<
 		element.gyro[0] << ", " << element.gyro[1] << ", " <<  element.gyro[2] << ", " <<
@@ -38,11 +41,11 @@ int main( int argc, char** argv )
 		"Delta time: " <<
 		timeNow - timePrev << "us\n" <<
 		"Acc: " <<
-		element.acc[0] << ", " << element.acc[1] << ", " <<  element.acc[2] << "\n" << 
+		element.acc[0] << ", " << element.acc[1] << ", " <<  element.acc[2] << "\n" <<
 		"Gyro: " <<
-		element.gyro[0] << ", " << element.gyro[1] << ", " <<  element.gyro[2] << "\n" << 
+		element.gyro[0] << ", " << element.gyro[1] << ", " <<  element.gyro[2] << "\n" <<
 		"Alpha: " <<
-		element.alpha[0] << ", " << element.alpha[1] << ", " <<  element.alpha[2] << "\n" << 
+		element.alpha[0] << ", " << element.alpha[1] << ", " <<  element.alpha[2] << "\n" <<
 		"Dist: " <<
 		element.dist << "\n" << std::endl;
 		timePrev = timeNow;
