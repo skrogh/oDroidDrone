@@ -186,7 +186,6 @@ void* Imu::imuThread( void ) {
 
 		// Check if correct interrupt
 		if (fdset.revents & POLLPRI) {
-			printf( "int\n" );
 			this->gpioIntHandler( tv );
 		}
 	}
@@ -208,15 +207,11 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 		tr.bits_per_word = bits;
 
 	// Copy output to flightcontroller
-	printf( "Pre lock %d\n", pthread_self() );
 	int ret1;
 	int ret2;
 	ret1 = pthread_mutex_lock( &flightControllerOutMtx );
-		printf( "In lock\n" );
-		std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
-		ret2 = pthread_mutex_unlock( &flightControllerOutMtx );
-	printf( "error code lock: %d, unlock: %d\n", ret1, ret2 );
-	printf( "Post lock\n" );
+	std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
+	ret2 = pthread_mutex_unlock( &flightControllerOutMtx );
 	repackUint8( tx, sizeof(flightControllerOut)/sizeof(float) );
 
 
