@@ -31,7 +31,6 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	timeout = 500;
 	FlightControllerOut_t tmpZeroStruct = {0};
 	flightControllerOut = tmpZeroStruct;
-	pthread_mutex_init( &flightControllerOutMtx, NULL );
 
 	//
 	// open I/O files
@@ -193,9 +192,9 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 		tr.bits_per_word = bits;
 
 	// Copy output to flightcontroller
-	pthread_mutex_lock( &flightControllerOutMtx );
+	flightControllerOutMtx.lock();
 	std::memcpy( tx, &tmpFlightCtrlStruct, sizeof(tmpFlightCtrlStruct) );
-	pthread_mutex_unlock( &flightControllerOutMtx );
+	flightControllerOutMtx.unlock();
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
 	if ( ret < 1 )
@@ -287,10 +286,10 @@ void ImuFifo::waitNotEmpty( void ) {
 }
 
 void Imu::setOutput( float x, float y, float yaw, float z ) {
-	pthread_mutex_lock( &flightControllerOutMtx );
+	flightControllerOutMtx.lock()
 	flightControllerOut.x = x;
 	flightControllerOut.y = y;
 	flightControllerOut.yaw = yaw;
 	flightControllerOut.z = z;
-	pthread_mutex_unlock( &flightControllerOutMtx );
+	flightControllerOutMtx.unlock();
 }
