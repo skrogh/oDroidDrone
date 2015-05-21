@@ -4,8 +4,6 @@
 #include <fstream>
 #include <thread>
 #include <sys/time.h>
-#include <linux/ioprio.h>
-#include <sys/syscall.h>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <atomic>
