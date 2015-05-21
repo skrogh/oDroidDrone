@@ -32,6 +32,8 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) : ImuFifo(){
 	FlightControllerOut_t tmpZeroStruct = {0};
 	flightControllerOut = tmpZeroStruct;
 	pthread_mutex_init( &flightControllerOutMtx, NULL );
+	pthread_mutex_lock( &flightControllerOutMtx );
+	pthread_mutex_unlock( &flightControllerOutMtx );
 
 
 
