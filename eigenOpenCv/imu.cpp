@@ -1,4 +1,5 @@
 #include "imu.hpp"
+#include <cstring> // memcpy
 
 #define MESSAGE_LENGTH  (20*2) // flight controller sends 16bit bytes
 
@@ -28,7 +29,7 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	speed = 6000000;
 	delay = 0;
 	timeout = 500;
-	FlightControllerOut_t tmpZeroStruct = {0}
+	FlightControllerOut_t tmpZeroStruct = {0};
 	flightControllerOut = tmpZeroStruct;
 
 	//
@@ -192,7 +193,7 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 
 	// Copy output to flightcontroller
 	FlightControllerOut_t tmpFlightCtrlStruct = flightControllerOut;
-	memcpy( tx, &tmpFlightCtrlStruct, sizeof(tmpFlightCtrlStruct) );
+	std::memcpy( tx, &tmpFlightCtrlStruct, sizeof(tmpFlightCtrlStruct) );
 
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
@@ -290,5 +291,5 @@ void Imu::setOutput( float x, float y, float yaw, float z ) {
 		tmpFlightCtrlStruct.y = y;
 		tmpFlightCtrlStruct.yaw = yaw;
 		tmpFlightCtrlStruct.z = z;
-	flightControllerOut = tmpFlightCtrlStruct;	
+	flightControllerOut = tmpFlightCtrlStruct;
 }
