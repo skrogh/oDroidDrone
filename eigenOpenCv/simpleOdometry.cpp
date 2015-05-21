@@ -4,6 +4,8 @@
 #include <fstream>
 #include <thread>
 #include <sys/time.h>
+#include <linux/ioprio.h>
+#include <sys/syscall.h>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
 #include <atomic>
@@ -16,8 +18,6 @@
 #include "videoIO.hpp"
 #include "telemetry.hpp"
 
-// DEBUG:
-#include <cfenv>
 
 using namespace cv;
 using namespace std;
@@ -145,6 +145,7 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 							<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
 			 				<< odometry.x.block<16,1>(0,0).transpose() << "\t"
 			 				<< odometry.sigma.diagonal().block<15,1>(0,0).transpose() << "\n";
+			// Flush to SD card at the end of propagation
 
 			// If valid distance measurement, update with that
 			if ( element.distValid )
@@ -169,6 +170,8 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
  				break;
 			}
 		}
+		// Now flush to SD card
+		logFile.flush(); // Fush to SD card
 
 		// end detect features (wait for completion)
 		trackerThread.join();
@@ -286,6 +289,8 @@ int main( int argc, char** argv )
     pthread_setschedprio(thId, max_prio_for_policy);
     pthread_attr_destroy(&thAttr);
 	}
+	// Raise IO prioty
+	syscall(SYS_ioprio_set, IOPRIO_WHO_PGRP, 0, IOPRIO_PRIO_VALUE(IO_PRIO_CLASS_BE,0));
 
 	// Set calibration parameters:
 	Calib calib;
@@ -336,7 +341,7 @@ int main( int argc, char** argv )
 	//
 	// Log for logging state at all steps (for plotting and stuff)
 	//
-	std::ofstream logFile;
+	std::filebuf logFile;
 	logFile.open("logMain.csv");
 
 	//
@@ -373,6 +378,7 @@ int main( int argc, char** argv )
 						<< std::setfill('0') << std::setw(6)
 						<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
 						<< predictor.x.block<16,1>(0,0).transpose() << "\n";
+		logFile.flush(); // Fush to SD card
 	}
 	logFile.close();
 
