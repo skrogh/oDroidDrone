@@ -369,10 +369,10 @@ int main( int argc, char** argv )
 		// predict
 		predictor.propagate( element.acc, element.gyro, false );
 		// controller goes here
-		QuaternionAlias<double> GI_q = predictor.x.segment<4>(0);
+		QuaternionAlias<double> IG_q = predictor.x.segment<4>(0);
 		Vector3d G_p = predictor.x.segment<3>(4);
 		Vector3d G_v = predictor.x.segment<3>(7);
-		Vector3d G_I_x = GI_q._transformVector( Vector3d(1,0,0) );
+		Vector3d G_I_x = IG_q.conjugate()._transformVector( Vector3d(1,0,0) );
 		G_I_x.normalize();
 		double theta = atan2( G_I_x(1), G_I_x(0) );
 		QuaternionAlias<double> LG_q( cos(theta/2), 0, 0, sin(theta/2) );
