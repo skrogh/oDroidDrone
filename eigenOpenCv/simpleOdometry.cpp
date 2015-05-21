@@ -15,6 +15,7 @@
 #include "imu.hpp"
 #include "videoIO.hpp"
 #include "telemetry.hpp"
+#include "QuaternionAlias.h"
 
 
 using namespace cv;
@@ -368,7 +369,18 @@ int main( int argc, char** argv )
 		// predict
 		predictor.propagate( element.acc, element.gyro, false );
 		// controller goes here
-		imu.setOutput( 0, 0, 0, 0.2 );
+		QuaternionAlias<double> GI_q = predictor.x.segment<4>(0);
+		Vector3d G_p = predictor.x.segment<3>(4);
+		Vector3d G_v = predictor.x.segment<3>(7);
+		Vector3d G_I_x = GI_q._transformVector( Vector3d(1,0,0) );
+		G_I_x.normalize();
+		double theta = atan2( G_I_x(1), G_I_x(2) );
+		QuaternionAlias<double> LG_q( cos(theta/2), 0, 0, sin(theta/2) );
+		Vector3d G_a_sp = -G_v*1.5 -G_I// acceleration setpoint
+		G_a_sp *= 2;
+		Vector3d L_a_sp = LG_q._transformVector( G_a_sp );
+
+		imu.setOutput( L_a_sp(0), L_a_sp(1), -theta, 0.3 );
 
 		// log over telemetry
 		if ( telemetryCounter++ > 40 ) {
