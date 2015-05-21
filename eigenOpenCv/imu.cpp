@@ -170,7 +170,6 @@ void* Imu::imuThread( void ) {
 		if (rc == 0){
 			// check if interrupt is high, if it is we previously missed a read/write so take it now
 			if ( value == '1' ) {
-				printf( "got missed int\n" );
 				this->gpioIntHandler( tv );
 				continue;
 			}
@@ -178,7 +177,6 @@ void* Imu::imuThread( void ) {
 
 		// Check if correct interrupt
 		if (fdset.revents & POLLPRI) {
-			printf("got int\n" );
 			this->gpioIntHandler( tv );
 		}
 	}
@@ -201,9 +199,10 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 
 	// Copy output to flightcontroller
 	printf( "Pre lock" );
-	pthread_mutex_lock( &flightControllerOutMtx );
+	if ( pthread_mutex_trylock( &flightControllerOutMtx ) ){
 	std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
 	pthread_mutex_unlock( &flightControllerOutMtx );
+	}
 	printf( "Post lock" );
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
