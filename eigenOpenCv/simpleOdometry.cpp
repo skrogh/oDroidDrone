@@ -383,11 +383,13 @@ int main( int argc, char** argv )
 		imu.setOutput( L_a_sp(0), L_a_sp(1), -theta, 0.3 );
 
 		// log over telemetry
-		if ( telemetryCounter++ > 100 ) {
+		if ( telemetryCounter++ > 50 ) {
+			/*
 			std::cout << "\nG_a_sp: " << G_a_sp.transpose()
 			<< "\n L_a_sp: " << L_a_sp.transpose()
 			<< "\n G_p: " << G_p.transpose()
 			<< "\n theta: " << theta << std::endl;
+			*/
 			telemetryCounter = 0;
 			telemetry.send( predictor.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
 		}
