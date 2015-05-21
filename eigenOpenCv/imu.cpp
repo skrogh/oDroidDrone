@@ -198,9 +198,11 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 		tr.bits_per_word = bits;
 
 	// Copy output to flightcontroller
+	printf( "Pre lock" );
 	pthread_mutex_lock( &flightControllerOutMtx );
 	std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
 	pthread_mutex_unlock( &flightControllerOutMtx );
+	printf( "Post lock" );
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
 	if ( ret < 1 )
