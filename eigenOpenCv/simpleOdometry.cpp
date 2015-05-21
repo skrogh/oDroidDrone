@@ -368,6 +368,8 @@ int main( int argc, char** argv )
 		// predict
 		predictor.propagate( element.acc, element.gyro, false );
 		// controller goes here
+		imu.setOutput( 0, 0, 0, 0.2 );
+
 		// log over telemetry
 		if ( telemetryCounter++ > 40 ) {
 			telemetryCounter = 0;
