@@ -7,6 +7,17 @@ uint32_t unpackUint32( uint8_t* from ) {
 	return (from[ 3] << 0) | (from[ 2] << 8) | (from[1] << 16) | (from[0] << 24);
 }
 
+void repackUint8( uint8_t* area, int n ) {
+	for( int i = 0; i < n*4; i+=4 ) {
+		uint8_t tmp = area[0+i];
+		area[0+i] = area[3+i];
+		area[3+i] = tmp;
+		tmp = area[1+i];
+		area[1+i] = area[2+i];
+		area[2+i] = tmp;
+	}
+}
+
 float unpackFloat( uint8_t* from ) {
 	uint32_t tmp = (from[ 3] << 0) | (from[ 2] << 8) | (from[1] << 16) | (from[0] << 24);
 	return *(float*)&tmp;
@@ -207,6 +218,8 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 	}
 	printf( "error code lock: %d, unlock: %d\n", ret1, ret2 );
 	printf( "Post lock\n" );
+	repackUint8( tx, sizeof(flightControllerOut)/sizeof(float) );
+
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
 	if ( ret < 1 )
