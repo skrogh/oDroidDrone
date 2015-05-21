@@ -197,7 +197,7 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 		tr.bits_per_word = bits;
 
 	// Copy output to flightcontroller
-	pthread_mutex_lock( &flightControllerOutMtx ) ) )
+	pthread_mutex_lock( &flightControllerOutMtx );
 	std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
 	pthread_mutex_unlock( &flightControllerOutMtx );
 
