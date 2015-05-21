@@ -31,10 +31,7 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) : ImuFifo(){
 	timeout = 500;
 	FlightControllerOut_t tmpZeroStruct = {0};
 	flightControllerOut = tmpZeroStruct;
-	pthread_mutex_init( &flightControllerOutMtx, NULL );
-	pthread_mutex_lock( &flightControllerOutMtx );
-	printf( "this print fine\n" );
-	pthread_mutex_unlock( &flightControllerOutMtx );
+	flightControllerOutMtx = PTHREAD_ERRORCHECK_MUTEX_INITIALIZER;
 
 
 
@@ -201,11 +198,14 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 
 	// Copy output to flightcontroller
 	printf( "Pre lock %d\n", pthread_self() );
-	if ( pthread_mutex_trylock( &flightControllerOutMtx ) ){
+	int ret1;
+	int ret2;
+	if ( ret1 = pthread_mutex_trylock( &flightControllerOutMtx ) ){
 		printf( "In lock\n" );
 		std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
-		pthread_mutex_unlock( &flightControllerOutMtx );
+		ret2 = pthread_mutex_unlock( &flightControllerOutMtx );
 	}
+	printf( "error code lock: %d, unlock: %d\n", ret1, ret2 );
 	printf( "Post lock\n" );
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
