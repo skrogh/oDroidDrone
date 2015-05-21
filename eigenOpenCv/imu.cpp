@@ -192,9 +192,12 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 		tr.bits_per_word = bits;
 
 	// Copy output to flightcontroller
-	flightControllerOutMtx.lock();
-	std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
-	flightControllerOutMtx.unlock();
+	if ( flightControllerOutMtx.try_lock() ) {
+		std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
+		flightControllerOutMtx.unlock();
+	} else {
+		printf( "OUT LOCK TAKEN!\n" );
+	}
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
 	if ( ret < 1 )
