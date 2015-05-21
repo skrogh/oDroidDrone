@@ -211,7 +211,7 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 	printf( "Pre lock %d\n", pthread_self() );
 	int ret1;
 	int ret2;
-	if ( !(ret1 = pthread_mutex_trylock( &flightControllerOutMtx ) ) ){
+	ret1 = pthread_mutex_lock( &flightControllerOutMtx );
 		printf( "In lock\n" );
 		std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
 		ret2 = pthread_mutex_unlock( &flightControllerOutMtx );
