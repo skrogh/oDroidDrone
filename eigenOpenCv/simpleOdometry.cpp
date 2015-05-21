@@ -287,9 +287,6 @@ int main( int argc, char** argv )
     pthread_setschedprio(thId, max_prio_for_policy);
     pthread_attr_destroy(&thAttr);
 	}
-	// Raise IO prioty
-	syscall(SYS_ioprio_set, IOPRIO_WHO_PGRP, 0, IOPRIO_PRIO_VALUE(IO_PRIO_CLASS_BE,0));
-
 	// Set calibration parameters:
 	Calib calib;
 	initCalib( calib );
