@@ -15,7 +15,7 @@
 #include "imu.hpp"
 #include "videoIO.hpp"
 #include "telemetry.hpp"
-#include "quaternionAlias.h"
+#include "quaternionAlias.hpp"
 
 
 using namespace cv;
