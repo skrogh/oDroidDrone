@@ -10,7 +10,7 @@ int main( int argc, char** argv )
 	Imu imu( "/dev/spidev1.0", "/sys/class/gpio/gpio199/value" );
 	std::ofstream file( "imudata.csv" );
 	if ( !file ) {
-		std::std::cout << "ERROR file not opend" << std::endl;
+		std::cout << "ERROR file not opend" << std::endl;
 	}
 
 	/*
