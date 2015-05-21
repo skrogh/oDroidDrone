@@ -384,6 +384,7 @@ int main( int argc, char** argv )
 
 		// log over telemetry
 		if ( telemetryCounter++ > 40 ) {
+			std::cout << "G_a_sp: " << G_a_sp.transpose() << "\n L_a_sp: " << L_a_sp.transpose() << std::endl;
 			telemetryCounter = 0;
 			telemetry.send( predictor.x.data(), sizeof(double)*10 ); // send quaternion, position and velocity
 		}
