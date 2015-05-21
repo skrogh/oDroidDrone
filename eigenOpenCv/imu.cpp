@@ -194,7 +194,7 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 
 	// Copy output to flightcontroller
 	pthread_mutex_lock( &flightControllerOutMtx );
-	std::memcpy( tx, &tmpFlightCtrlStruct, sizeof(tmpFlightCtrlStruct) );
+	std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
 	pthread_mutex_unlock( &flightControllerOutMtx );
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
