@@ -193,7 +193,7 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 
 	// Copy output to flightcontroller
 	flightControllerOutMtx.lock();
-	std::memcpy( tx, &tmpFlightCtrlStruct, sizeof(tmpFlightCtrlStruct) );
+	std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
 	flightControllerOutMtx.unlock();
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
@@ -286,7 +286,7 @@ void ImuFifo::waitNotEmpty( void ) {
 }
 
 void Imu::setOutput( float x, float y, float yaw, float z ) {
-	flightControllerOutMtx.lock()
+	flightControllerOutMtx.lock();
 	flightControllerOut.x = x;
 	flightControllerOut.y = y;
 	flightControllerOut.yaw = yaw;
