@@ -339,7 +339,7 @@ int main( int argc, char** argv )
 	//
 	// Log for logging state at all steps (for plotting and stuff)
 	//
-	std::filebuf logFile;
+	std::ofstream logFile;
 	logFile.open("logMain.csv");
 
 	//
