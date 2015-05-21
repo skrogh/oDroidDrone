@@ -92,8 +92,8 @@ private:
 	//
 	// Output to flight controller
 	//
-	std::atomic<FlightControllerOut_t> flightControllerOut;
-
+	FlightControllerOut_t flightControllerOut;
+	std::mutex flightControllerOutMtx;
 
 	//
 	// Functions
