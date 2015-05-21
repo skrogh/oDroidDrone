@@ -33,6 +33,7 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) : ImuFifo(){
 	flightControllerOut = tmpZeroStruct;
 	pthread_mutex_init( &flightControllerOutMtx, NULL );
 	pthread_mutex_lock( &flightControllerOutMtx );
+	printf( "this print fine\n" );
 	pthread_mutex_unlock( &flightControllerOutMtx );
 
 
@@ -197,9 +198,9 @@ void Imu::gpioIntHandler( const struct timeval& tv ) {
 		tr.bits_per_word = bits;
 
 	// Copy output to flightcontroller
-	//pthread_mutex_lock( &flightControllerOutMtx );
+	pthread_mutex_lock( &flightControllerOutMtx );
 	std::memcpy( tx, &flightControllerOut, sizeof(flightControllerOut) );
-	//pthread_mutex_unlock( &flightControllerOutMtx );
+	pthread_mutex_unlock( &flightControllerOutMtx );
 
 	ret = ioctl( spiFd, SPI_IOC_MESSAGE(1), &tr );
 	if ( ret < 1 )
