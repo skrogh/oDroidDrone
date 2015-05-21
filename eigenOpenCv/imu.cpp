@@ -19,7 +19,7 @@ void unpackFloats( uint8_t* from, float to[], uint32_t n ) {
 	}
 }
 
-Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
+Imu::Imu( const char *spiDevice, const char *gpioDevice ) : ImuFifo(){
 	//
 	// Init variables
 	//
@@ -32,6 +32,8 @@ Imu::Imu( const char *spiDevice, const char *gpioDevice ) {
 	FlightControllerOut_t tmpZeroStruct = {0};
 	flightControllerOut = tmpZeroStruct;
 	pthread_mutex_init( &flightControllerOutMtx, NULL );
+
+
 
 	//
 	// open I/O files
