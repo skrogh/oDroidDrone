@@ -152,8 +152,8 @@ Matrix3d msac( const Eigen::Matrix2Xd& pointsFrom, const Eigen::Matrix2Xd& point
     idxTrial++;
   }
 
-  threshold *= dis.mean();
   VectorXd dis = evaluateTform( pointsFrom, pointsTo, bestT, threshold );
+  threshold *= dis.mean();
   int numInliers = 0;
   for ( int i = 0; i < dis.rows(); i++ ){
     if ( dis(i) < threshold )
