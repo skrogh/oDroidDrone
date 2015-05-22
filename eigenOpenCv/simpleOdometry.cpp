@@ -298,7 +298,7 @@ int main( int argc, char** argv )
                    optopt );
         return 1;
       default:
-				fprintf( stderr, "ERROR: Parsing arguments", optopt );
+				fprintf( stderr, "ERROR: Parsing arguments" );
         abort();
     }
 	}
