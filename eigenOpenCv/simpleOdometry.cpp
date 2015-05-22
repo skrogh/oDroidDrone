@@ -283,7 +283,8 @@ int main( int argc, char** argv )
 	// Parse arguments
 
   opterr = 0;
-  while( ( int c = getopt( argc, argv, "l" ) ) != -1 ) {
+	int c;
+  while( ( c = getopt( argc, argv, "l" ) ) != -1 ) {
     switch(c) {
       case 'l':
         logToFile = true;
