@@ -17,11 +17,14 @@
 #include "videoIO.hpp"
 #include "telemetry.hpp"
 #include "quaternionAlias.hpp"
+#include <unistd.h> // input parsing
 
 
 using namespace cv;
 using namespace std;
 using namespace Eigen;
+
+bool logToFile = false;
 
 void trackerThreadHandler( LKTracker* tracker, cv::Mat* gray, cv::Mat* prevGray ) {
 	tracker->detectFeatures( *gray, *prevGray );
@@ -82,6 +85,7 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 	logFile.open ("log.csv");
 	if ( !logFile ) {
 		printf( "logFile not opened!\n" );
+		logToFile = false;
 	}
 	// Video server getter (TODO: WARNING MAX ONE CONSUMER)
 	VideoIn videoIn( 0 );
@@ -143,12 +147,13 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 			odometry.propagate( element.acc, element.gyro );
 
 			// log to file
-			logFile << element.timeStamp.tv_sec << "."
-							<< std::setfill('0') << std::setw(6)
-							<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
-			 				<< odometry.x.block<16,1>(0,0).transpose() << "\t"
-			 				<< odometry.sigma.diagonal().block<15,1>(0,0).transpose() << "\n";
-			// Flush to SD card at the end of propagation
+			if ( logToFile ) {
+				logFile << element.timeStamp.tv_sec << "."
+								<< std::setfill('0') << std::setw(6)
+								<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
+				 				<< odometry.x.block<16,1>(0,0).transpose() << "\t"
+				 				<< odometry.sigma.diagonal().block<15,1>(0,0).transpose() << "\n";
+			}
 
 			// If valid distance measurement, update with that
 			if ( element.distValid )
@@ -173,8 +178,6 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
  				break;
 			}
 		}
-		// Now flush to SD card
-		logFile.flush(); // Fush to SD card
 
 		// end detect features (wait for completion)
 		trackerThread.join();
@@ -277,6 +280,27 @@ void initCalib( Calib& calib ) {
 
 int main( int argc, char** argv )
 {
+	// Parse arguments
+
+  opterr = 0;
+  while( ( int c = getopt( argc, argv, "l" ) ) != -1 ) {
+    switch(c) {
+      case 'l':
+        logToFile = true;
+        break;
+      case '?':
+				if( isprint(optopt) )
+          fprintf( stderr, "Unknown option `-%c'.\n", optopt );
+        else
+          fprintf( stderr,
+                   "Unknown option character `\\x%x'.\n",
+                   optopt );
+        return 1;
+      default:
+				fprintf( stderr, "ERROR: Parsing arguments", optopt );
+        abort();
+    }
+	}
 	// Raise prioty to max of SCHED_OTHER
 	{
 		pthread_t thId = pthread_self();
@@ -345,6 +369,7 @@ int main( int argc, char** argv )
 	logFile.open("logMain.csv");
 	if ( !logFile ) {
 		printf( "logFile not opened!\n" );
+		logToFile = false;
 	}
 
 	//
@@ -410,11 +435,12 @@ int main( int argc, char** argv )
 		}
 
 		// log to file
-		logFile << element.timeStamp.tv_sec << "."
-						<< std::setfill('0') << std::setw(6)
-						<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
-						<< predictor.x.block<16,1>(0,0).transpose() << "\n";
-		logFile.flush(); // Fush to SD card
+		if ( logToFile ) {
+			logFile << element.timeStamp.tv_sec << "."
+							<< std::setfill('0') << std::setw(6)
+							<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
+							<< predictor.x.block<16,1>(0,0).transpose() << "\n";
+		}
 	}
 	logFile.close();
 
