@@ -1,5 +1,5 @@
 %% Client for recieving data from drone.
-tcpipClient = udp('10.16.162.96',55000);
+tcpipClient = udp('10.16.162.73',55000);
 set(tcpipClient, 'inputbuffersize', 2^15 )
 fclose(tcpipClient)
 fopen(tcpipClient)                          % connect
@@ -32,29 +32,29 @@ while 1                                     %keep going
     
     %%
     q = state(1:4);
-    IG_R = [ q(1)^2 - q(2)^2 - q(3) + q(4)^2, 2*(q(1)*q(2) + q(3)*q(4)), 2*(q(1)*q(3) - q(2)*q(4))
-        2*(q(1)*q(2) - q(3)*q(4)), -q(1)^2 + q(2)^2 - q(3)^2 + q(4)^2, 2*(q(2)*q(3) + q(1)+q(4))
+    IG_R = [ q(1)^2 - q(2)^2 - q(3)^2 + q(4)^2, 2*(q(1)*q(2) + q(3)*q(4)), 2*(q(1)*q(3) - q(2)*q(4))
+        2*(q(1)*q(2) - q(3)*q(4)), -q(1)^2 + q(2)^2 - q(3)^2 + q(4)^2, 2*(q(2)*q(3) + q(1)*q(4))
         2*(q(1)*q(3) + q(2)*q(4)), 2*(q(2)*q(3) - q(1)*q(4)), -q(1)^2 - q(2)^2 + q(3)^2 + q(4)^2 ];
     GI_R = IG_R';
 
     x=[1,0,0]';
     g_x = GI_R*x*0.15;
-    y=[1,0,0]';
+    y=[0,1,0]';
     g_y = GI_R*y*0.15;
-    z=[1,0,0]';
+    z=[0,0,1]';
     g_z = GI_R*z*0.15;
     
     X = [state(5), state(5)+g_x(1)];                         %update X data
-    Y = [state(6), state(6)+g_x(1)];                         %update Y data
-    Z = [state(7), state(7)+g_x(1)];                         %update Z data
+    Y = [state(6), state(6)+g_x(2)];                         %update Y data
+    Z = [state(7), state(7)+g_x(3)];                         %update Z data
     set( xHandle, 'XData', X, 'YData', Y, 'ZData', Z ); %notify plot of update
     X = [state(5), state(5)+g_y(1)];                         %update X data
-    Y = [state(6), state(6)+g_y(1)];                         %update Y data
-    Z = [state(7), state(7)+g_y(1)];                         %update Z data
+    Y = [state(6), state(6)+g_y(2)];                         %update Y data
+    Z = [state(7), state(7)+g_y(3)];                         %update Z data
     set( yHandle, 'XData', X, 'YData', Y, 'ZData', Z ); %notify plot of update
     X = [state(5), state(5)+g_z(1)];                         %update X data
-    Y = [state(6), state(6)+g_z(1)];                         %update Y data
-    Z = [state(7), state(7)+g_z(1)];                         %update Z data
+    Y = [state(6), state(6)+g_z(2)];                         %update Y data
+    Z = [state(7), state(7)+g_z(3)];                         %update Z data
     set( zHandle, 'XData', X, 'YData', Y, 'ZData', Z ); %notify plot of update
     drawnow;                                %force plot update to animate
 end
