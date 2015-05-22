@@ -949,7 +949,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 			QuaternionAlias<double> IpI_q = IpG_q * IG_q.conjugate();
 			// rotate dir by IpI_q
 			dir = IpI_q._transformVector( dir );
-			double dTheta_e = atan2( dir(1), dir(0) );
+			double dTheta_e = -atan2( dir(1), dir(0) );
 			Matrix<double,3,1> r;
 			r << dTheta_m - dTheta_e,
 			/* this is: Previous (x,y) + measured movement - propageted (x,y) */
