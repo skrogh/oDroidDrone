@@ -395,7 +395,7 @@ int main( int argc, char** argv )
 
 		Vector3d L_a_sp = LG_q._transformVector( G_a_sp );
 
-		imu.setOutput( L_a_sp(0), L_a_sp(1), -theta, 0.3 );
+		imu.setOutput( L_a_sp(0), L_a_sp(1), -theta*0.5, 0.3 );
 
 		// log over telemetry
 		if ( telemetryCounter++ > 50 ) {
