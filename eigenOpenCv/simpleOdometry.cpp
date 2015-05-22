@@ -369,6 +369,8 @@ int main( int argc, char** argv )
 		// predict
 		predictor.propagate( element.acc, element.gyro, false );
 		// controller goes here
+
+		// Stuff for transposing
 		QuaternionAlias<double> IG_q = predictor.x.segment<4>(0);
 		Vector3d G_p = predictor.x.segment<3>(4);
 		Vector3d G_v = predictor.x.segment<3>(7);
@@ -376,8 +378,20 @@ int main( int argc, char** argv )
 		G_I_x.normalize();
 		double theta = atan2( G_I_x(1), G_I_x(0) );
 		QuaternionAlias<double> LG_q( cos(theta/2), 0, 0, sin(theta/2) );
-		Vector3d G_a_sp = - G_v*1.5 - G_p; // acceleration setpoint
-		G_a_sp *= 2;
+
+		// Actual controller
+		Vector3d G_p_sp( 0, 0, 0 );
+
+		Vector3d G_a_sp = G_p_sp - G_p;
+		G_a_sp(2) = 0;
+		G_a_sp *= 1.5;
+		G_a_sp /= G_a_sp.norm()/0.25;
+
+		G_a_sp -= G_v;
+		G_a_sp(2) = 0;
+		G_a_sp *= 5;
+		G_a_sp /= G_a_sp.norm()/3;
+
 		Vector3d L_a_sp = LG_q._transformVector( G_a_sp );
 
 		imu.setOutput( L_a_sp(0), L_a_sp(1), -theta, 0.3 );
