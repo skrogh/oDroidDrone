@@ -151,6 +151,8 @@ Matrix3d msac( const Eigen::Matrix2Xd& pointsFrom, const Eigen::Matrix2Xd& point
     }
     idxTrial++;
   }
+
+  threshold *= dis.mean();
   VectorXd dis = evaluateTform( pointsFrom, pointsTo, bestT, threshold );
   int numInliers = 0;
   for ( int i = 0; i < dis.rows(); i++ ){
@@ -181,7 +183,7 @@ Eigen::Matrix<double,4,1> estimateSimilarTransform(
     indices(i) = i;
   }
   //Matrix3d T = computeSimilarity( pointsFrom, pointsTo ); // No ransac'n
-  Matrix3d T = msac( pointsTo, pointsFrom, 20, 99, 2 );
+  Matrix3d T = msac( pointsTo, pointsFrom, 20, 99, 1 );
 
   h(0) = T(0,0);
   h(1) = T(1,0);
