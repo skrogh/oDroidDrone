@@ -940,7 +940,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 			//
 
 			// Measured rotation
-			double dTheta_m = atan2( h(1), h(0) );
+			double dTheta_m = -atan2( h(1), h(0) );
 			// Calculate estimated rotation
 			Vector3d dir(1,0,0); // vector orthogonal to Z axis
 			// Calculate quaternion of rotation
