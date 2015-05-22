@@ -940,7 +940,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 			//
 
 			// Measured rotation
-			double dTheta_m = -atan2( h(1), h(0) );
+			double dTheta_m = atan2( h(1), h(0) );
 			// Calculate estimated rotation
 			Vector3d dir(1,0,0); // vector orthogonal to Z axis
 			// Calculate quaternion of rotation
@@ -958,7 +958,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 			// Noise
 			Matrix<double,3,3> R;
 			R << MatrixXd::Identity(3, 3) * 0.05*0.05; // TODO: make dependant on number of features
-
+			R(0) = 10;
 			// calculate Measurement jacobian
 			Matrix<double,3,Dynamic> H( 3, sigma.cols() );
 			H <<
