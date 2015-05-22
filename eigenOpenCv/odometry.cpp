@@ -940,7 +940,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 			//
 
 			// Measured rotation
-			double dTheta_m = -atan2( h(1), h(0) );
+			double dTheta_m = atan2( h(1), h(0) );
 			// Calculate estimated rotation
 			Vector3d dir(1,0,0); // vector orthogonal to Z axis
 			// Calculate quaternion of rotation
@@ -949,11 +949,11 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 			QuaternionAlias<double> IpI_q = IpG_q * IG_q.conjugate();
 			// rotate dir by IpI_q
 			dir = IpI_q._transformVector( dir );
-			double dTheta_e = atan2( dir(1), dir(0) );
+			double dTheta_e = -atan2( dir(1), dir(0) );
 			Matrix<double,3,1> r;
 			r << dTheta_m - dTheta_e,
 			/* this is: Previous (x,y) + measured movement - propageted (x,y) */
-			x.block<2,1>(4+ODO_STATE_SIZE,0) + Vector2d( h(2), h(3) ) - x.block<2,1>(4,0);
+			Vector2d( h(2), h(3) ) - ( x.block<2,1>(4,0) - x.block<2,1>(4+ODO_STATE_SIZE,0) );
 
 			// Noise
 			Matrix<double,3,3> R;
