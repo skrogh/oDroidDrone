@@ -8,6 +8,7 @@
 #include <Eigen/Geometry>
 #include <atomic>
 #include <cmath>
+#include <algorithm>    // std::max
 #include <ctype.h>
 #include <random>
 #include "lkTracker.hpp"
@@ -385,12 +386,12 @@ int main( int argc, char** argv )
 		Vector3d G_a_sp = G_p_sp - G_p;
 		G_a_sp(2) = 0;
 		G_a_sp *= 1.5;
-		G_a_sp /= max( G_a_sp.norm()/0.25, 1 );
+		G_a_sp /= std::max( G_a_sp.norm()/0.25, 1 );
 
 		G_a_sp -= G_v;
 		G_a_sp(2) = 0;
 		G_a_sp *= 5;
-		G_a_sp /= max( G_a_sp.norm()/3, 1 );
+		G_a_sp /= std::max( G_a_sp.norm()/3, 1 );
 
 		Vector3d L_a_sp = LG_q._transformVector( G_a_sp );
 
