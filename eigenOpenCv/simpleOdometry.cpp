@@ -25,7 +25,7 @@ using namespace std;
 using namespace Eigen;
 
 bool logToFile = false;
-#define LOG_BUFFER_SIZE (4096*8) // Pagesize*8
+#define LOG_BUFFER_SIZE (256*1024) // 256KB
 
 void trackerThreadHandler( LKTracker* tracker, cv::Mat* gray, cv::Mat* prevGray ) {
 	tracker->detectFeatures( *gray, *prevGray );
