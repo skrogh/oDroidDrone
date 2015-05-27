@@ -958,7 +958,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 			// Noise
 			Matrix<double,3,3> R;
 			R << MatrixXd::Identity(3, 3) * 0.05*0.05; // TODO: make dependant on number of features
-			R(0) = 10;
+			R(0) = 0.1*0.1;
 			// calculate Measurement jacobian
 			Matrix<double,3,Dynamic> H( 3, sigma.cols() );
 			H <<
