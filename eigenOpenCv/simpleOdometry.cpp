@@ -25,6 +25,7 @@ using namespace std;
 using namespace Eigen;
 
 bool logToFile = false;
+#define LOG_BUFFER_SIZE (4096*8) // Pagesize*8
 
 void trackerThreadHandler( LKTracker* tracker, cv::Mat* gray, cv::Mat* prevGray ) {
 	tracker->detectFeatures( *gray, *prevGray );
@@ -82,6 +83,8 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 	//
 	// Log for logging state at all steps (for plotting and stuff)
 	std::ofstream logFile;
+	char logFileBuffer[LOG_BUFFER_SIZE];
+	logFile.rdbuf()->pubsetbuf( logFileBuffer, LOG_BUFFER_SIZE );
 	logFile.open ("log.csv");
 	if ( !logFile ) {
 		printf( "logFile not opened!\n" );
@@ -367,6 +370,8 @@ int main( int argc, char** argv )
 	// Log for logging state at all steps (for plotting and stuff)
 	//
 	std::ofstream logFile;
+	char logFileBuffer[LOG_BUFFER_SIZE];
+	logFile.rdbuf()->pubsetbuf( logFileBuffer, LOG_BUFFER_SIZE );
 	logFile.open("logMain.csv");
 	if ( !logFile ) {
 		printf( "logFile not opened!\n" );
