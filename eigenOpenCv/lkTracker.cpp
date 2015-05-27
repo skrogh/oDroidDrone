@@ -40,7 +40,7 @@ void LKTracker::detectFeatures( const Mat& image, const Mat& prevImage )
 
 		vector<Point2f> gfttPoints;
 		//goodFeaturesToTrack(roi, gfttPoints, (N_OPTIMAL-prevPoints.size())/2, 0.01, 10, Mat(), 3, 0, 0.04);
-		goodFeaturesToTrack(prevImage, gfttPoints, N_OPTIMA, 0.01, 10, Mat(), 3, 0, 0.04);
+		goodFeaturesToTrack(prevImage, gfttPoints, N_OPTIMAL, 0.01, 10, Mat(), 3, 0, 0.04);
 		if ( !gfttPoints.empty() ) // Guard againts cornersubpixel throwing when no points
 			cornerSubPix(prevImage, gfttPoints, subPixWinSize, Size(-1,-1), termcrit);
 		for ( int i = 0; i < gfttPoints.size(); i++ ) {
