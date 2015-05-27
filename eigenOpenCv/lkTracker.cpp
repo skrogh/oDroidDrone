@@ -44,9 +44,9 @@ void LKTracker::detectFeatures( const Mat& image, const Mat& prevImage )
 		if ( !gfttPoints.empty() ) // Guard againts cornersubpixel throwing when no points
 			cornerSubPix(prevImage, gfttPoints, subPixWinSize, Size(-1,-1), termcrit);
 		for ( int i = 0; i < gfttPoints.size(); i++ ) {
-			//prevPoints.push_back(gfttPoints[i] + roiP);
-			prevPoints.push_back(gfttPoints[i]);
+			prevPoints.push_back(gfttPoints[i] + roiP);
 		}
+		prevPoints = gfttPoints;
 	}
 
 	// If
