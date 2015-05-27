@@ -18,7 +18,7 @@ LKTracker::LKTracker( void )
 	termcrit = TermCriteria(TermCriteria::COUNT|TermCriteria::EPS,10,0.03);
 	roiDistX = uniform_int_distribution<int>(0,640-ROI_X_SIZE);
 	roiDistY = uniform_int_distribution<int>(0,480-ROI_Y_SIZE);
-	deadDist = uniform_int_distribution<int>(1,N_OPTIMAL/3);
+	deadDist = uniform_int_distribution<int>(0,N_OPTIMAL/3);
 	subPixWinSize =  Size(10,10);
 	winSize = Size(31,31);
 }
@@ -39,14 +39,12 @@ void LKTracker::detectFeatures( const Mat& image, const Mat& prevImage )
 		Mat roi(prevImage, Rect(roiX,roiY,ROI_X_SIZE,ROI_Y_SIZE));
 
 		vector<Point2f> gfttPoints;
-		//goodFeaturesToTrack(roi, gfttPoints, (N_OPTIMAL-prevPoints.size())/2, 0.01, 10, Mat(), 3, 0, 0.04);
-		goodFeaturesToTrack(prevImage, gfttPoints, N_OPTIMAL, 0.01, 10, Mat(), 3, 0, 0.04);
+		goodFeaturesToTrack(roi, gfttPoints, (N_OPTIMAL-prevPoints.size())/2, 0.01, 10, Mat(), 3, 0, 0.04);
 		if ( !gfttPoints.empty() ) // Guard againts cornersubpixel throwing when no points
 			cornerSubPix(prevImage, gfttPoints, subPixWinSize, Size(-1,-1), termcrit);
 		for ( int i = 0; i < gfttPoints.size(); i++ ) {
 			prevPoints.push_back(gfttPoints[i] + roiP);
 		}
-		prevPoints = gfttPoints;
 	}
 
 	// If
@@ -59,7 +57,7 @@ void LKTracker::detectFeatures( const Mat& image, const Mat& prevImage )
 		size_t i, k;
 		for( i = k = 0; i < points.size(); i++ )
 		{
-			// Skip this point, if it is invalid
+			//´Skip this point, if it is invalid
 			if( !status[i] || (deadDist(generator)==0) )
 				continue;
 
