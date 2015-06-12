@@ -1,5 +1,5 @@
 %% Client for recieving data from drone.
-tcpipClient = udp('10.16.173.52',55000);
+tcpipClient = udp('10.16.165.94',55000);
 set(tcpipClient, 'inputbuffersize', 2^15 )
 fclose(tcpipClient)
 fopen(tcpipClient)                          % connect
