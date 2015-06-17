@@ -286,9 +286,9 @@ struct V {
 	double x = 0;
 	double y = 0;
 	double z = 0.4;
-}
+};
 
-std::atomic<struct V> G_p_sp_atom;
+std::atomic<V> G_p_sp_atom;
 
 void inputParserThread( void ) {
 	while(1) {
@@ -301,7 +301,7 @@ void inputParserThread( void ) {
 			<< x/1000.0 << ", "
 			<< y/1000.0 << ", "
 			<< z/1000.0 << std::endl;
-			struct V tmp;
+			V tmp;
 			tmp.x = x/1000.0;
 			tmp.y = y/1000.0;
 			tmp.z = z/1000.0;
@@ -447,7 +447,7 @@ int main( int argc, char** argv )
 		QuaternionAlias<double> LG_q( cos(theta/2), 0, 0, sin(theta/2) );
 
 		// Actual controller
-		struct V tmp;
+		V tmp;
 		G_p_sp_atom.load( tmp );
 		Vector3d G_p_sp( tmp.x, tmp.y, tmp.z );
 
