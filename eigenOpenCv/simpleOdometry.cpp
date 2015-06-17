@@ -3,6 +3,7 @@
 #include <iomanip>
 #include <fstream>
 #include <thread>
+#include <string>
 #include <sys/time.h>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
@@ -281,6 +282,21 @@ void initCalib( Calib& calib ) {
 	std::cout << "calib is:\n" << calib << std::endl;
 }
 
+void inputParserThread( void ) {
+	std::string line:
+	std::getline( std::cin, line );
+	std::cout << "Echo: " << line << std::endl;
+	int x, y, z;
+	int parsed = sscanf( line.c_str(), "P: %d, %d, %d", &x, &y, &z );
+	if ( parsed == 3 ) {
+		std::cout << "New set point: "
+		<< x/1000.0 << ", "
+		<< y/1000.0 << ", "
+		<< z/1000.0 << std::endl;
+	}
+
+}
+
 int main( int argc, char** argv )
 {
 	// Parse arguments
@@ -305,6 +321,9 @@ int main( int argc, char** argv )
         abort();
     }
 	}
+	// open input parsing thread while we are low prioty
+	std::thread inputParser( inputParserThread );
+
 	// Raise prioty to max of SCHED_OTHER
 	{
 		pthread_t thId = pthread_self();
@@ -413,7 +432,7 @@ int main( int argc, char** argv )
 		QuaternionAlias<double> LG_q( cos(theta/2), 0, 0, sin(theta/2) );
 
 		// Actual controller
-		Vector3d G_p_sp( 0, 0, 0 );
+		Vector3d G_p_sp( 0, 0, 0.4 );
 
 		Vector3d G_v_sp = G_p_sp - G_p;
 		G_v_sp(2) = 0; // Remove Z axis
@@ -433,7 +452,7 @@ int main( int argc, char** argv )
 		L_a(2) = 0; // Remove Z axis (there souldnt be any but just n case)
 		L_a_i /= std::max( (double) L_a_i.norm()/1, 1.0 );
 
-		imu.setOutput( L_a_sp(0) + L_a_i(0), L_a_sp(1) + L_a_i(1), -theta*0.5, 0.4 );
+		imu.setOutput( L_a_sp(0) + L_a_i(0), L_a_sp(1) + L_a_i(1), -theta*0.5, G_p_sp(2) );
 
 		// log over telemetry
 		if ( telemetryCounter++ > 50 ) {
