@@ -283,7 +283,7 @@ void initCalib( Calib& calib ) {
 }
 
 void inputParserThread( void ) {
-	std::string inputLine:
+	std::string inputLine;
 	std::getline( std::cin, inputLine );
 	std::cout << "Echo: " << inputLine << std::endl;
 	int x, y, z;
