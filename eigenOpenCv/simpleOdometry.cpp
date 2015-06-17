@@ -414,12 +414,12 @@ int main( int argc, char** argv )
 		// Actual controller
 		Vector3d G_p_sp( 0, 0, 0 );
 
-		Vector3d G_a_sp = G_p_sp - G_p;
-		G_a_sp(2) = 0;
-		G_a_sp *= 1.5;
-		G_a_sp /= std::max( (double) G_a_sp.norm()/0.10, 1.0 );
+		Vector3d G_v_sp = G_p_sp - G_p;
+		G_v_sp(2) = 0;
+		G_v_sp *= 1.5;
+		G_v_sp /= std::max( (double) G_a_sp.norm()/0.10, 1.0 );
 
-		G_a_sp -= G_v;
+		Vector3d G_a_sp = G_v_sp - G_v;
 		G_a_sp(2) = 0;
 		G_a_sp *= 5;
 		G_a_sp /= std::max( (double) G_a_sp.norm()/3, 1.0 );
@@ -445,7 +445,8 @@ int main( int argc, char** argv )
 			logFile << element.timeStamp.tv_sec << "."
 							<< std::setfill('0') << std::setw(6)
 							<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
-							<< predictor.x.block<16,1>(0,0).transpose() << "\n";
+							<< predictor.x.block<16,1>(0,0).transpose() << "\t"
+							<< G_a_sp.transpose() << G_v_sp.transpose() << "\n";
 		}
 	}
 	logFile.close();

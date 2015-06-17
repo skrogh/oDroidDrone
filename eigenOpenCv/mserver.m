@@ -1,10 +1,11 @@
 %% Client for recieving data from drone.
-tcpipClient = udp('10.16.165.94',55000);
+tcpipClient = udp('10.16.163.125',55000);
 set(tcpipClient, 'inputbuffersize', 2^15 )
 fclose(tcpipClient)
 fopen(tcpipClient)                          % connect
 fwrite(tcpipClient,0)
 % init plots
+subplot(3,2,[1,3,5])
 hold off
 lHandle = plot3(nan, nan, nan);             % get line handle
 hold on
@@ -15,6 +16,12 @@ view([0,90]);                               %set 2d view
 xlim([-1,1]);                               %set xlimit
 ylim([-1,1]);                               %set ylimit
 axis equal
+subplot(3,2,2)
+vxHandle = plot(nan);
+subplot(3,2,4)
+vyHandle = plot(nan);
+subplot(3,2,6)
+vzHandle = plot(nan);
 %% Main loop
 while 1                                     %keep going
     rawData = uint8( fread( tcpipClient, 8*10 ) );                %read data from buffer
@@ -56,6 +63,17 @@ while 1                                     %keep going
     Y = [state(6), state(6)+g_z(2)];                         %update Y data
     Z = [state(7), state(7)+g_z(3)];                         %update Z data
     set( zHandle, 'XData', X, 'YData', Y, 'ZData', Z ); %notify plot of update
+    %%    
+    data = get( vxHandle, 'YData' );
+    data = [data state(8)];
+    set( vxHandle, 'YData', data ); %notify plot of update
+    data = get( vyHandle, 'YData' );
+    data = [data state(9)];
+    set( vyHandle, 'YData', data ); %notify plot of update
+    data = get( vzHandle, 'YData' );
+    data = [data state(10)];
+    set( vzHandle, 'YData', data ); %notify plot of update
+    
     drawnow;                                %force plot update to animate
 end
 fclose(tcpipClient)                         %close connection
