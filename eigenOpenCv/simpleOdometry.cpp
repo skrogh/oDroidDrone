@@ -429,7 +429,7 @@ int main( int argc, char** argv )
 		Vector3d L_a = LG_q._transformVector( G_a );
 		L_a(2) = 0; // Remove Z axis
 		static Vector3d L_a_i( 0, 0, 0 ); // integrator for acceleration error
-		L_a_i += ( L_a_sp - L_a ) * calib.delta_t * 1; // I gain
+		L_a_i += ( L_a_sp - L_a ) * calib.delta_t / 3.0; // I gain
 		L_a(2) = 0; // Remove Z axis (there souldnt be any but just n case)
 		L_a_i /= std::max( (double) L_a_i.norm()/1, 1.0 );
 
