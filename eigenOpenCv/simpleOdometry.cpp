@@ -282,13 +282,9 @@ void initCalib( Calib& calib ) {
 	std::cout << "calib is:\n" << calib << std::endl;
 }
 
-struct V {
-	double x = 0;
-	double y = 0;
-	double z = 0.4;
-};
-
-std::atomic<V> G_p_sp_atom;
+std::atomic<double> G_p_sp_x;
+std::atomic<double> G_p_sp_y;
+std::atomic<double> G_p_sp_z;
 
 void inputParserThread( void ) {
 	while(1) {
@@ -301,11 +297,9 @@ void inputParserThread( void ) {
 			<< x/1000.0 << ", "
 			<< y/1000.0 << ", "
 			<< z/1000.0 << std::endl;
-			V tmp;
-			tmp.x = x/1000.0;
-			tmp.y = y/1000.0;
-			tmp.z = z/1000.0;
-			G_p_sp_atom = tmp;
+			G_p_sp_x = x/1000.0;
+			G_p_sp_y = y/1000.0;
+			G_p_sp_z = z/1000.0;
 		} else {
 			std::cout << "Error in parsing input" << std::endl;
 		}
@@ -447,8 +441,7 @@ int main( int argc, char** argv )
 		QuaternionAlias<double> LG_q( cos(theta/2), 0, 0, sin(theta/2) );
 
 		// Actual controller
-		V tmp =	G_p_sp_atom;
-		Vector3d G_p_sp( tmp.x, tmp.y, tmp.z );
+		Vector3d G_p_sp( G_p_sp_x, G_p_sp_y, G_p_sp_z );
 
 		Vector3d G_v_sp = G_p_sp - G_p;
 		G_v_sp(2) = 0; // Remove Z axis
