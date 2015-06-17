@@ -153,8 +153,8 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 			if ( logToFile ) {
 				logFile << element.timeStamp.tv_sec << "."
 								<< std::setfill('0') << std::setw(6)
-								<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
-				 				<< odometry.x.block<16,1>(0,0).transpose() << "\t"
+								<< element.timeStamp.tv_usec << std::setfill(' ') << " \t"
+				 				<< odometry.x.block<16,1>(0,0).transpose() << " \t"
 				 				<< odometry.sigma.diagonal().block<15,1>(0,0).transpose() << "\n";
 			}
 
@@ -444,8 +444,8 @@ int main( int argc, char** argv )
 		if ( logToFile ) {
 			logFile << element.timeStamp.tv_sec << "."
 							<< std::setfill('0') << std::setw(6)
-							<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
-							<< predictor.x.block<16,1>(0,0).transpose() << "\t"
+							<< element.timeStamp.tv_usec << std::setfill(' ') << " \t"
+							<< predictor.x.block<16,1>(0,0).transpose() << " \t"
 							<< G_a_sp.transpose() << G_v_sp.transpose() << "\n";
 		}
 	}
