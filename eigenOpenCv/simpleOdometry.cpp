@@ -4,10 +4,10 @@
 #include <fstream>
 #include <thread>
 #include <string>
+#include <atomic>
 #include <sys/time.h>
 #include <Eigen/Dense>
 #include <Eigen/Geometry>
-#include <atomic>
 #include <cmath>
 #include <algorithm>    // std::max
 #include <ctype.h>
@@ -282,19 +282,24 @@ void initCalib( Calib& calib ) {
 	std::cout << "calib is:\n" << calib << std::endl;
 }
 
-void inputParserThread( void ) {
-	std::string inputLine;
-	std::getline( std::cin, inputLine );
-	std::cout << "Echo: " << inputLine << std::endl;
-	int x, y, z;
-	int parsed = sscanf( inputLine.c_str(), "P: %d, %d, %d", &x, &y, &z );
-	if ( parsed == 3 ) {
-		std::cout << "New set point: "
-		<< x/1000.0 << ", "
-		<< y/1000.0 << ", "
-		<< z/1000.0 << std::endl;
-	}
+std::atomic<Vector3d> G_p_sp_atom = Vector3d( 0, 0, 0.4 );
 
+void inputParserThread( void ) {
+	while(1) {
+		std::string inputLine;
+		std::getline( std::cin, inputLine );
+		int x, y, z;
+		int parsed = sscanf( inputLine.c_str(), "P: %d, %d, %d", &x, &y, &z );
+		if ( ( parsed == 3 ) && ( z > 0 ) && ( z < 1000 ) ) {
+			std::cout << "New set point: "
+			<< x/1000.0 << ", "
+			<< y/1000.0 << ", "
+			<< z/1000.0 << std::endl;
+			G_p_sp_atom = Vector3d( x/1000.0, y/1000.0, z/1000.0 );
+		} else {
+			std::cout << "Error in parsing input" << std::endl;
+		}
+	}
 }
 
 int main( int argc, char** argv )
@@ -432,7 +437,7 @@ int main( int argc, char** argv )
 		QuaternionAlias<double> LG_q( cos(theta/2), 0, 0, sin(theta/2) );
 
 		// Actual controller
-		Vector3d G_p_sp( 0, 0, 0.4 );
+		Vector3d G_p_sp = G_p_sp_atom;
 
 		Vector3d G_v_sp = G_p_sp - G_p;
 		G_v_sp(2) = 0; // Remove Z axis
