@@ -406,6 +406,7 @@ int main( int argc, char** argv )
 		QuaternionAlias<double> IG_q = predictor.x.segment<4>(0);
 		Vector3d G_p = predictor.x.segment<3>(4);
 		Vector3d G_v = predictor.x.segment<3>(7);
+		Vector3d G_a = IG_q.conjugate()._transformVector( predictor.I_a_dly );
 		Vector3d G_I_x = IG_q.conjugate()._transformVector( Vector3d(1,0,0) );
 		G_I_x.normalize();
 		double theta = atan2( G_I_x(1), G_I_x(0) );
@@ -446,6 +447,7 @@ int main( int argc, char** argv )
 							<< std::setfill('0') << std::setw(6)
 							<< element.timeStamp.tv_usec << std::setfill(' ') << "\t"
 							<< predictor.x.block<16,1>(0,0).transpose() << "\t"
+							<< G_a.transpose() << "\t"
 							<< G_a_sp.transpose() << "\t"
 							<< G_v_sp.transpose() << "\n";
 		}
