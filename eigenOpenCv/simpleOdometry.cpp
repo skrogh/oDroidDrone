@@ -417,7 +417,7 @@ int main( int argc, char** argv )
 		Vector3d G_v_sp = G_p_sp - G_p;
 		G_v_sp(2) = 0;
 		G_v_sp *= 1.5;
-		G_v_sp /= std::max( (double) G_a_sp.norm()/0.10, 1.0 );
+		G_v_sp /= std::max( (double) G_v_sp.norm()/0.10, 1.0 );
 
 		Vector3d G_a_sp = G_v_sp - G_v;
 		G_a_sp(2) = 0;
