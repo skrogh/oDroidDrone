@@ -416,18 +416,24 @@ int main( int argc, char** argv )
 		Vector3d G_p_sp( 0, 0, 0 );
 
 		Vector3d G_v_sp = G_p_sp - G_p;
-		G_v_sp(2) = 0;
-		G_v_sp *= 1.5;
+		G_v_sp(2) = 0; // Remove Z axis
+		G_v_sp *= 1.5; // P gain
 		G_v_sp /= std::max( (double) G_v_sp.norm()/0.10, 1.0 );
 
 		Vector3d G_a_sp = G_v_sp - G_v;
-		G_a_sp(2) = 0;
-		G_a_sp *= 5;
+		G_a_sp(2) = 0; // Remove Z axis
+		G_a_sp *= 5;   // V gain
 		G_a_sp /= std::max( (double) G_a_sp.norm()/3, 1.0 );
 
 		Vector3d L_a_sp = LG_q._transformVector( G_a_sp );
+		Vector3d L_a = LG_q._transformVector( G_a );
+		L_a(2) = 0; // Remove Z axis
+		static Vector3d L_a_i( 0, 0, 0 ); // integrator for acceleration error
+		L_a_i += ( L_a_sp - L_a ) * calib.delta_t * 1; // I gain
+		L_a(2) = 0; // Remove Z axis (there souldnt be any but just n case)
+		L_a_i /= std::max( (double) L_a_i.norm()/1, 1.0 );
 
-		imu.setOutput( L_a_sp(0), L_a_sp(1), -theta*0.5, 0.4 );
+		imu.setOutput( L_a_sp(0) + L_a_i(0), L_a_sp(1) + L_a_i(1), -theta*0.5, 0.4 );
 
 		// log over telemetry
 		if ( telemetryCounter++ > 50 ) {
@@ -449,7 +455,8 @@ int main( int argc, char** argv )
 							<< predictor.x.block<16,1>(0,0).transpose() << "\t"
 							<< G_a.transpose() << "\t"
 							<< G_a_sp.transpose() << "\t"
-							<< G_v_sp.transpose() << "\n";
+							<< G_v_sp.transpose() << "\t"
+							<< L_a_i.transpose() << "\n";
 		}
 	}
 	logFile.close();
