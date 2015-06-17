@@ -305,7 +305,7 @@ void inputParserThread( void ) {
 			tmp.x = x/1000.0;
 			tmp.y = y/1000.0;
 			tmp.z = z/1000.0;
-			G_p_sp_atom.store( tmp );
+			G_p_sp_atom = tmp;
 		} else {
 			std::cout << "Error in parsing input" << std::endl;
 		}
@@ -447,8 +447,7 @@ int main( int argc, char** argv )
 		QuaternionAlias<double> LG_q( cos(theta/2), 0, 0, sin(theta/2) );
 
 		// Actual controller
-		V tmp;
-		G_p_sp_atom.load( tmp );
+		V tmp =	G_p_sp_atom;
 		Vector3d G_p_sp( tmp.x, tmp.y, tmp.z );
 
 		Vector3d G_v_sp = G_p_sp - G_p;
