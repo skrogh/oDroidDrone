@@ -283,11 +283,11 @@ void initCalib( Calib& calib ) {
 }
 
 void inputParserThread( void ) {
-	std::string line:
-	std::getline( std::cin, line );
-	std::cout << "Echo: " << line << std::endl;
+	std::string inputLine:
+	std::getline( std::cin, inputLine );
+	std::cout << "Echo: " << inputLine << std::endl;
 	int x, y, z;
-	int parsed = sscanf( line.c_str(), "P: %d, %d, %d", &x, &y, &z );
+	int parsed = sscanf( inputLine.c_str(), "P: %d, %d, %d", &x, &y, &z );
 	if ( parsed == 3 ) {
 		std::cout << "New set point: "
 		<< x/1000.0 << ", "
