@@ -451,7 +451,7 @@ int main( int argc, char** argv )
 		Vector3d G_a_sp = G_v_sp - G_v;
 		G_a_sp(2) = 0; // Remove Z axis
 		G_a_sp *= 5;   // V gain
-		G_a_sp /= std::max( (double) G_a_sp.norm()/3, 1.0 );
+		G_a_sp /= std::max( (double) G_a_sp.norm()/1, 1.0 );
 
 		Vector3d L_a_sp = LG_q._transformVector( G_a_sp );
 		Vector3d L_a = LG_q._transformVector( G_a );
