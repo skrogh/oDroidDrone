@@ -943,13 +943,18 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 			double dTheta_m = atan2( h(1), h(0) );
 			// Calculate estimated rotation
 			Vector3d dir(1,0,0); // vector orthogonal to Z axis
+			Vector3d dir_p(1,0,0); // vector orthogonal to Z axis
 			// Calculate quaternion of rotation
 			QuaternionAlias<double> IpG_q( x.block<4,1>(0+ODO_STATE_SIZE,0) );
 			QuaternionAlias<double> IG_q( x.block<4,1>(0,0) );
 			QuaternionAlias<double> IIp_q = IG_q * IpG_q.conjugate();
+			dir = IG_q.conjugate()._transformVector( dir );
+			dir_p = IG_q.conjugate()._transformVector( dir_p );
 			// rotate dir by IpI_q
 			dir = IIp_q._transformVector( dir );
-			double dTheta_e = atan2( dir(1), dir(0) );
+			double dTheta_e = atan2(
+				dir.block<2,1>(0,0).cross( dir_p.block<2,1>(0,0) ),
+				dir.block<2,1>(0,0).dot( dir_p.block<2,1>(0,0) ) );
 			Matrix<double,3,1> r;
 			r << dTheta_m - dTheta_e,
 			/* this is: Previous (x,y) + measured movement - propageted (x,y) */
