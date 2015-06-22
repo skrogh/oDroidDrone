@@ -953,7 +953,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 			// rotate dir by IpI_q
 			dir = IIp_q._transformVector( dir );
 			double dTheta_e = atan2(
-				-dir(0)*dir_p(1) + dir(1)*dir_p(0),
+				dir(0)*dir_p(1) - dir(1)*dir_p(0),
 				dir.block<2,1>(0,0).dot( dir_p.block<2,1>(0,0) ) );
 			Matrix<double,3,1> r;
 			r << dTheta_m - dTheta_e,
