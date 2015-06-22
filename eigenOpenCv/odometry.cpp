@@ -948,7 +948,7 @@ void GTEKF::updateCamera( const Matrix2Xd &points, const Matrix2Xd &prevPoints, 
 			QuaternionAlias<double> IG_q( x.block<4,1>(0,0) );
 			QuaternionAlias<double> IIp_q = IG_q * IpG_q.conjugate();
 			// rotate dir by IpI_q
-			dir = IpI_q._transformVector( dir );
+			dir = IIp_q._transformVector( dir );
 			double dTheta_e = atan2( dir(1), dir(0) );
 			Matrix<double,3,1> r;
 			r << dTheta_m - dTheta_e,
