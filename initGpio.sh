@@ -14,7 +14,12 @@ if [ -d "/sys/class/gpio/gpio199" ]
 then
  echo "already exported"
 else
+ echo "creating ramdisk"
+ mount -t tmpfs -o size=512m tmpfs /mnt/ramdisk
+ ln -s /mnt/ramdisk/logs ~/oDroidDrone/eigenOpenCv
+ mkdir /mnt/ramdisk/logs
  #export
+ echo "exporting gpios"
  echo 199 > /sys/class/gpio/export
  # set as input
  echo in > /sys/class/gpio/gpio199/direction
