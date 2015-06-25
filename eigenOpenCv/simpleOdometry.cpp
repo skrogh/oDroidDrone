@@ -86,7 +86,7 @@ void estimator( ImuFifo* imuPt, Calib* calibPt,
 	std::ofstream logFile;
 	char logFileBuffer[LOG_BUFFER_SIZE];
 	logFile.rdbuf()->pubsetbuf( logFileBuffer, LOG_BUFFER_SIZE );
-	logFile.open ("log.csv");
+	logFile.open ("logs/log.csv");
 	if ( !logFile ) {
 		printf( "logFile not opened!\n" );
 		logToFile = false;
@@ -400,7 +400,7 @@ int main( int argc, char** argv )
 	std::ofstream logFile;
 	char logFileBuffer[LOG_BUFFER_SIZE];
 	logFile.rdbuf()->pubsetbuf( logFileBuffer, LOG_BUFFER_SIZE );
-	logFile.open("logMain.csv");
+	logFile.open("logs/logMain.csv");
 	if ( !logFile ) {
 		printf( "logFile not opened!\n" );
 		logToFile = false;
