@@ -104,7 +104,7 @@ struct io_dev *in_demo_create(int width, int height)
 	priv->width = width;
 	priv->height = height;
 
-	dev->fd = STDIN;
+	dev->fd = stdin;
 	dev->io[DIR_IN].type = IO_NONE;
 	dev->io[DIR_OUT].type = IO_FUNC;
 	dev->ops = &in_demo_ops;
