@@ -105,7 +105,7 @@ struct io_dev *in_demo_create(int width, int height)
 	dev->fd = -1;
 	dev->io[DIR_IN].type = IO_NONE;
 	dev->io[DIR_OUT].type = IO_FUNC;
-	dev->io[DIR_OUT].state = FS_BUSSY;
+	dev->io[DIR_OUT].state = FS_BUSY;
 	// dev->io[DIR_OUT].event = true;
 	dev->ops = &in_demo_ops;
 
