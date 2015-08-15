@@ -94,9 +94,7 @@ void print_usage(char const *name)
 {
 	int i;
 	printf("Usage: %s [args]\n"
-	       "\t-i <device>   - FIMC camera device (e.g. /dev/video1)\n"
-	       "\t                If not specified demo input device is used\n"
-	       "\t-m <device>   - (required) MFC device (e.g. /dev/video8)\n"
+	       "\t-m <device>   - (required) MFC device (e.g. /dev/video9)\n"
 	       "\t-o <file>     - Output file name\n"
 	       "\t-c <codec>[,param[=val]]...\n"
 	       "\t              - The codec of the encoded stream optionally\n"
@@ -154,11 +152,8 @@ int parse_args(struct options *opts, int argc, char **argv)
 	tokens[i++] = "h264";
 	tokens[i++] = NULL;
 
-	while ((c = getopt(argc, argv, "i:m:o:c:d:r:s:b:")) != -1) {
+	while ((c = getopt(argc, argv, "m:o:c:d:r:s:b:")) != -1) {
 		switch (c) {
-		case 'i':
-			opts->in_name = optarg;
-			break;
 		case 'm':
 			opts->mfc_name = optarg;
 			break;
@@ -217,4 +212,3 @@ int parse_args(struct options *opts, int argc, char **argv)
 
 	return 0;
 }
-

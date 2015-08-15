@@ -28,7 +28,6 @@
 #define MAX_CTRLS 100
 
 struct options {
-	char *in_name;
 	char *mfc_name;
 	char *out_name;
 	int codec;
