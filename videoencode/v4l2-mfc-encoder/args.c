@@ -29,6 +29,7 @@
 #include <sys/eventfd.h>
 
 #include "common.h"
+#include "encoder.h"
 
 struct {
 	int id;

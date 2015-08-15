@@ -34,7 +34,6 @@ int main(int argc, char *argv[])
 	       "Copyright 2012 Samsung Electronics Co., Ltd.\n\n");
 
 	if (parse_args(&opts, "/dev/video9", "video.avi", 640, 480, "h264")) {
-		print_usage(argv[0]);
 		return 1;
 	}
 
