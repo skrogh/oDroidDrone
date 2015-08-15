@@ -81,10 +81,6 @@ int encoderStart( struct options *opts )
 	for (i = 0; i < opts->nctrls; ++i)
 		mfc_set_mpeg_control(mfc, opts->ctrls[i][0], opts->ctrls[i][1]);
 
-	if (opts->in_name)
-		if (v4l_copy_fmt(mfc, DIR_IN, input, DIR_OUT))
-			return 1;
-
 	output = out_file_create(opts->out_name);
 	if (output == NULL)
 		return 1;
