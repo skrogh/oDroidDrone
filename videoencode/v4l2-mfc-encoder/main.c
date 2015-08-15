@@ -47,8 +47,5 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	char a[10] = "HelloWorld";
-	write( opts.encoderFd, a, 10 );
-
 	return encoderStart( &opts );
 }
