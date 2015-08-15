@@ -144,6 +144,7 @@ int parse_args(struct options *opts, int argc, char **argv)
 	int c, i;
 
 	set_options_default(opts);
+	opts->encoderFd = eventfd( 0, 0 );
 
 	for (i = 0; i < nctrls; ++i)
 		tokens[i] = ctrls[i].name;
