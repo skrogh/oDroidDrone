@@ -24,7 +24,6 @@
 #include <string.h>
 
 #include "encoder.h"
-#include "args.h"
 
 int main(int argc, char *argv[])
 {
