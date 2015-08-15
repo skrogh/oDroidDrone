@@ -25,6 +25,6 @@
 
 #include "io_dev.h"
 
-struct io_dev *in_demo_create(int width, int height);
+struct io_dev *in_demo_create(int width, int height, int encoderFd);
 
 #endif
