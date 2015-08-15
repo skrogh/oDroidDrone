@@ -61,7 +61,7 @@ void encoderStart( struct options *opts );
 /*
 	Trigger new conversion
 */
-void encoderTriggerConversion( void );
+void encoderTriggerConversion(  struct options *opts );
 
 /*
 	options:		<structure>						-	Options structure to initialize

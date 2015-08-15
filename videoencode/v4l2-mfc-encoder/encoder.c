@@ -132,6 +132,6 @@ void encoderStart( struct options *opts ){
 	Trigger new conversion
 */
 void encoderTriggerConversion( struct options *opts ) {
-	char a[1] = 0;
+	char a[1] = {0};
 	write( opts->encoderFd, a, 1 );
 }
