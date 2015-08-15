@@ -45,5 +45,8 @@ int main(int argc, char *argv[])
   inBuff[0] = Gray.data;
   inBuff[1] = CbCr_2.data;
 
+  char a[10] = "HelloWorld";
+	write( opts.encoderFd, a, 10 );
+
 	return encoderStart( &opts );
 }

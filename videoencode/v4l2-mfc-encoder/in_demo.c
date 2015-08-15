@@ -44,7 +44,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 	printf( "Processing input image\n" );
 	printf( "consuming trigger\n" );
 	char c[8];
-	char a = read( dev->fd, c, 8);
+	//char a = read( dev->fd, c, 8); // comment out to loop forever
 	printf( "consumed trigger\n" );
 
 
