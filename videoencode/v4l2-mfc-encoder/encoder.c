@@ -133,6 +133,6 @@ void encoderStart( struct options *opts ){
 	Trigger new conversion
 */
 void encoderTriggerConversion( struct options *opts ) {
-	char a[2] = "T";
-	write( opts->encoderFd, a, 1 );
+	char a[9] = "Trigger!";
+	write( opts->encoderFd, a, 8 );
 }
