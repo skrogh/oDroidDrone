@@ -114,7 +114,8 @@ int process_pair(struct io_dev *in, struct io_dev *out)
 	int idx;
 
 	idx = 0;
-	printf( "Out state: %d, In State: %d\n", in->io[DIR_OUT].state, in->io[DIR_IN].state );
+	printf( "IN: Out state: %d, FD %d. In State: %d, FD %d\n", in->io[DIR_OUT].state,in->io[DIR_OUT].fd, in->io[DIR_IN].state, in->io[DIR_IN].fd );
+	printf( "OUT: Out state: %d, FD %d. In State: %d, FD %d\n", out->io[DIR_OUT].state,out->io[DIR_OUT].fd, out->io[DIR_IN].state, out->io[DIR_IN].fd );
 	if (in->io[DIR_OUT].state == FS_READY) {
 		idx = in->ops->deq_buf(in, DIR_OUT);
 		if (out->io[DIR_IN].state != FS_END) {
