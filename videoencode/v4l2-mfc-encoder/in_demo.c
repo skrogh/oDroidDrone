@@ -22,6 +22,7 @@
 
 #include <stdlib.h>
 #include <unistd.h>
+#include <stdio.h>
 #include <string.h>
 #include <math.h>
 
@@ -39,9 +40,9 @@ struct in_demo_priv {
 
 static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 {
-	printf( "Processing input image" );
-	//printf( "pres any key\n" );
-	//char a = getchar();
+	printf( "Processing input image\n" );
+	printf( "consuming trigger\n" );
+	char a = getchar();
 	struct in_demo_priv *p;
 	int x, y;
 	int i, j;
