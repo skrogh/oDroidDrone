@@ -26,7 +26,6 @@
 #include "common.h"
 #include "encoder.h"
 #include "in_demo.h"
-#include "in_camera.h"
 #include "out_file.h"
 #include "io_dev.h"
 #include "mfc.h"
