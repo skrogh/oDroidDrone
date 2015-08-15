@@ -43,9 +43,14 @@ int main(int argc, char *argv[])
   int from_to[] = { 0,0, 2,1, 1,2 };
   cv::mixChannels(&YcrCb, 1, out, 2, from_to, 3);
 
-  cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv::INTER_NEAREST);
+  cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);
   inBuff[0] = (char*) Gray.data;
   inBuff[1] = (char*) CbCr_2.data;
+
+  cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );// Create a window for display.
+  cv::imshow( "Display window", frame );                   // Show our image inside it.
+
+  cv::waitKey(0);                                          // Wait for a keystroke in the window
 
   char a[11] = "HelloWorld";
 	write( opts.encoderFd, a, 10 );
