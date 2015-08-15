@@ -30,6 +30,7 @@
 struct options {
 	char *mfc_name;
 	char *out_name;
+	int encoderFd;
 	int codec;
 	int width;
 	int height;

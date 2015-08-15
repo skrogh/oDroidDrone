@@ -56,7 +56,7 @@ int encoderStart( struct options *opts )
 	struct io_dev *chain[3] = {};
 
 
-	input = in_demo_create(opts->width, opts->height);
+	input = in_demo_create(opts->width, opts->height, opts->encoderFd);
 	if (input == NULL)
 		return 1;
 	chain[0] = input;
