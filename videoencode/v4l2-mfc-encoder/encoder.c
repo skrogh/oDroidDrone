@@ -49,7 +49,6 @@ struct options {
 */
 int encoderStart( struct options *opts )
 {
-	struct options opts;
 	struct io_dev *input;
 	struct io_dev *mfc;
 	struct io_dev *output;
