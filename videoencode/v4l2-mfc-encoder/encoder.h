@@ -38,6 +38,7 @@ struct options {
 	int rate;
 	int nctrls;
 	int ctrls[MAX_CTRLS][2];
+	char **NU12_ARRAY;
 };
 
 /*

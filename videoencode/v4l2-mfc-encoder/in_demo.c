@@ -36,6 +36,7 @@
 struct in_demo_priv {
 	int width;
 	int height;
+	char **NU12_ARRAY;
 };
 
 static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
@@ -94,7 +95,7 @@ static struct io_dev_ops in_demo_ops = { .read = in_demo_read,
 					 .destroy = in_demo_destroy
 					};
 
-struct io_dev *in_demo_create(int width, int height, int encoderFd)
+struct io_dev *in_demo_create(int width, int height, int encoderFd, char **NU12_ARRAY)
 {
 	struct io_dev *dev;
 	struct in_demo_priv *priv;
@@ -105,6 +106,7 @@ struct io_dev *in_demo_create(int width, int height, int encoderFd)
 	priv = malloc(sizeof(struct in_demo_priv));
 	priv->width = width;
 	priv->height = height;
+	priv->NU12_ARRAY = NU12_ARRAY;
 
 	dev->fd = encoderFd;
 	dev->io[DIR_IN].type = IO_NONE;

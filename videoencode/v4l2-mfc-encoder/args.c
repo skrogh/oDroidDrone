@@ -95,15 +95,15 @@ void print_usage(char const *name)
 {
 	int i;
 	printf("Usage: %s [args]\n"
-	       "\t-m <device>   - (required) MFC device (e.g. /dev/video9)\n"
-	       "\t-o <file>     - Output file name\n"
-	       "\t-c <codec>[,param[=val]]...\n"
+	       "\t-m <device>   - (required) MFC device (e.g. /dev/video9)\n" // as string?
+	       "\t-o <file>     - Output file name\n" // as string?
+	       "\t-c <codec>[,param[=val]]...\n" // as string (to parser)
 	       "\t              - The codec of the encoded stream optionally\n"
 	       "\t                followed by comma separated parameters.\n"
 	       "\t                Available codecs: mpeg4, h263, h264\n"
-	       "\t-d <duration> - Number of frames to encode\n"
-	       "\t-r <rate>     - Frame rate\n"
-	       "\t-s <size>     - Size of frame in format WxH\n"
+	       "\t-d <duration> - Number of frames to encode\n" // no
+	       "\t-r <rate>     - Frame rate\n" // no
+	       "\t-s <size>     - Size of frame in format WxH\n" // as two ints
 	       "Codec parameters:\n"
 		, name);
 
@@ -127,11 +127,11 @@ int get_codec(char *str)
 void set_options_default(struct options *o)
 {
 	memset(o, 0, sizeof(*o));
-	o->width = 176;
-	o->height = 144;
-	o->duration = 250;
-	o->rate = 25;
-	o->out_name = "demo.out";
+	o->width = 640;
+	o->height = 480;
+	o->duration = 0;
+	o->rate = 30;
+	o->out_name = "demo.avi";
 	o->codec = V4L2_PIX_FMT_H264;
 }
 
