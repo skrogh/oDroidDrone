@@ -59,14 +59,18 @@ struct options {
 int encoderStart( struct options *opts );
 
 /*
-	options:	<structure>						-	Options structure to initialize
-	mfc_name: <path>								- Path to mfc encoder
-	out_name:	<path>								- Path to output file
-	width:		<int>									- Image width
-	height:		<int>									- Image height
- 	codex:		<codec>[,param[=val]]	- Codex and parameters used. Parameters can be seen in ctrls struct above
+	options:		<structure>						-	Options structure to initialize
+	mfc_name: 	<path>								-	Path to mfc encoder
+	out_name:		<path>								-	Path to output file
+	width:			<int>									-	Image width
+	height:			<int>									-	Image height
+ 	codex:			<codec>[,param[=val]]	-	Codex and parameters used.
+																		-	Parameters can be seen in ctrls struct above
+	NU12_ARRAY:	<array of arrays>			-	Memory area fro imae to be encoded.
+																		-	Must be (width*height)+(width*height)/2
 */
 int parse_args(struct options *opts,
-		char *mfc_name, char *out_name, int width, int height, char *codex);
+		char *mfc_name, char *out_name, int width, int height, char *codex,
+		char **NU12_ARRAY)
 
 #endif

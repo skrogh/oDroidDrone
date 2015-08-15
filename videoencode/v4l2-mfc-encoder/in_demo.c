@@ -65,8 +65,8 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		return -1;
 	}
 
-	memset(bufs[0], 0, size);
-	memset(bufs[1], (t)%256, size / 2);
+	memcpy(bufs[0], p->NU12_ARRAY, size);
+	memcpy(bufs[1], p->NU12_ARRAY, size / 2);
 
 	rx = cos(7 * t / 3.14 / 25 * 100 / p->width);
 	ry = sin(6 * t / 3.14 / 25 * 100 / p->width);

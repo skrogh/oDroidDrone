@@ -104,15 +104,19 @@ int get_codec(char *str)
 }
 
 /*
-	options:	<structure>						-	Options structure to initialize
-	mfc_name: <path>								- Path to mfc encoder
-	out_name:	<path>								- Path to output file
-	width:		<int>									- Image width
-	height:		<int>									- Image height
- 	codex:		<codec>[,param[=val]]	- Codex and parameters used. Parameters can be seen in ctrls struct above
+	options:		<structure>						-	Options structure to initialize
+	mfc_name: 	<path>								-	Path to mfc encoder
+	out_name:		<path>								-	Path to output file
+	width:			<int>									-	Image width
+	height:			<int>									-	Image height
+ 	codex:			<codec>[,param[=val]]	-	Codex and parameters used.
+																		-	Parameters can be seen in ctrls struct above
+	NU12_ARRAY:	<array of arrays>			-	Memory area fro imae to be encoded.
+																		-	Must be (width*height)+(width*height)/2
 */
 int parse_args(struct options *opts,
-		char *mfc_name, char *out_name, int width, int height, char *codex)
+		char *mfc_name, char *out_name, int width, int height, char *codex,
+		char **NU12_ARRAY)
 {
 	static const int codecs[] = {
 		V4L2_PIX_FMT_MPEG4, V4L2_PIX_FMT_H263, V4L2_PIX_FMT_H264 };
@@ -129,6 +133,7 @@ int parse_args(struct options *opts,
 	opts->height = height;
 	opts->mfc_name = mfc_name;
 	opts->out_name = out_name;
+	opts->NU12_ARRAY = NU12_ARRAY;
 	// decode codex
 	for (i = 0; i < nctrls; ++i)
 		tokens[i] = ctrls[i].name;

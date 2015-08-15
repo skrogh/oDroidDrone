@@ -33,7 +33,14 @@ int main(int argc, char *argv[])
 	       "Andrzej Hajda <a.hajda@samsung.com>\n"
 	       "Copyright 2012 Samsung Electronics Co., Ltd.\n\n");
 
-	if (parse_args(&opts, "/dev/video9", "video.avi", 640, 480, "h264")) {
+	int size = 480*640;
+	char **inBuff;
+	inBuff[0] = malloc( size );
+	memset(inBufs[0], 0, size );
+	inBuff[1] = malloc( size/2 );
+  memset(inBufs[0], 0, size/2 );
+
+	if (parse_args(&opts, "/dev/video9", "video.avi", 640, 480, "h264", inBuff)) {
 		return 1;
 	}
 
