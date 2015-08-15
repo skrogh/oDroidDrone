@@ -45,6 +45,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 	char c[1];
 	char a = 0;
 	while( ( a = read( dev->fd, c, 1) ) == 0 );
+	lseek( dev->fd, 0, SEEK_SET );
 	struct in_demo_priv *p;
 	int x, y;
 	int i, j;
