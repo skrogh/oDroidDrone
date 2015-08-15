@@ -34,8 +34,18 @@
 
 /*
 * Makes a blokcing call and starts the encoder, looping over the given array and encoding
-* Arguments are:
-*
+* Arguments are simply the optins block:
+struct options {
+	char *mfc_name;
+	char *out_name;
+	int codec;
+	int width;
+	int height;
+	int duration;
+	int rate;
+	int nctrls;
+	int ctrls[MAX_CTRLS][2];
+};
 */
 int encoderStart( struct options *opts )
 {
