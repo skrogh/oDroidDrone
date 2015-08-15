@@ -41,11 +41,11 @@ struct in_demo_priv {
 static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 {
 	printf( "Processing input image\n" );
-	printf( "consuming trigger\n" );
+	/*printf( "consuming trigger\n" );
 	char c[1];
 	char a = 0;
 	while( ( a = read( dev->fd, c, 1) ) == 0 );
-	lseek( dev->fd, 0, SEEK_SET );
+	lseek( dev->fd, 0, SEEK_SET );*/
 	struct in_demo_priv *p;
 	int x, y;
 	int i, j;

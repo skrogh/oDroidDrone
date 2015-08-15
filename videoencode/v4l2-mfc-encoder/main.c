@@ -26,6 +26,7 @@
 #include <sys/mman.h>
 #include <sys/stat.h>        /* For mode constants */
 #include <fcntl.h>           /* For O_* constants */
+#include <sys/eventfd.h>
 
 #include "encoder.h"
 #include "args.h"
@@ -42,7 +43,8 @@ int main(int argc, char *argv[])
 		print_usage(argv[0]);
 		return 1;
 	}
-	opts.encoderFd = shm_open("/videoEncoder", O_RDWR|O_CREAT|O_TRUNC, 0600);
+	opts.encoderFd = eventfd(unsigned int initval, int flags);
+	printf( "Fd for event is: %d", opts.encoderFd );
 
 
 	return encoderStart( &opts );
