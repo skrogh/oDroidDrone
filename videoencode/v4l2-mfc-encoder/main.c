@@ -38,6 +38,8 @@ int main(int argc, char *argv[])
 		print_usage(argv[0]);
 		return 1;
 	}
+	opts.encoderFd = 0;
+
 
 	return encoderStart( &opts );
 }
