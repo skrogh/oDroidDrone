@@ -45,6 +45,9 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 	printf( "consuming trigger\n" );
 	char c[8];
 	char a = read( dev->fd, c, 8);
+	printf( "consumed trigger\n" );
+
+
 	struct in_demo_priv *p;
 	int x, y;
 	int i, j;
@@ -65,8 +68,8 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		return -1;
 	}
 
-	memcpy(bufs[0], p->NU12_ARRAY, size);
-	memcpy(bufs[1], p->NU12_ARRAY, size / 2);
+	memcpy(bufs[0], p->NU12_ARRAY[0], size);
+	memcpy(bufs[1], p->NU12_ARRAY[1], size / 2);
 
 	rx = cos(7 * t / 3.14 / 25 * 100 / p->width);
 	ry = sin(6 * t / 3.14 / 25 * 100 / p->width);
