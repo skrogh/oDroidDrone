@@ -29,7 +29,6 @@
 #include <sys/eventfd.h>
 
 #include "common.h"
-#include "args.h"
 
 struct {
 	int id;
@@ -91,27 +90,6 @@ struct {
 	{ V4L2_CID_MPEG_VIDEO_VBV_SIZE, "vbv_size"},
 };
 
-void print_usage(char const *name)
-{
-	int i;
-	printf("Usage: %s [args]\n"
-	       "\t-m <device>   - (required) MFC device (e.g. /dev/video9)\n" // as string?
-	       "\t-o <file>     - Output file name\n" // as string?
-	       "\t-c <codec>[,param[=val]]...\n" // as string (to parser)
-	       "\t              - The codec of the encoded stream optionally\n"
-	       "\t                followed by comma separated parameters.\n"
-	       "\t                Available codecs: mpeg4, h263, h264\n"
-	       "\t-d <duration> - Number of frames to encode\n" // no
-	       "\t-r <rate>     - Frame rate\n" // no
-	       "\t-s <size>     - Size of frame in format WxH\n" // as two ints
-	       "Codec parameters:\n"
-		, name);
-
-	for (i = 0; i < array_len(ctrls); ++i) {
-		printf("\t%s\n", ctrls[i].name);
-	}
-}
-
 int get_codec(char *str)
 {
 	if (strncasecmp("mpeg4", str, 5) == 0)
@@ -124,17 +102,14 @@ int get_codec(char *str)
 	return 0;
 }
 
-void set_options_default(struct options *o)
-{
-	memset(o, 0, sizeof(*o));
-	o->width = 640;
-	o->height = 480;
-	o->duration = 0;
-	o->rate = 30;
-	o->out_name = "demo.avi";
-	o->codec = V4L2_PIX_FMT_H264;
-}
-
+/*
+	options:	<structure>						-	Options structure to initialize
+	mfc_name: <path>								- Path to mfc encoder
+	out_name:	<path>								- Path to output file
+	width:		<int>									- Image width
+	height:		<int>									- Image height
+ 	codex:		<codec>[,param[=val]]	- Codex and parameters used. Parameters can be seen in ctrls struct above
+*/
 int parse_args(struct options *opts,
 		char *mfc_name, char *out_name, int width, int height, char *codex)
 {
@@ -144,8 +119,6 @@ int parse_args(struct options *opts,
 	char *tokens[nctrls + 4];
 	char *s, *v;
 	int c, i;
-
-	set_options_default(opts);
 
 	// set values of options struct:
 	opts->encoderFd = eventfd( 0, 0 );

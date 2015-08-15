@@ -58,4 +58,15 @@ struct options {
 */
 int encoderStart( struct options *opts );
 
+/*
+	options:	<structure>						-	Options structure to initialize
+	mfc_name: <path>								- Path to mfc encoder
+	out_name:	<path>								- Path to output file
+	width:		<int>									- Image width
+	height:		<int>									- Image height
+ 	codex:		<codec>[,param[=val]]	- Codex and parameters used. Parameters can be seen in ctrls struct above
+*/
+int parse_args(struct options *opts,
+		char *mfc_name, char *out_name, int width, int height, char *codex);
+
 #endif
