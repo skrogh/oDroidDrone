@@ -114,10 +114,10 @@ int process_pair(struct io_dev *in, struct io_dev *out)
 	int idx;
 
 	idx = 0;
-	printf( "FS_OFF: %d, FS_BUSY: %d, FS_READY: %d, FS_EVENT: %d, FS_END: %d",
+	printf( "FS_OFF: %d, FS_BUSY: %d, FS_READY: %d, FS_EVENT: %d, FS_END: %d\n",
 		FS_OFF, FS_BUSY, FS_READY, FS_EVENT, FS_END );
-	printf( "IN: Out state: %d. In State: %d\n", in->io[DIR_OUT].state, in->io[DIR_IN].state );
-	printf( "OUT: Out state: %d. In State: %d\n", out->io[DIR_OUT].state, out->io[DIR_IN].state );
+	printf( "In dev: Out state: %d. In State: %d\n", in->io[DIR_OUT].state, in->io[DIR_IN].state );
+	printf( "Out dev: Out state: %d. In State: %d\n", out->io[DIR_OUT].state, out->io[DIR_IN].state );
 	if (in->io[DIR_OUT].state == FS_READY) {
 		idx = in->ops->deq_buf(in, DIR_OUT);
 		if (out->io[DIR_IN].state != FS_END) {
