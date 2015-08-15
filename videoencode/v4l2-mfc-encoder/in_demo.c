@@ -42,7 +42,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 {
 	printf( "Processing input image\n" );
 	printf( "consuming trigger\n" );
-	char a = getchar();
+	//char a = getchar();
 	struct in_demo_priv *p;
 	int x, y;
 	int i, j;
