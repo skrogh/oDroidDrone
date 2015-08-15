@@ -162,6 +162,7 @@ int process_chain(struct io_dev *chain[], int ndev)
 		if (ret <= 0)
 			break;
 		for (i = 1; i < ndev; ++i) {
+			printf("Processing pair: %d -> %d\n", i - 1, i );
 			ret = process_pair(chain[i - 1], chain[i]);
 			if (ret != 0) {
 				dbg("pair %d:%d ret=%d", i-1, i, ret);
