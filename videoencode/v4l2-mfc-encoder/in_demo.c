@@ -38,8 +38,9 @@ struct in_demo_priv {
 
 static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 {
-	printf( "pres any key\n" );
-	char a = getchar();
+	printf( "Processing input image" );
+	//printf( "pres any key\n" );
+	//char a = getchar();
 	struct in_demo_priv *p;
 	int x, y;
 	int i, j;
@@ -102,11 +103,9 @@ struct io_dev *in_demo_create(int width, int height)
 	priv->width = width;
 	priv->height = height;
 
-	dev->fd = -1;
+	dev->fd = STDIN;
 	dev->io[DIR_IN].type = IO_NONE;
 	dev->io[DIR_OUT].type = IO_FUNC;
-	// dev->io[DIR_OUT].state = FS_BUSY;
-	// dev->io[DIR_OUT].event = true;
 	dev->ops = &in_demo_ops;
 
 	dev->priv = priv;
