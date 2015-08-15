@@ -185,8 +185,6 @@ int parse_args(struct options *opts,
 		}
 	}
 
-	}
-
 	if (opts->mfc_name == NULL) {
 		err("Please provide MFC device");
 		return -1;
