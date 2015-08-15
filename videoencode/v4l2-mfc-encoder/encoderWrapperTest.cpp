@@ -37,13 +37,13 @@ int main(int argc, char *argv[])
   cv::Mat Gray(frame.rows, frame.cols, CV_8UC1);
   cv::Mat CbCr(frame.rows,frame.cols, CV_8UC2);
   cv::Mat CbCr_2(frame.rows/2, frame.cols/2, CV_8UC2);
-  cv::cvtColor(frame, YcrCb, COLOR_BGR2YCrCb);
+  cv::cvtColor(frame, YcrCb, cv::COLOR_BGR2YCrCb);
 
   cv::Mat out[] = {Gray, CbCr};
   int from_to[] = { 0,0, 2,1, 1,2 };
   cv::mixChannels(&YcrCb, 1, out, 2, from_to, 3);
 
-  cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, INTER_NEAREST);
+  cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cV::INTER_NEAREST);
   inBuff[0] = (char*) Gray.data;
   inBuff[1] = (char*) CbCr_2.data;
 
