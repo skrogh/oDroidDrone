@@ -17,10 +17,11 @@
 #
 
 # Toolchain path
-TCPATH = 
+TCPATH =
 KERNELHEADERS = /home/kamil/praca/w1-party/kernel/headers/include
+LIBS = $(shell pkg-config --libs opencv ) -pthread
 
-CC = ${TCPATH}gcc
+CC = ${TCPATH}g++
 AR = "${TCPATH}ar rc"
 AR2 = ${TCPATH}ranlib make -j4
 
@@ -30,13 +31,13 @@ INCLUDES = -I$(KERNELHEADERS)
 SOURCES = main.c args.c in_demo.c out_file.c mfc.c io_dev.c func_dev.c v4l_dev.c in_camera.c
 OBJECTS := $(SOURCES:.c=.o)
 EXEC = mfc-encode
-CFLAGS = -Wall -g -DS5PC1XX_FIMC
+CFLAGS = -Wall -g -DS5PC1XX_FIMC -std=c++11 $(shell pkg-config --cflags opencv )
 DEP = .dep
 
 all: $(EXEC) $(DEP)
 
 .c.o:
-	$(CC) -c $(CFLAGS) $(INCLUDES) $<
+	$(CC) -c $(CFLAGS) $(INCLUDES) $< $(LIBS)
 
 $(EXEC): $(OBJECTS)
 	$(CC) $(CFLAGS) -o $(EXEC) $(OBJECTS) -lm -lrt
