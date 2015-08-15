@@ -58,7 +58,7 @@ int encoderSetup( struct options *opts )
 
 	struct io_dev *chain[3] = {};
 
-
+	dbg( "EncoderFd: %d\n", opts->EncoderFd );
 	input = in_demo_create(opts->width, opts->height, opts->encoderFd, opts->NU12_ARRAY);
 	if (input == NULL)
 		return 1;
@@ -123,6 +123,7 @@ struct options {
 };
 */
 void encoderStart( struct options *opts ){
+	dbg( "EncoderFd: %d\n", opts->EncoderFd );
 	pthread_t thread;
 	pthread_create( &thread, NULL, (void*) &encoderThreadWrapper, (void*) opts );
 	pthread_detach( thread );
