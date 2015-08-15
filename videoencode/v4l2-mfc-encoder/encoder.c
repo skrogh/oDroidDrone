@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <pthread.h>
 
 #include "common.h"
@@ -121,7 +122,7 @@ struct options {
 	int ctrls[MAX_CTRLS][2];
 };
 */
-int encoderStart( struct options *opts ){
+void encoderStart( struct options *opts ){
 	pthread_t thread;
 	pthread_create( &thread, NULL, (void*) &encoderThreadWrapper, (void*) opts );
 	pthread_detach( thread );
@@ -130,7 +131,7 @@ int encoderStart( struct options *opts ){
 /*
 	Trigger new conversion
 */
-void encoderTriggerConversion( void ) {
+void encoderTriggerConversion( struct options *opts ) {
 	char a[1] = 0;
-	write( opts.encoderFd, a, 1 );
+	write( opts->encoderFd, a, 1 );
 }
