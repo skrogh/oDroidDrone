@@ -37,9 +37,9 @@ int main(int argc, char *argv[])
 
 	int size = 480*640;
 	char **inBuff;
-	inBuff[0] = malloc( size );
+	inBuff[0] = (char*) malloc( size );
 	memset(inBuff[0], 0, size );
-	inBuff[1] = malloc( size/2 );
+	inBuff[1] = (char*) malloc( size/2 );
   memset(inBuff[0], 0, size/2 );
 
 	if (parse_args(&opts, "/dev/video9", "video.avi", 640, 480, "h264", inBuff)) {
