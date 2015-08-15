@@ -47,5 +47,11 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 
-	return encoderStart( &opts );
+	encoderStart( &opts );
+
+	while(1) {
+		printf( "waiting for input: \n" );
+		char a = getchar();
+		encoderTriggerConversion();
+	}
 }
