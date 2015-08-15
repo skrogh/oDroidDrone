@@ -38,6 +38,8 @@ struct in_demo_priv {
 
 static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 {
+	printf( "pres any key\n" );
+	char a = getchar();
 	struct in_demo_priv *p;
 	int x, y;
 	int i, j;
@@ -59,7 +61,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 	}
 
 	memset(bufs[0], 0, size);
-	memset(bufs[1], 128, size / 2);
+	memset(bufs[1], (t)%256, size / 2);
 
 	rx = cos(7 * t / 3.14 / 25 * 100 / p->width);
 	ry = sin(6 * t / 3.14 / 25 * 100 / p->width);
