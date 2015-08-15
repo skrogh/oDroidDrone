@@ -56,7 +56,7 @@ struct options {
 	int ctrls[MAX_CTRLS][2];
 };
 */
-int encoderStart( struct options *opts )
+int encoderStart( struct options *opts );
 
 /*
 	Trigger new conversion
