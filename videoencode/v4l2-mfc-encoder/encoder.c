@@ -22,7 +22,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <pthreads.h>
+#include <pthread.h>
 
 #include "common.h"
 #include "encoder.h"
