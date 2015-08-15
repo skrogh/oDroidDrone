@@ -51,6 +51,6 @@ int main(int argc, char *argv[])
 	while(1) {
 		printf( "waiting for input: \n" );
 		char a = getchar();
-		encoderTriggerConversion();
+		encoderTriggerConversion(&opts);
 	}
 }
