@@ -22,6 +22,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <pthreads.h>
 
 #include "common.h"
 #include "encoder.h"
@@ -30,6 +31,7 @@
 #include "io_dev.h"
 #include "mfc.h"
 #include "v4l_dev.h"
+
 
 /*
 * Makes a blokcing call and starts the encoder, looping over the given array and encoding
@@ -46,7 +48,7 @@ struct options {
 	int ctrls[MAX_CTRLS][2];
 };
 */
-int encoderStart( struct options *opts )
+int encoderSetup( struct options *opts )
 {
 	struct io_dev *input;
 	struct io_dev *mfc;
@@ -98,4 +100,37 @@ int encoderStart( struct options *opts )
 		chain[i]->ops->destroy(chain[i]);
 
 	return 0;
+}
+
+void encoderThreadWrapper( struct options *opts ){
+	encoderSetup( opts );
+}
+
+/*
+ Spawn encoder thread and start waiting for images
+Arguments are simply the optins block:
+struct options {
+	char *mfc_name;
+	char *out_name;
+	int codec;
+	int width;
+	int height;
+	int duration;
+	int rate;
+	int nctrls;
+	int ctrls[MAX_CTRLS][2];
+};
+*/
+int encoderStart( struct options *opts ){
+	pthread_t thread;
+	pthread_create( &thread, NULL, (void*) &encoderThreadWrapper, (void*) opts );
+	pthread_detach( thread );
+}
+
+/*
+	Trigger new conversion
+*/
+void encoderTriggerConversion( void ) {
+	char a[1] = 0;
+	write( opts.encoderFd, a, 1 );
 }
