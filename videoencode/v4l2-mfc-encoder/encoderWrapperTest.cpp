@@ -23,6 +23,9 @@ int main(int argc, char *argv[])
     return 1;
   }
 
+  // Start the encoder thread
+  encoderStart( &opts );
+
   /* open capture dev */
   cv::VideoCapture capDev;
   if (!capDev.open(0))
@@ -30,25 +33,27 @@ int main(int argc, char *argv[])
   capDev.set(cv::CAP_PROP_FRAME_HEIGHT, /*HEIGHT*/ 480);
   capDev.set(cv::CAP_PROP_FRAME_WIDTH, /*WIDTH*/ 640);
 
-  /* grab popcor... image */
+  // init images (and buffers)
   cv::Mat frame;
-  capDev.read(frame);
   cv::Mat YcrCb;
   cv::Mat Gray(frame.rows, frame.cols, CV_8UC1);
   cv::Mat CbCr(frame.rows,frame.cols, CV_8UC2);
   cv::Mat CbCr_2(frame.rows/2, frame.cols/2, CV_8UC2);
-  cv::cvtColor(frame, YcrCb, cv::COLOR_BGR2YCrCb);
-
-  cv::Mat out[] = {Gray, CbCr};
-  int from_to[] = { 0,0, 2,1, 1,2 };
-  cv::mixChannels(&YcrCb, 1, out, 2, from_to, 3);
-
-  cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);
+  // point encoder to images: (TODO: add switch as threadsafety)
   inBuff[0] = (char*) Gray.data;
   inBuff[1] = (char*) CbCr_2.data;
 
-  char a[11] = "HelloWorld";
-	write( opts.encoderFd, a, 10 );
-
-	return encoderStart( &opts );
+  // grab and encode
+  while(1) {
+    /* grab popcor... image */
+    capDev.read(frame);
+    // Convert it
+    cv::cvtColor(frame, YcrCb, cv::COLOR_BGR2YCrCb);
+    cv::Mat out[] = {Gray, CbCr};
+    int from_to[] = { 0,0, 2,1, 1,2 };
+    cv::mixChannels(&YcrCb, 1, out, 2, from_to, 3);
+    cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);
+    // Trigger encoding
+		encoderTriggerConversion( &opts );
+	}
 }
