@@ -93,7 +93,7 @@ static struct io_dev_ops in_demo_ops = { .read = in_demo_read,
 					 .destroy = in_demo_destroy
 					};
 
-struct io_dev *in_demo_create(int width, int height,, int encoderFd)
+struct io_dev *in_demo_create(int width, int height, int encoderFd)
 {
 	struct io_dev *dev;
 	struct in_demo_priv *priv;
