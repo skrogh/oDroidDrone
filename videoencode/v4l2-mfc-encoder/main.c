@@ -36,7 +36,8 @@ int main(int argc, char *argv[])
 	       "Copyright 2012 Samsung Electronics Co., Ltd.\n\n");
 
 	int size = 480*640;
-	char **inBuff;
+
+	char *inBuff[2];
 	inBuff[0] = (char*) malloc( size );
 	memset(inBuff[0], 0, size );
 	inBuff[1] = (char*) malloc( size/2 );
