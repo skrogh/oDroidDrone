@@ -24,7 +24,7 @@
 #include <string.h>
 
 #include "common.h"
-#include "args.h"
+#include "encoder.h"
 #include "in_demo.h"
 #include "in_camera.h"
 #include "out_file.h"

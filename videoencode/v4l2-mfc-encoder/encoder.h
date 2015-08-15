@@ -20,13 +20,23 @@
  *
  */
 
-#ifndef ARGS_H
-#define ARGS_H
+#ifndef ENCODER_H
+#define ENCODER_H
 
 #include "common.h"
-#include "encoder.h"
 
-void print_usage(char const *name);
-int parse_args(struct options *opts, int argc, char **argv);
+#define MAX_CTRLS 100
+
+struct options {
+	char *mfc_name;
+	char *out_name;
+	int codec;
+	int width;
+	int height;
+	int duration;
+	int rate;
+	int nctrls;
+	int ctrls[MAX_CTRLS][2];
+};
 
 #endif
