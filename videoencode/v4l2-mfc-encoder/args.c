@@ -26,6 +26,7 @@
 #include <unistd.h>
 #include <linux/videodev2.h>
 #include <stddef.h>
+#include <sys/eventfd.h>
 
 #include "common.h"
 #include "args.h"
