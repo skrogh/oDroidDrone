@@ -37,14 +37,15 @@ int main(int argc, char *argv[])
 
 	printf("mfc codec encoding example application\n"
 	       "Andrzej Hajda <a.hajda@samsung.com>\n"
-	       "Copyright 2012 Samsung Electronics Co., Ltd.\n\n");
+	       "Copyright 2012 Samsung Electronics Co., Ltd.\n");
 
 	if (parse_args(&opts, argc, argv)) {
 		print_usage(argv[0]);
 		return 1;
 	}
 	opts.encoderFd = eventfd( 0, 0 );
-	printf( "Fd for event is: %d", opts.encoderFd );
+	
+	printf( "Fd for event is: %d\n\n", opts.encoderFd );
 
 
 	return encoderStart( &opts );
