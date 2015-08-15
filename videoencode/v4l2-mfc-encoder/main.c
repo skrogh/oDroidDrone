@@ -42,7 +42,7 @@ int main(int argc, char *argv[])
 		print_usage(argv[0]);
 		return 1;
 	}
-	opts.encoderFd = 0;//shm_open("/videoEncoder", O_RDWR|O_CREAT, 0600);
+	opts.encoderFd = shm_open("/videoEncoder", O_RDWR|O_CREAT, 0600);
 
 
 	return encoderStart( &opts );
