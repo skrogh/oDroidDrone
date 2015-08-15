@@ -23,6 +23,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <sys/mman.h>
+#include <sys/stat.h>        /* For mode constants */
+#include <fcntl.h>           /* For O_* constants */
+
 #include "encoder.h"
 #include "args.h"
 
@@ -38,7 +42,7 @@ int main(int argc, char *argv[])
 		print_usage(argv[0]);
 		return 1;
 	}
-	opts.encoderFd = 0;
+	opts.encoderFd = 0;//shm_open("/videoEncoder", O_RDWR|O_CREAT, 0600);
 
 
 	return encoderStart( &opts );
