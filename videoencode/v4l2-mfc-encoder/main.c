@@ -21,6 +21,7 @@
  */
 
 #include <stdio.h>
+#include <unixio.h>
 #include <stdlib.h>
 #include <string.h>
 
