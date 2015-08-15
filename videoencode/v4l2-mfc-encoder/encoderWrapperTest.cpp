@@ -27,8 +27,8 @@ int main(int argc, char *argv[])
   cv::VideoCapture capDev;
   if (!capDev.open(0))
     return -1;
-  capDev.set(cv::CAP_PROP_FRAME_HEIGHT, /*HEIGHT*/ 640);
-  capDev.set(cv::CAP_PROP_FRAME_WIDTH, /*WIDTH*/ 480);
+  capDev.set(cv::CAP_PROP_FRAME_HEIGHT, /*HEIGHT*/ 480);
+  capDev.set(cv::CAP_PROP_FRAME_WIDTH, /*WIDTH*/ 640);
 
   /* grab popcor... image */
   cv::Mat frame;
