@@ -135,7 +135,8 @@ void set_options_default(struct options *o)
 	o->codec = V4L2_PIX_FMT_H264;
 }
 
-int parse_args(struct options *opts, int argc, char **argv)
+int parse_args(struct options *opts,
+		char *mfc_name, char *out_name, int width, int height, char *codex)
 {
 	static const int codecs[] = {
 		V4L2_PIX_FMT_MPEG4, V4L2_PIX_FMT_H263, V4L2_PIX_FMT_H264 };
@@ -145,66 +146,45 @@ int parse_args(struct options *opts, int argc, char **argv)
 	int c, i;
 
 	set_options_default(opts);
-	opts->encoderFd = eventfd( 0, 0 );
 
+	// set values of options struct:
+	opts->encoderFd = eventfd( 0, 0 );
+	opts->duration = 0; // run forever
+	opts->rate = 30; // Rate is irrelevant, as input rate is not constant
+	opts->width = width;
+	opts->height = height;
+	opts->mfc_name = mfc_name;
+	opts->out_name = out_name;
+	// decode codex
 	for (i = 0; i < nctrls; ++i)
 		tokens[i] = ctrls[i].name;
 	tokens[i++] = "mpeg4";
 	tokens[i++] = "h263";
 	tokens[i++] = "h264";
 	tokens[i++] = NULL;
+	s = codex;
 
-	while ((c = getopt(argc, argv, "m:o:c:d:r:s:b:")) != -1) {
-		switch (c) {
-		case 'm':
-			opts->mfc_name = optarg;
-			break;
-		case 'o':
-			opts->out_name = optarg;
-			break;
-		case 'c':
-			s = optarg;
-
-			while (*s) {
-				c = getsubopt(&s, tokens, &v);
-				if (c < 0) {
-					err("unknown codec option '%s'", v);
-					return -1;
-				} else if (c < nctrls) {
-					int *ctl = opts->ctrls[opts->nctrls++];
-					if (opts->nctrls > MAX_CTRLS) {
-						err("Too many codec options");
-						return -1;
-					}
-					ctl[0] = ctrls[c].id;
-					ctl[1] = v ? atoi(v) : 1;
-					dbg("opt %s=%d", ctrls[c].name, ctl[1]);
-				} else {
-					dbg("codec: %.04s",
-					    (char *)&codecs[c - nctrls]);
-					opts->codec = codecs[c - nctrls];
-				}
-			};
-			break;
-		case 'd':
-			opts->duration = atoi(optarg);
-			break;
-		case 'r':
-			opts->rate = atoi(optarg);
-			break;
-		case 's': {
-			char *sep = NULL;
-			opts->width = strtol(optarg, &sep, 10);
-			if (!sep || *sep != 'x') {
-				err("Bad size, should be like 320x200");
+	while (*s) {
+		c = getsubopt(&s, tokens, &v);
+		if (c < 0) {
+			err("unknown codec option '%s'", v);
+			return -1;
+		} else if (c < nctrls) {
+			int *ctl = opts->ctrls[opts->nctrls++];
+			if (opts->nctrls > MAX_CTRLS) {
+				err("Too many codec options");
 				return -1;
 			}
-			opts->height = atoi(++sep);
-			break;
+			ctl[0] = ctrls[c].id;
+			ctl[1] = v ? atoi(v) : 1;
+			dbg("opt %s=%d", ctrls[c].name, ctl[1]);
+		} else {
+			dbg("codec: %.04s",
+			    (char *)&codecs[c - nctrls]);
+			opts->codec = codecs[c - nctrls];
 		}
-		default:
-			return -1;
-		}
+	}
+
 	}
 
 	if (opts->mfc_name == NULL) {

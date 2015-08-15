@@ -27,6 +27,7 @@
 #include "encoder.h"
 
 void print_usage(char const *name);
-int parse_args(struct options *opts, int argc, char **argv);
+int parse_args(struct options *opts,
+		char *mfc_name, char *out_name, int width, int height, char *codex);
 
 #endif
