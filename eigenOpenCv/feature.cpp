@@ -15,17 +15,17 @@ CameraDetector::CameraDetector( void ) {
 	bool useHarrisDetector = false;
 	double k = 0.04;
 
-	detector = GoodFeaturesToTrackDetector( maxCorners, qualityLevel,
+	detector = GFTTDetector::create( maxCorners, qualityLevel,
 			minDistance, blockSize, useHarrisDetector, k );
 
-	extractor = DescriptorExtractor::create( "ORB" );
+	extractor = ORB::create( );
 
 	matcher = BFMatcher(NORM_HAMMING, true);
 }
 
 void CameraDetector::detectFeatures( const Mat& image, CameraMeasurements& cameraMeasurements ) {
 	keypointsOld = keypointsNew;
-	detector.detect( image, keypointsNew );
+	detector->detect( image, keypointsNew );
 
 	Mat descriptorsNew;
 	extractor->compute( image, keypointsNew, descriptorsNew );

@@ -23,9 +23,9 @@ public:
 	Size winSize;
 
 	// Points and previous points
-	vector<Point2f> points, prevPoints;
+	std::vector<Point2f> points, prevPoints;
 
-//public:
+	//public:
 	// Constructor. TODO: add parameters
 	LKTracker( void );
 	// detect features

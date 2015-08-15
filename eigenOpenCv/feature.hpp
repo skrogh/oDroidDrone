@@ -14,7 +14,7 @@ public:
 	// Interfaces for detection, extraction and matching
 	//
 	// Detector
-	GoodFeaturesToTrackDetector detector;
+	Ptr<GFTTDetector> detector;
 	// Extractor
 	Ptr<DescriptorExtractor> extractor;
 	// Matcher
