@@ -43,7 +43,7 @@ int main(int argc, char *argv[])
 		print_usage(argv[0]);
 		return 1;
 	}
-	opts.encoderFd = eventfd(unsigned int initval, int flags);
+	opts.encoderFd = eventfd( 0, 0 );
 	printf( "Fd for event is: %d", opts.encoderFd );
 
 
