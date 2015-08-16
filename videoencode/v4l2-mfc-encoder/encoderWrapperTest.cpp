@@ -47,26 +47,14 @@ int main(int argc, char *argv[])
   // grab and encode
   while(1) {
     /* grab popcor... image */
-    std::cout << "Grabbing img" << std::endl;
     capDev.read(frame);
-    // Display it
-    std::cout << "Displaying img" << std::endl;
-    cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );// Create a window for display.
-    cv::imshow( "Display window", frame );                   // Show our image inside it.
-    cv::waitKey(0);
-
     // Convert it
-    std::cout << "Converting img" << std::endl;
-    std::cout << "Converting frame to YcrCb" << std::endl;
     cv::cvtColor(frame, YcrCb, cv::COLOR_BGR2YCrCb);
     cv::Mat out[] = {Gray, CbCr};
     int from_to[] = { 0,0, 2,1, 1,2 };
-    std::cout << "Mixing" << std::endl;
     cv::mixChannels(&YcrCb, 1, out, 2, from_to, 3);
-    std::cout << "Resizing" << std::endl;
     cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);                                       // Wait for a keystroke in the window
     // Trigger encodingb
-    std::cout << "Triggering encoder" << std::endl;
 		encoderTriggerConversion( &opts );
 	}
 }
