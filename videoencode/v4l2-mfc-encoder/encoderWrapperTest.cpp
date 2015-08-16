@@ -36,9 +36,9 @@ int main(int argc, char *argv[])
   // init images (and buffers)
   cv::Mat frame;
   cv::Mat YcrCb;
-  cv::Mat Gray(frame.rows, frame.cols, CV_8UC1);
-  cv::Mat CbCr(frame.rows,frame.cols, CV_8UC2);
-  cv::Mat CbCr_2(frame.rows/2, frame.cols/2, CV_8UC2);
+  cv::Mat Gray(frame.rows, frame.cols, CV_8UC1, cv::Scalar::all(0));
+  cv::Mat CbCr(frame.rows,frame.cols, CV_8UC2, cv::Scalar::all(0));
+  cv::Mat CbCr_2(frame.rows/2, frame.cols/2, CV_8UC2, cv::Scalar::all(0));
   // point encoder to images: (TODO: add switch as threadsafety)
   inBuff[0] = (char*) Gray.data;
   inBuff[1] = (char*) CbCr_2.data;
@@ -64,7 +64,7 @@ int main(int argc, char *argv[])
     cv::mixChannels(&YcrCb, 1, out, 2, from_to, 3);
     std::cout << "Resizing" << std::endl;
     cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);                                       // Wait for a keystroke in the window
-    // Trigger encoding
+    // Trigger encodingb
     std::cout << "Triggering encoder" << std::endl;
 		encoderTriggerConversion( &opts );
 	}
