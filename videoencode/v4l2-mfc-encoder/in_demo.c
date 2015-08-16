@@ -102,7 +102,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 
 
 
-		uint8x8_t y8 = (uint8x8_t) vrshrn_n_s16( y16, 7 );  // rounding shift and narrow
+		uint8x8_t y8 = (uint8x8_t) vrshrn_n_s16( y16, 8 );  // rounding shift and narrow
 		//y8 = vadd_u8( y8, c128 );
 
 
