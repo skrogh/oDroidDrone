@@ -126,9 +126,9 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 			int16x8x2_t b = vuzpq_s16( b16[0], b16[1] ); // get each other R
 
 			// U
-			int16x8_t u16 = vmulq_n_s16( r16, -43 );
-			u16 = vmlaq_n_s16( u16, g16, -84 );
-			u16 = vmlaq_n_s16( u16, b16, 127 );
+			int16x8_t u16 = vmulq_n_s16( r.val[0], -43 );
+			u16 = vmlaq_n_s16( u16, g.val[0], -84 );
+			u16 = vmlaq_n_s16( u16, b.val[0], 127 );
 			// rounding shift and narrow
 			uint8x8_t u8 = (uint8x8_t) vrshrn_n_s16( u16, 8 );
 			// shift arround 0
