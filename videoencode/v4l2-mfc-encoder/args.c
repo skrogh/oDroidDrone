@@ -176,7 +176,7 @@ int parse_args(struct options *opts,
 			printf( "v ? atoi(v) : 1: %d\n", v ? atoi(v) : 1 );
 			printf( "ctl[0] val: %d\n", ctl[0] );
 			printf( "ctl[1] val: %d\n", ctl[1] );
-			printf( "dbgprint\n", ctl );
+			printf( "dbgprint\n" );
 			ctl[0] = ctrls[c].id;
 			ctl[1] = v ? atoi(v) : 1;
 			dbg("opt %s=%d", ctrls[c].name, ctl[1]);
