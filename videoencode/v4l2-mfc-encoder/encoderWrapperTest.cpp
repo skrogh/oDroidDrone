@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
     cv::mixChannels(&YcrCb, 1, out, 2, from_to, 3);
     cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);
     //
-    cv::namedWindow( "Display window", WINDOW_AUTOSIZE );// Create a window for display.
+    cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );// Create a window for display.
     cv::imshow( "Display window", frame );                   // Show our image inside it.
 
     cv::waitKey(0);                                          // Wait for a keystroke in the window
