@@ -24,7 +24,7 @@ int main(int argc, char *argv[])
     std::cout << "Arg: " << i << " = " << argv[i] << std::endl;
   }
 
-  if (parse_args(&opts, "/dev/video9", "video.avi", 640, 480, (argc>1) ? argv[1] : "h264\0", inBuff)) {
+  if (parse_args(&opts, "/dev/video9", "video.avi", 640, 480, (argc==1) ? argv[1] : "h264-demo", inBuff)) {
     return 1;
   }
 
