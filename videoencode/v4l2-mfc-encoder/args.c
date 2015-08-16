@@ -126,8 +126,8 @@ int parse_args(struct options *opts,
 	char *s, *v;
 	char *buffer;
 	int c, i;
-	buffer = (char*) mallox( strlen(codex) * size_of(char) );
-	memcpy( buffer, codex, strlen(codex) * size_of(char) );
+	buffer = (char*) mallox( strlen(codex) * sizeof(char) );
+	memcpy( buffer, codex, strlen(codex) * sizeof(char) );
 
 	// set values of options struct:
 	opts->encoderFd = eventfd( 0, 0 );
@@ -151,13 +151,13 @@ int parse_args(struct options *opts,
 		c = getsubopt(&s, tokens, &v);
 		if (c < 0) {
 			err("unknown codec option '%s'", v);
-			free(buffer)
+			free(buffer);
 			return -1;
 		} else if (c < nctrls) {
 			int *ctl = opts->ctrls[opts->nctrls++];
 			if (opts->nctrls > MAX_CTRLS) {
 				err("Too many codec options");
-				free(buffer)
+				free(buffer);
 				return -1;
 			}
 			ctl[0] = ctrls[c].id;
@@ -172,9 +172,9 @@ int parse_args(struct options *opts,
 
 	if (opts->mfc_name == NULL) {
 		err("Please provide MFC device");
-		free(buffer)
+		free(buffer);
 		return -1;
 	}
-	free(buffer)
+	free(buffer);
 	return 0;
 }
