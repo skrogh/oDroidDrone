@@ -137,9 +137,9 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 			vst1_u8( chromaUArray, u8 );
 
 			// V
-			int16x8_t v16 = vmulq_n_s16( r16, 127 );
-			v16 = vmlaq_n_s16( y16, g16, -106 );
-			v16 = vmlaq_n_s16( y16, b16, -21 );
+			int16x8_t v16 = vmulq_n_s16( r.val[0], 127 );
+			v16 = vmlaq_n_s16( y16, g.val[0], -106 );
+			v16 = vmlaq_n_s16( y16, b.val[0], -21 );
 			// rounding shift and narrow
 			uint8x8_t v8 = (uint8x8_t) vrshrn_n_s16( v16, 8 );
 			// shift arround 0
