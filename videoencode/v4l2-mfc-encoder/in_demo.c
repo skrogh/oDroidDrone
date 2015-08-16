@@ -80,22 +80,28 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 			// bgr.val[1]: Green value of first 8 pixels
 			// bgr.val[2]: Red value of first 8 pixels
 		// Load matrix values:
-		int8x8_t m11 = vdup_n_s8( 76 );
-		int8x8_t m12 = vdup_n_s8( 150 );
-		int8x8_t m13 = vdup_n_s8( 29 );
-		int8x8_t m21 = vdup_n_s8( -43 );
-		int8x8_t m22 = vdup_n_s8( -84 );
-		int8x8_t m23 = vdup_n_s8( -127 );
-		int8x8_t m31 = vdup_n_s8( 127 );
-		int8x8_t m32 = vdup_n_s8( -106 );
-		int8x8_t m33 = vdup_n_s8( -21 );
-		uint8x8_t c128 = vdup_n_s8( 128 );
-
+		//int8x8_t m11 = vdup_n_s8( 76 );
+		//int8x8_t m12 = vdup_n_s8( 150 );
+		//int8x8_t m13 = vdup_n_s8( 29 );
+		//int8x8_t m21 = vdup_n_s8( -43 );
+		//int8x8_t m22 = vdup_n_s8( -84 );
+		//int8x8_t m23 = vdup_n_s8( -127 );
+		//int8x8_t m31 = vdup_n_s8( 127 );
+		//int8x8_t m32 = vdup_n_s8( -106 );
+		//int8x8_t m33 = vdup_n_s8( -21 );
+		uint8x8_t c128 = vdup_n_u8( 128 );
+		uint8x8_t c0 = vdup_n_u8( 0 );
+		int16x8_t r16 = (int16x8_t) vaddl_u8( bgr[2], c0 );
+		int16x8_t g16 = (int16x8_t) vaddl_u8( bgr[1], c0 );
+		int16x8_t b16 = (int16x8_t) vaddl_u8( bgr[0], c0 );
 		// Calculate Y
 		// Matrix product
-		int16x8_t y16 = vmull_s8( bgr.val[2], m11 );
-		y16 = vmlal_s8( y16,  bgr.val[1], m12 );
-		y16 = vmlal_s8( y16,  bgr.val[0], m13 );
+		int16x8_t y16 = vmulq_n_s16( r16, 76 );
+		y16 = vmlaq_n_s16( y16, g16, 150 );
+		y16 = vmlaq_n_s16( y16, b16, 29 );                     
+
+
+
 		uint8x8_t y8 = vqrshrun_n_s16( y16, 8 );  // rounding shift and narrow
 		y8 = vadd_u8( y8, c128 );
 
@@ -104,7 +110,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		vst2_u8( chromaArray, uint8x8x2_t val ); // store chroma
 
 		bgrArray += 8*3;
-		chromaArray += 8*2
+		chromaArray += 8*2;
 		luma += 8;
 	}
 
