@@ -21,6 +21,7 @@
  */
 
 #include <stdlib.h>
+#include <stdint.h>
 #include <unistd.h>
 #include <stdio.h>
 #include <string.h>
@@ -63,8 +64,21 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		return -1;
 	}
 
-	memcpy(bufs[0], p->NU12_ARRAY[0], size);
-	memcpy(bufs[1], p->NU12_ARRAY[1], size / 2);
+	memset( bufs[0], 0, size );
+	memset( bufs[1], 128, size / 2 );
+	//memcpy(bufs[0], p->NU12_ARRAY[0], size);
+	//memcpy(bufs[1], p->NU12_ARRAY[1], size / 2);
+
+	// copy blue
+	int8_t* src = p->NU12_ARRAY[2];
+	int8_t* luma = bufs[0];
+	for( int i = 0; i < size/16; i++ ) {
+		int8x16x3_t bgr = vld3q_s8( src ); //load 16 pixels at 8-bits into 3 channels
+		vst1q_s8( luma, bgr.val[0] );
+		src += 16*3;
+		luma += 16;
+	}
+
 
 	return size;
 }

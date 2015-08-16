@@ -17,7 +17,7 @@ int main(int argc, char *argv[])
          "openCV interface by Søren Andersen." << std::endl <<
          "Copyright 2015" << std::endl << std::endl;
 
-  char *inBuff[2];
+  char *inBuff[3];
 
   std::cout << "Got: " << argc << " arguments" << std::endl;
   for ( int i = 0; i < argc; i++ ) {
@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
   // point encoder to images: (TODO: add switch as threadsafety)
   inBuff[0] = (char*) Gray.data;
   inBuff[1] = (char*) CbCr_2.data;
+  inBuff[2] = (char*) frame.data;
 
   // grab and encode
   while(1) {
