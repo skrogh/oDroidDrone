@@ -72,7 +72,8 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 	// copy blue
 	int8_t* src = p->NU12_ARRAY[2];
 	int8_t* luma = bufs[0];
-	for( int i = 0; i < size/16; i++ ) {
+	int i;
+	for( i = 0; i < size/16; i++ ) {
 		int8x16x3_t bgr = vld3q_s8( src ); //load 16 pixels at 8-bits into 3 channels
 		vst1q_s8( luma, bgr.val[0] );
 		src += 16*3;
