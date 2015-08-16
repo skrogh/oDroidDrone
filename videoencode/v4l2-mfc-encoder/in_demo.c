@@ -111,7 +111,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 
 		bgrArray += 8*3;
 		chromaArray += 8*2;
-		luma += 8;
+		lumaArray += 8;
 	}
 
 
