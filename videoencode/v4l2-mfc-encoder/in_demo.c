@@ -77,21 +77,9 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 
 	int i;
 	for( i = 0; i < size/16; i++ ) {
+		printf( "it: %d\n", i );
 		uint8x8x3_t bgr[2] = { vld3_u8( bgrArray ), //load 16 pixels at 8-bits into 3 channels
 			vld3_u8( bgrArray + 3*8 ) }; //load 16 pixels at 8-bits into 3 channels
-			// bgr.val[0]: Blue value of first 8 pixels
-			// bgr.val[1]: Green value of first 8 pixels
-			// bgr.val[2]: Red value of first 8 pixels
-		// Load matrix values:
-		//int8x8_t m11 = vdup_n_s8( 76 );
-		//int8x8_t m12 = vdup_n_s8( 150 );
-		//int8x8_t m13 = vdup_n_s8( 29 );
-		//int8x8_t m21 = vdup_n_s8( -43 );
-		//int8x8_t m22 = vdup_n_s8( -84 );
-		//int8x8_t m23 = vdup_n_s8( -127 );
-		//int8x8_t m31 = vdup_n_s8( 127 );
-		//int8x8_t m32 = vdup_n_s8( -106 );
-		//int8x8_t m33 = vdup_n_s8( -21 );
 		uint8x8_t c128 = vdup_n_u8( 128 );
 		uint8x8_t c0 = vdup_n_u8( 0 );
 
