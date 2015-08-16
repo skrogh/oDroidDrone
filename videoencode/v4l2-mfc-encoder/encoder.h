@@ -75,7 +75,7 @@ void encoderTriggerConversion(  struct options *opts );
 																		-	Must be (width*height)+(width*height)/2
 */
 int parse_args(struct options *opts,
-		char *mfc_name, char *out_name, int width, int height, char *codex,
+		char *mfc_name, char *out_name, int width, int height, char []codex,
 		char **NU12_ARRAY);
 
 #endif
