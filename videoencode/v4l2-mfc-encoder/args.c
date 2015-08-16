@@ -164,6 +164,7 @@ int parse_args(struct options *opts,
 				return -1;
 			}
 			printf( "ctl addr: %p\n", ctl );
+			printf( "opts->ctrls[opts->nctrls]: %p\n", opts->ctrls[opts->nctrls-1] );
 			printf( "dbgprint\n", ctl );
 			ctl[0] = ctrls[c].id;
 			ctl[1] = v ? atoi(v) : 1;
