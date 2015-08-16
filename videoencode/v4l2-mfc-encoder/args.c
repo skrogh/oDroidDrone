@@ -164,8 +164,8 @@ int parse_args(struct options *opts,
 				return -1;
 			}
 			printf( "4Got opts: %d, %s, %s\n", c, s, v );
-			printf( "ctl addr: 0x%x", (int)ctl );
-			printf( "ctrls[opts->nctrls: 0x%x", (int) opts->ctrls[opts->nctrls] );
+			printf( "ctl addr: %p", ctl );
+			printf( "ctrls[opts->nctrls: %p", opts->ctrls[opts->nctrls] );
 			printf( "5ctrls[c].id: 0x%x", ctrls[c].id );
 			ctl[0] = ctrls[c].id;
 			printf( "6Got opts: %d, %s, %s\n", c, s, v );
