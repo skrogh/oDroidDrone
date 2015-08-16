@@ -91,14 +91,14 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		//int8x8_t m33 = vdup_n_s8( -21 );
 		uint8x8_t c128 = vdup_n_u8( 128 );
 		uint8x8_t c0 = vdup_n_u8( 0 );
-		int16x8_t r16 = (int16x8_t) vaddl_u8( bgr[2], c0 );
-		int16x8_t g16 = (int16x8_t) vaddl_u8( bgr[1], c0 );
-		int16x8_t b16 = (int16x8_t) vaddl_u8( bgr[0], c0 );
+		int16x8_t r16 = (int16x8_t) vaddl_u8( bgr.val[2], c0 );
+		int16x8_t g16 = (int16x8_t) vaddl_u8( bgr.val[1], c0 );
+		int16x8_t b16 = (int16x8_t) vaddl_u8( bgr.val[0], c0 );
 		// Calculate Y
 		// Matrix product
 		int16x8_t y16 = vmulq_n_s16( r16, 76 );
 		y16 = vmlaq_n_s16( y16, g16, 150 );
-		y16 = vmlaq_n_s16( y16, b16, 29 );                     
+		y16 = vmlaq_n_s16( y16, b16, 29 );
 
 
 
@@ -107,7 +107,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 
 
 		vst1_u8( lumaArray, y8 ); // store luma
-		vst2_u8( chromaArray, uint8x8x2_t val ); // store chroma
+		//vst2_u8( chromaArray, uint8x8x2_t val ); // store chroma
 
 		bgrArray += 8*3;
 		chromaArray += 8*2;
