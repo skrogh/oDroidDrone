@@ -156,7 +156,7 @@ int parse_args(struct options *opts,
 			return -1;
 		} else if (c < nctrls) {
 			printf( "Got opts: %d, %s, %s\n", c, s, v );
-			int *ctl = opts->ctrls[opts->nctrls++];
+			int *ctl = &(opts->ctrls[opts->nctrls++][0]);
 			printf( "Got opts: %d, %s, %s\n", c, s, v );
 			if (opts->nctrls > MAX_CTRLS) {
 				err("Too many codec options");
@@ -165,6 +165,7 @@ int parse_args(struct options *opts,
 			}
 			printf( "Got opts: %d, %s, %s\n", c, s, v );
 			ctl[0] = ctrls[c].id;
+			printf( "Got opts: %d, %s, %s\n", c, s, v );
 			ctl[1] = v ? atoi(v) : 1;
 			printf( "Got opts: %d, %s, %s\n", c, s, v );
 			dbg("opt %s=%d", ctrls[c].name, ctl[1]);
