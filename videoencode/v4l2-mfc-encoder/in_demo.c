@@ -73,11 +73,11 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 	uint8_t* bgrArray = p->NU12_ARRAY[2];
 	uint8_t* lumaArray = bufs[0];
 	uint8_t* chromaUArray = bufs[1];
-	uint8_t* chromaVArray = bufs[1];
+	uint8_t* chromaVArray = bufs[1] + size/4;
 
 	int i;
-	for( i = 0; i < size/16; i++ ) {
-		printf( "it: %d\n", i );
+	for( i = 0; i < size/32; i++ ) {
+		printf( "it: %d/%d\n", i, size/32 );
 		uint8x8x3_t bgr[2] = { vld3_u8( bgrArray ), //load 16 pixels at 8-bits into 3 channels
 			vld3_u8( bgrArray + 3*8 ) }; //load 16 pixels at 8-bits into 3 channels
 		uint8x8_t c128 = vdup_n_u8( 128 );
