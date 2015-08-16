@@ -53,6 +53,11 @@ int main(int argc, char *argv[])
     int from_to[] = { 0,0, 2,1, 1,2 };
     cv::mixChannels(&YcrCb, 1, out, 2, from_to, 3);
     cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);
+    //
+    cv::namedWindow( "Display window", WINDOW_AUTOSIZE );// Create a window for display.
+    cv::imshow( "Display window", frame );                   // Show our image inside it.
+
+    cv::waitKey(0);                                          // Wait for a keystroke in the window
     // Trigger encoding
 		encoderTriggerConversion( &opts );
 	}
