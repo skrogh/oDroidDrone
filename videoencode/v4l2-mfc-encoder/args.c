@@ -126,12 +126,12 @@ int parse_args(struct options *opts,
 	char *s, *v;
 	char *buffer;
 	int c, i;
-	buffer = (char*) malloc( strlen(codex) * sizeof(char) );
+	buffer = (char*) malloc( (strlen(codex) + 1) * sizeof(char) );
 	if (buffer==NULL) {
 		err("Failed to malloc string buffer\n" );
 		return -1;
 	}
-	memcpy( buffer, codex, strlen(codex) * sizeof(char) );
+	memcpy( buffer, codex, (strlen(codex) + 1) * sizeof(char) );
 
 	// Zero struct
 	memset( opts, 0, sizeof(struct options) );
