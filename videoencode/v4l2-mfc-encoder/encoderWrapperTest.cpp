@@ -17,6 +17,8 @@ int main(int argc, char *argv[])
          "openCV interface by Søren Andersen." << std::endl <<
          "Copyright 2015" << std::endl << std::endl;
 
+  char *inBuff[2];
+
   if (parse_args(&opts, "/dev/video9", "video.avi", 640, 480, "h264", inBuff)) {
     return 1;
   }
@@ -38,26 +40,29 @@ int main(int argc, char *argv[])
   cv::Mat CbCr(frame.rows,frame.cols, CV_8UC2);
   cv::Mat CbCr_2(frame.rows/2, frame.cols/2, CV_8UC2);
   // point encoder to images: (TODO: add switch as threadsafety)
-  opts.NU12_ARRAY[0] = (char*) Gray.data;
-  opts.NU12_ARRAY[1] = (char*) CbCr_2.data;
-
+  inBuff[0] = (char*) Gray.data;
+  inBuff[1] = (char*) CbCr_2.data;
 
   // grab and encode
   while(1) {
     /* grab popcor... image */
+    std::cout << "Grabbing img" << std::endl;
     capDev.read(frame);
+    // Display it
+    std::cout << "Displaying img" << std::endl;
+    cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );// Create a window for display.
+    cv::imshow( "Display window", frame );                   // Show our image inside it.
+    cv::waitKey(0);
+
     // Convert it
+    std::cout << "Converting img" << std::endl;
     cv::cvtColor(frame, YcrCb, cv::COLOR_BGR2YCrCb);
     cv::Mat out[] = {Gray, CbCr};
     int from_to[] = { 0,0, 2,1, 1,2 };
     cv::mixChannels(&YcrCb, 1, out, 2, from_to, 3);
-    cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);
-    //
-    cv::namedWindow( "Display window", cv::WINDOW_AUTOSIZE );// Create a window for display.
-    cv::imshow( "Display window", frame );                   // Show our image inside it.
-
-    cv::waitKey(0);                                          // Wait for a keystroke in the window
+    cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);                                       // Wait for a keystroke in the window
     // Trigger encoding
+    std::cout << "Triggering encoder" << std::endl;
 		encoderTriggerConversion( &opts );
 	}
 }
