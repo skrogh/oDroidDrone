@@ -24,6 +24,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <pthread.h>
+#include <execinfo.h>
 
 #include "common.h"
 #include "encoder.h"
@@ -33,6 +34,18 @@
 #include "mfc.h"
 #include "v4l_dev.h"
 
+void segfaultHander(int sig) {
+  void *array[10];
+  size_t size;
+
+  // get void*'s for all entries on the stack
+  size = backtrace(array, 10);
+
+  // print out all the frames to stderr
+  fprintf(stderr, "Error: signal %d:\n", sig);
+  backtrace_symbols_fd(array, size, STDERR_FILENO);
+  exit(1);
+}
 
 /*
 * Makes a blokcing call and starts the encoder, looping over the given array and encoding
@@ -51,6 +64,8 @@ struct options {
 */
 int encoderSetup( struct options *opts )
 {
+	signal(SIGSEGV, segfaultHandler);   // install our handler
+
 	struct io_dev *input;
 	struct io_dev *mfc;
 	struct io_dev *output;
