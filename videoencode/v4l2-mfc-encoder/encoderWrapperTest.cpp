@@ -56,10 +56,13 @@ int main(int argc, char *argv[])
 
     // Convert it
     std::cout << "Converting img" << std::endl;
+    std::cout << "Converting frame to YcrCb" << std::endl;
     cv::cvtColor(frame, YcrCb, cv::COLOR_BGR2YCrCb);
     cv::Mat out[] = {Gray, CbCr};
     int from_to[] = { 0,0, 2,1, 1,2 };
+    std::cout << "Mixing" << std::endl;
     cv::mixChannels(&YcrCb, 1, out, 2, from_to, 3);
+    std::cout << "Resizing" << std::endl;
     cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);                                       // Wait for a keystroke in the window
     // Trigger encoding
     std::cout << "Triggering encoder" << std::endl;
