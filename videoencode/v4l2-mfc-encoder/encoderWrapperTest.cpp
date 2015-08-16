@@ -17,8 +17,6 @@ int main(int argc, char *argv[])
          "openCV interface by Søren Andersen." << std::endl <<
          "Copyright 2015" << std::endl << std::endl;
 
-  char *inBuff[2];
-
   if (parse_args(&opts, "/dev/video9", "video.avi", 640, 480, "h264", inBuff)) {
     return 1;
   }
@@ -40,8 +38,9 @@ int main(int argc, char *argv[])
   cv::Mat CbCr(frame.rows,frame.cols, CV_8UC2);
   cv::Mat CbCr_2(frame.rows/2, frame.cols/2, CV_8UC2);
   // point encoder to images: (TODO: add switch as threadsafety)
-  inBuff[0] = (char*) Gray.data;
-  inBuff[1] = (char*) CbCr_2.data;
+  opts.NU12_ARRAY[0] = (char*) Gray.data;
+  opts.NU12_ARRAY[1] = (char*) CbCr_2.data;
+
 
   // grab and encode
   while(1) {
