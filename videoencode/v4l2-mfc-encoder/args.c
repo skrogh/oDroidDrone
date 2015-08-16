@@ -134,7 +134,7 @@ int parse_args(struct options *opts,
 	memcpy( buffer, codex, strlen(codex) * sizeof(char) );
 
 	// Zero struct
-	memzero( opts, sizeof(struct options) );
+	memset( opts, 0, sizeof(struct options) );
 
 	// set values of options struct:
 	opts->encoderFd = eventfd( 0, 0 );
