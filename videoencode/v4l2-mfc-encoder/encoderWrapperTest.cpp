@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
   char *inBuff[2];
 
-  sdt::cout << "Got: " << argc << " arguments" << std::endl;
+  std::cout << "Got: " << argc << " arguments" << std::endl;
   for ( int i = 0; i < argc; i++ ) {
     std::cout << "Arg: " << i << " = " << argv[i] << std::endl;
   }
