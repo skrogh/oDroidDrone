@@ -25,6 +25,8 @@
 #include <unistd.h>
 #include <pthread.h>
 #include <execinfo.h>
+#include <signal.h>
+
 
 #include "common.h"
 #include "encoder.h"
@@ -34,7 +36,7 @@
 #include "mfc.h"
 #include "v4l_dev.h"
 
-void segfaultHander(int sig) {
+void segfaultHandler(int sig) {
   void *array[10];
   size_t size;
 
