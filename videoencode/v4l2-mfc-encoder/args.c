@@ -149,6 +149,7 @@ int parse_args(struct options *opts,
 
 	while (*s) {
 		c = getsubopt(&s, tokens, &v);
+		printf( "Got opts: %d, %s, %s\n", c, s, v );
 		if (c < 0) {
 			err("unknown codec option '%s'", v);
 			free(buffer);

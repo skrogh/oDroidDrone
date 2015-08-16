@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 
   char *inBuff[2];
 
-  if (parse_args(&opts, "/dev/video9", "video.avi", 640, 480, "h264,h264_min_qp = 40", inBuff)) {
+  if (parse_args(&opts, "/dev/video9", "video.avi", 640, 480, "h264,h264_min_qp=40", inBuff)) {
     return 1;
   }
 
