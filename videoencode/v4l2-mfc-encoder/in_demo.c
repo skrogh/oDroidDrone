@@ -72,10 +72,13 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 	// copy blue
 	uint8_t* bgrArray = p->NU12_ARRAY[2];
 	uint8_t* lumaArray = bufs[0];
-	uint8_t* chromaArray = bufs[1];
+	uint8_t* chromUaArray = bufs[1];
+	uint8_t* chromaVArray = bufs[1] size/4;
+
 	int i;
-	for( i = 0; i < size/8; i++ ) {
-		uint8x8x3_t bgr = vld3_u8( bgrArray ); //load 16 pixels at 8-bits into 3 channels
+	for( i = 0; i < size/16; i++ ) {
+		uint8x8x3_t bgr[2] = { vld3_u8( bgrArray ), //load 16 pixels at 8-bits into 3 channels
+			vld3_u8( bgrArray + 3*8 ) }; //load 16 pixels at 8-bits into 3 channels
 			// bgr.val[0]: Blue value of first 8 pixels
 			// bgr.val[1]: Green value of first 8 pixels
 			// bgr.val[2]: Red value of first 8 pixels
@@ -91,27 +94,67 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		//int8x8_t m33 = vdup_n_s8( -21 );
 		uint8x8_t c128 = vdup_n_u8( 128 );
 		uint8x8_t c0 = vdup_n_u8( 0 );
-		int16x8_t r16 = (int16x8_t) vaddl_u8( bgr.val[2], c0 );
-		int16x8_t g16 = (int16x8_t) vaddl_u8( bgr.val[1], c0 );
-		int16x8_t b16 = (int16x8_t) vaddl_u8( bgr.val[0], c0 );
-		// Calculate Y
-		// Matrix product
-		int16x8_t y16 = vmulq_n_s16( r16, 76 );
-		y16 = vmlaq_n_s16( y16, g16, 150 );
-		y16 = vmlaq_n_s16( y16, b16, 29 );
 
+		int16x8_t r16[2];
+		int16x8_t g16[2];
+		int16x8_t b16[2];
+		uint8x8_t y8[2];
 
+		int j;
+		for ( j = 0; j < 2; j++ ) {
+			// Covert to 16 bit
+			r16[i] = (int16x8_t) vaddl_u8( bgr[i].val[2], c0 )
+			g16[i] = (int16x8_t) vaddl_u8( bgr[i].val[1], c0 )
+			b16[i] = (int16x8_t) vaddl_u8( bgr[i].val[0], c0 )
+			// Calculate Y
+			// Matrix product
+			int16x8_t y16 = vmulq_n_s16( r16[i], 76 );
+			y16 = vmlaq_n_s16( y16, g16[i], 150 );
+			y16 = vmlaq_n_s16( y16, b16[i], 29 );
+			// rounding shift and narrow
+			y8[i] = (uint8x8_t) vrshrn_n_s16( y16, 8 );
+		}
+		// store luma
+		vst1_u8( lumaArray, y8[0] );
+		vst1_u8( lumaArray + 8*3, y8[1] );
 
-		uint8x8_t y8 = (uint8x8_t) vrshrn_n_s16( y16, 8 );  // rounding shift and narrow
-		//y8 = vadd_u8( y8, c128 );
+		// Advance array pointers
+		Array += 8*3;
+		lumaArray += 16;
 
+		// Check if we should encode chroma
+		if( (i/640)%2 ) {
+			// get each Other
+			int16x8x2_t r = vuzpq_s16( r16[0], r16[1] ); // get each other R
+			int16x8x2_t g = vuzpq_s16( g16[0], g16[1] ); // get each other R
+			int16x8x2_t b = vuzpq_s16( b16[0], b16[1] ); // get each other R
 
-		vst1_u8( lumaArray, y8 ); // store luma
-		//vst2_u8( chromaArray, uint8x8x2_t val ); // store chroma
+			// U
+			int16x8_t u16 = vmulq_n_s16( r16, -43 );
+			u16 = vmlaq_n_s16( u16, g16, -84 );
+			u16 = vmlaq_n_s16( u16, b16, 127 );
+			// rounding shift and narrow
+			uint8x8_t u8 = (uint8x8_t) vrshrn_n_s16( u16, 8 );
+			// shift arround 0
+			u8 = vaddl_u8( u8, c128 );
+			//store
+			vst1_u8( chromaUArray, u8 );
 
-		bgrArray += 8*3;
-		chromaArray += 8*2;
-		lumaArray += 8;
+			// V
+			int16x8_t v16 = vmulq_n_s16( r16, 127 );
+			v16 = vmlaq_n_s16( y16, g16, -106 );
+			v16 = vmlaq_n_s16( y16, b16, -21 );
+			// rounding shift and narrow
+			uint8x8_t v8 = (uint8x8_t) vrshrn_n_s16( v16, 8 );
+			// shift arround 0
+			v8 = vaddl_u8( v8, c128 );
+			//store
+			vst1_u8( chromaVArray, v8 );
+
+			// move array pointer
+			chromaUArray += 8;
+			chromaVArray += 8;
+		}
 	}
 
 
