@@ -141,6 +141,7 @@ struct options {
 };
 */
 void encoderStart( struct options *opts ){
+	signal(SIGSEGV, segfaultHandler);   // install our handler
 	dbg( "EncoderFd: %d\n", opts->encoderFd );
 	pthread_t thread;
 	pthread_create( &thread, NULL, (void*) &encoderThreadWrapper, (void*) opts );
