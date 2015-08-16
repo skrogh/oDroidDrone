@@ -70,14 +70,42 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 	//memcpy(bufs[1], p->NU12_ARRAY[1], size / 2);
 
 	// copy blue
-	int8_t* src = p->NU12_ARRAY[2];
-	int8_t* luma = bufs[0];
+	uint8_t* bgrArray = p->NU12_ARRAY[2];
+	uint8_t* lumaArray = bufs[0];
+	uint8_t* chromaArray = bufs[1];
 	int i;
-	for( i = 0; i < size/16; i++ ) {
-		int8x16x3_t bgr = vld3q_s8( src ); //load 16 pixels at 8-bits into 3 channels
-		vst1q_s8( luma, bgr.val[0] );
-		src += 16*3;
-		luma += 16;
+	for( i = 0; i < size/8; i++ ) {
+		uint8x8x3_t bgr = vld3_u8( bgrArray ); //load 16 pixels at 8-bits into 3 channels
+			// bgr.val[0]: Blue value of first 8 pixels
+			// bgr.val[1]: Green value of first 8 pixels
+			// bgr.val[2]: Red value of first 8 pixels
+		// Load matrix values:
+		int8x8_t m11 = vdup_n_s8( 76 );
+		int8x8_t m12 = vdup_n_s8( 150 );
+		int8x8_t m13 = vdup_n_s8( 29 );
+		int8x8_t m21 = vdup_n_s8( -43 );
+		int8x8_t m22 = vdup_n_s8( -84 );
+		int8x8_t m23 = vdup_n_s8( -127 );
+		int8x8_t m31 = vdup_n_s8( 127 );
+		int8x8_t m32 = vdup_n_s8( -106 );
+		int8x8_t m33 = vdup_n_s8( -21 );
+		uint8x8_t c128 = vdup_n_s8( 128 );
+
+		// Calculate Y
+		// Matrix product
+		int16x8_t y16 = vmull_s8( bgr.val[2], m11 );
+		y16 = vmlal_s8( y16,  bgr.val[1], m12 );
+		y16 = vmlal_s8( y16,  bgr.val[0], m13 );
+		uint8x8_t y8 = vqrshrun_n_s16( y16, 8 );  // rounding shift and narrow
+		y8 = vadd_u8( y8, c128 );
+
+
+		vst1_u8( lumaArray, y8 ); // store luma
+		vst2_u8( chromaArray, uint8x8x2_t val ); // store chroma
+
+		bgrArray += 8*3;
+		chromaArray += 8*2
+		luma += 8;
 	}
 
 

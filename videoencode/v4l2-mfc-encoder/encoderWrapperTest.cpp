@@ -63,6 +63,6 @@ int main(int argc, char *argv[])
     cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);                                       // Wait for a keystroke in the window
     */
     // Trigger encodingb
-		//encoderTriggerConversion( &opts );
+		encoderTriggerConversion( &opts );
 	}
 }
