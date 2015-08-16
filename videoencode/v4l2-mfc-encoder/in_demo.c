@@ -25,6 +25,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <math.h>
+#include <arm_neon.h>
 
 #include "common.h"
 #include "in_demo.h"

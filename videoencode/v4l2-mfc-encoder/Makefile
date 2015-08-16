@@ -30,7 +30,7 @@ INCLUDES = -I$(KERNELHEADERS)
 SOURCES = main.c args.c encoder.c in_demo.c out_file.c mfc.c io_dev.c func_dev.c v4l_dev.c
 OBJECTS := $(SOURCES:.c=.o)
 EXEC = mfc-encode
-CFLAGS = -Wall -g -DS5PC1XX_FIMC -pthread
+CFLAGS = -Wall -g -DS5PC1XX_FIMC -pthread -mfpu=neon
 DEP = .dep
 
 all: $(EXEC) $(DEP)
