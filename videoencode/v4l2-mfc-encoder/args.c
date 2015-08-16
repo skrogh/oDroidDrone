@@ -126,7 +126,7 @@ int parse_args(struct options *opts,
 	char *s, *v;
 	char *buffer;
 	int c, i;
-	buffer = (char*) mallox( strlen(codex) * sizeof(char) );
+	buffer = (char*) malloc( strlen(codex) * sizeof(char) );
 	memcpy( buffer, codex, strlen(codex) * sizeof(char) );
 
 	// set values of options struct:
