@@ -156,7 +156,9 @@ int parse_args(struct options *opts,
 			return -1;
 		} else if (c < nctrls) {
 			printf( "2Got opts: %d, %s, %s\n", c, s, v );
-			int *ctl = opts->ctrls[opts->nctrls++];
+			int *ctl = NULL;
+			printf( "ctl addr: %p", ctl );
+			ctl = opts->ctrls[opts->nctrls++];
 			printf( "3Got opts: %d, %s, %s\n", c, s, v );
 			if (opts->nctrls > MAX_CTRLS) {
 				err("Too many codec options");
