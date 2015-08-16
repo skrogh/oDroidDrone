@@ -20,7 +20,7 @@
 TCPATH =
 KERNELHEADERS = /home/kamil/praca/w1-party/kernel/headers/include
 
-CC = ${TCPATH}gcc
+CC = ${TCPATH}colorgcc
 AR = "${TCPATH}ar rc"
 AR2 = ${TCPATH}ranlib make -j4
 
