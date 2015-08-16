@@ -156,26 +156,17 @@ int parse_args(struct options *opts,
 			return -1;
 		} else if (c < nctrls) {
 			printf( "2Got opts: %d, %s, %s\n", c, s, v );
-			int *ctl = NULL;
-			printf( "ctl addr: %p", ctl );
-			ctl = opts->ctrls[opts->nctrls++];
-			printf( "ctl addr: %p", ctl );
-			
-			printf( "3Got opts: %d, %s, %s\n", c, s, v );
+			int *ctl = opts->ctrls[opts->nctrls++];
+			printf( "ctl addr: %p\n", ctl );
 			if (opts->nctrls > MAX_CTRLS) {
 				err("Too many codec options");
 				free(buffer);
 				return -1;
 			}
-			printf( "4Got opts: %d, %s, %s\n", c, s, v );
-			printf( "5Got opts: %p, %p, %p\n", &c, &s, &v );
-			printf( "ctl addr: %p", ctl );
-			printf( "ctrls[opts->nctrls: %p", opts->ctrls[opts->nctrls] );
-			printf( "5ctrls[c].id: 0x%x", ctrls[c].id );
+			printf( "ctl addr: %p\n", ctl );
+			printf( "dbgprint\n", ctl );
 			ctl[0] = ctrls[c].id;
-			printf( "6Got opts: %d, %s, %s\n", c, s, v );
 			ctl[1] = v ? atoi(v) : 1;
-			printf( "7Got opts: %d, %s, %s\n", c, s, v );
 			dbg("opt %s=%d", ctrls[c].name, ctl[1]);
 			printf( "8Got opts: %d, %s, %s\n", c, s, v );
 		} else {
