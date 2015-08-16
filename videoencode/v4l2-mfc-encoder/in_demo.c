@@ -132,7 +132,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 			// rounding shift and narrow
 			uint8x8_t u8 = (uint8x8_t) vrshrn_n_s16( u16, 8 );
 			// shift arround 0
-			u8 = vaddl_u8( u8, c128 );
+			u8 = vadd_u8( u8, c128 );
 			//store
 			vst1_u8( chromaUArray, u8 );
 
@@ -143,7 +143,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 			// rounding shift and narrow
 			uint8x8_t v8 = (uint8x8_t) vrshrn_n_s16( v16, 8 );
 			// shift arround 0
-			v8 = vaddl_u8( v8, c128 );
+			v8 = vadd_u8( v8, c128 );
 			//store
 			vst1_u8( chromaVArray, v8 );
 
