@@ -103,9 +103,9 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		int j;
 		for ( j = 0; j < 2; j++ ) {
 			// Covert to 16 bit
-			r16[i] = (int16x8_t) vaddl_u8( bgr[i].val[2], c0 )
-			g16[i] = (int16x8_t) vaddl_u8( bgr[i].val[1], c0 )
-			b16[i] = (int16x8_t) vaddl_u8( bgr[i].val[0], c0 )
+			r16[i] = (int16x8_t) vaddl_u8( bgr[i].val[2], c0 );
+			g16[i] = (int16x8_t) vaddl_u8( bgr[i].val[1], c0 );
+			b16[i] = (int16x8_t) vaddl_u8( bgr[i].val[0], c0 );
 			// Calculate Y
 			// Matrix product
 			int16x8_t y16 = vmulq_n_s16( r16[i], 76 );
@@ -117,10 +117,6 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		// store luma
 		vst1_u8( lumaArray, y8[0] );
 		vst1_u8( lumaArray + 8*3, y8[1] );
-
-		// Advance array pointers
-		Array += 8*3;
-		lumaArray += 16;
 
 		// Check if we should encode chroma
 		if( (i/640)%2 ) {
@@ -155,6 +151,9 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 			chromaUArray += 8;
 			chromaVArray += 8;
 		}
+		// Advance array pointers
+		bgrArray += 8*3;
+		lumaArray += 16;
 	}
 
 
