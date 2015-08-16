@@ -116,7 +116,7 @@ int get_codec(char *str)
 																		-	Must be (width*height)+(width*height)/2
 */
 int parse_args(struct options *opts,
-		char *mfc_name, char *out_name, int width, int height, char codex[],
+		char *mfc_name, char *out_name, int width, int height, const char *codex
 		char **NU12_ARRAY)
 {
 	static const int codecs[] = {
@@ -124,7 +124,10 @@ int parse_args(struct options *opts,
 	const int nctrls = array_len(ctrls);
 	char *tokens[nctrls + 4];
 	char *s, *v;
+	char *buffer;
 	int c, i;
+	buffer = (char*) mallox( strlen(codex) * size_of(char) );
+	memcpy( buffer, codex, strlen(codex) * size_of(char) );
 
 	// set values of options struct:
 	opts->encoderFd = eventfd( 0, 0 );
@@ -142,17 +145,19 @@ int parse_args(struct options *opts,
 	tokens[i++] = "h263";
 	tokens[i++] = "h264";
 	tokens[i++] = NULL;
-	s = codex;
+	s = buffer;
 
 	while (*s) {
 		c = getsubopt(&s, tokens, &v);
 		if (c < 0) {
 			err("unknown codec option '%s'", v);
+			free(buffer)
 			return -1;
 		} else if (c < nctrls) {
 			int *ctl = opts->ctrls[opts->nctrls++];
 			if (opts->nctrls > MAX_CTRLS) {
 				err("Too many codec options");
+				free(buffer)
 				return -1;
 			}
 			ctl[0] = ctrls[c].id;
@@ -167,8 +172,9 @@ int parse_args(struct options *opts,
 
 	if (opts->mfc_name == NULL) {
 		err("Please provide MFC device");
+		free(buffer)
 		return -1;
 	}
-
+	free(buffer)
 	return 0;
 }
