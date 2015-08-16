@@ -35,6 +35,7 @@ int main(int argc, char *argv[])
 
   // init images (and buffers)
   cv::Mat frame;
+  capDev.read(frame); // get first image and its size
   cv::Mat YcrCb;
   cv::Mat Gray(frame.rows, frame.cols, CV_8UC1, cv::Scalar::all(0));
   cv::Mat CbCr(frame.rows,frame.cols, CV_8UC2, cv::Scalar::all(0));
