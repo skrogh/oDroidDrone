@@ -138,7 +138,7 @@ int parse_args(struct options *opts,
 
 	// set values of options struct:
 	opts->encoderFd = eventfd( 0, 0 );
-	opts->duration = 0; // run forever
+	opts->duration = 200; // run forever, 200 for bW test
 	opts->rate = 1; // Rate is irrelevant, as input rate is not constant
 	opts->width = width;
 	opts->height = height;
