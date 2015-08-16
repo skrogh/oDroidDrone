@@ -49,18 +49,12 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 
 
 	struct in_demo_priv *p;
-	int x, y;
-	int i, j;
 	int size;
-	double rx, ry;
-	int t;
 
 	p = dev->priv;
 
 	if (nbufs != 2)
 		return -1;
-
-	t = dev->io[DIR_OUT].counter;
 
 	size = p->width * p->height;
 	if (size > lens[0] || size > 2 * lens[1]) {
@@ -70,16 +64,6 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 
 	memcpy(bufs[0], p->NU12_ARRAY[0], size);
 	memcpy(bufs[1], p->NU12_ARRAY[1], size / 2);
-
-	rx = cos(7 * t / 3.14 / 25 * 100 / p->width);
-	ry = sin(6 * t / 3.14 / 25 * 100 / p->width);
-
-	x = (rx + 1) / 2 * (p->width - 2 * SQUARE_SIZE) + SQUARE_SIZE;
-	y = (ry + 1) / 2 * (p->height - 2 * SQUARE_SIZE) + SQUARE_SIZE;
-
-	for (i = MIN(SQUARE_SIZE, p->width) - 1; i >= 0; --i)
-		for (j = MIN(SQUARE_SIZE, p->height) - 1; j >= 0; --j)
-			bufs[0][x + i + (y + j) * p->width] = 255;
 
 	return size;
 }
