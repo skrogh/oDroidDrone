@@ -73,7 +73,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 	uint8_t* bgrArray = p->NU12_ARRAY[2];
 	uint8_t* lumaArray = bufs[0];
 	uint8_t* chromaUArray = bufs[1];
-	uint8_t* chromaVArray = bufs[1] + size/4;
+	uint8_t* chromaVArray = bufs[1];
 
 	int i;
 	for( i = 0; i < size/16; i++ ) {
