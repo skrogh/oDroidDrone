@@ -140,7 +140,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 			chromaVArray += 8;
 		}
 		// Advance array pointers
-		bgrArray += 8*3;
+		bgrArray += 16*3;
 		lumaArray += 16;
 	}
 
