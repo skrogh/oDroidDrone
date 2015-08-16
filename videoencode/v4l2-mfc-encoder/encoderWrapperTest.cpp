@@ -55,11 +55,13 @@ int main(int argc, char *argv[])
     /* grab popcor... image */
     capDev.read(frame);
     // Convert it
+    /*
     cv::cvtColor(frame, YcrCb, cv::COLOR_BGR2YCrCb);
     cv::Mat out[] = {Gray, CbCr};
     int from_to[] = { 0,0, 2,1, 1,2 };
     cv::mixChannels(&YcrCb, 1, out, 2, from_to, 3);
     cv::resize(CbCr, CbCr_2, cv::Size(), 0.5, 0.5, cv ::INTER_NEAREST);                                       // Wait for a keystroke in the window
+    */
     // Trigger encodingb
 		encoderTriggerConversion( &opts );
 	}
