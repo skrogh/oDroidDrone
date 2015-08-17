@@ -106,7 +106,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		vst1_u8( lumaArray + 8, y8[1] );
 
 		// Check if we should encode chroma
-		if(0){//( (i/(p->width/16))%2 ) {
+		if( (i/(p->width/16))%2 ) {
 			// get each Other
 			int16x8x2_t r = vuzpq_s16( r16[0], r16[1] ); // get each other R
 			int16x8x2_t g = vuzpq_s16( g16[0], g16[1] ); // get each other R
