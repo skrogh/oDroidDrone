@@ -135,7 +135,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 			vst2_u8( chromaArray, c );
 
 			// move array pointer
-			chromaArray += 8;
+			chromaArray += 16;
 		}
 		// Advance array pointers
 		bgrArray += 16*3;
