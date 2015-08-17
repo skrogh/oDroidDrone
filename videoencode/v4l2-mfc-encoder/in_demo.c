@@ -77,7 +77,6 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 
 	int i;
 	for( i = 0; i < size/16; i++ ) {
-		printf( "it: %d/%d. bgrArray: %d, Luma Array: %d\n", i, size/16, (unsigned int)bgrArray - (unsigned int)p->NU12_ARRAY[2], (unsigned int)lumaArray- (unsigned int)bufs[0]  );
 		uint8x8x3_t bgr[2] = { vld3_u8( bgrArray ), //load 16 pixels at 8-bits into 3 channels
 			vld3_u8( bgrArray + 3*8 ) }; //load 16 pixels at 8-bits into 3 channels
 		uint8x8_t c128 = vdup_n_u8( 128 );
@@ -107,7 +106,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		vst1_u8( lumaArray + 8*3, y8[1] );
 
 		// Check if we should encode chroma
-		if(0) { //( (i/(p->width/16))%2 ) {
+		if( (i/(p->width/16))%2 ) {
 			// get each Other
 			int16x8x2_t r = vuzpq_s16( r16[0], r16[1] ); // get each other R
 			int16x8x2_t g = vuzpq_s16( g16[0], g16[1] ); // get each other R
