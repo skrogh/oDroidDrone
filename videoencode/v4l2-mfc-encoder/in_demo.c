@@ -103,7 +103,7 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		}
 		// store luma
 		vst1_u8( lumaArray, y8[0] );
-		vst1_u8( lumaArray + 8, c0 );
+		vst1_u8( lumaArray + 8, y8[1] );
 
 		// Check if we should encode chroma
 		if(0){//( (i/(p->width/16))%2 ) {
