@@ -38,7 +38,7 @@
 struct in_demo_priv {
 	int width;
 	int height;
-	char **NU12_ARRAY;
+	char **NV12_ARRAY;
 };
 
 static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
@@ -66,14 +66,13 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 
 	memset( bufs[0], 0, size );
 	memset( bufs[1], 128, size / 2 );
-	//memcpy(bufs[0], p->NU12_ARRAY[0], size);
-	//memcpy(bufs[1], p->NU12_ARRAY[1], size / 2);
+	//memcpy(bufs[0], p->NV12_ARRAY[0], size);
+	//memcpy(bufs[1], p->NV12_ARRAY[1], size / 2);
 
 	// copy blue
-	uint8_t* bgrArray = p->NU12_ARRAY[2];
+	uint8_t* bgrArray = p->NV12_ARRAY[2];
 	uint8_t* lumaArray = bufs[0];
-	uint8_t* chromaUArray = bufs[1];
-	uint8_t* chromaVArray = bufs[1] + size/4;
+	uint8_t* chromaArray = bufs[1];
 
 	int i;
 	for( i = 0; i < size/16; i++ ) {
@@ -120,8 +119,6 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 			uint8x8_t u8 = (uint8x8_t) vrshrn_n_s16( u16, 8 );
 			// shift arround 0
 			u8 = vadd_u8( u8, c128 );
-			//store
-			vst1_u8( chromaUArray, u8 );
 
 			// V
 			int16x8_t v16 = vmulq_n_s16( r.val[0], 127 );
@@ -131,12 +128,14 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 			uint8x8_t v8 = (uint8x8_t) vrshrn_n_s16( v16, 8 );
 			// shift arround 0
 			v8 = vadd_u8( v8, c128 );
-			//store
-			vst1_u8( chromaVArray, v8 );
+
+			//interleave and store
+			uint8x8x2_t c = { .val[0] = u8,
+												.val[1] = v8 };
+			vst2_u8( chromaArray, c );
 
 			// move array pointer
-			chromaUArray += 8;
-			chromaVArray += 8;
+			chromaArray += 8;
 		}
 		// Advance array pointers
 		bgrArray += 16*3;
@@ -161,7 +160,7 @@ static struct io_dev_ops in_demo_ops = { .read = in_demo_read,
 					 .destroy = in_demo_destroy
 					};
 
-struct io_dev *in_demo_create(int width, int height, int encoderFd, char **NU12_ARRAY)
+struct io_dev *in_demo_create(int width, int height, int encoderFd, char **NV12_ARRAY)
 {
 	struct io_dev *dev;
 	struct in_demo_priv *priv;
@@ -172,7 +171,7 @@ struct io_dev *in_demo_create(int width, int height, int encoderFd, char **NU12_
 	priv = malloc(sizeof(struct in_demo_priv));
 	priv->width = width;
 	priv->height = height;
-	priv->NU12_ARRAY = NU12_ARRAY;
+	priv->NV12_ARRAY = NV12_ARRAY;
 
 	dev->fd = encoderFd;
 	dev->io[DIR_IN].type = IO_NONE;

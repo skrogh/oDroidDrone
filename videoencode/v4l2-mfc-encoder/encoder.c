@@ -77,7 +77,7 @@ int encoderSetup( struct options *opts )
 	struct io_dev *chain[3] = {};
 
 	dbg( "EncoderFd: %d\n", opts->encoderFd );
-	input = in_demo_create(opts->width, opts->height, opts->encoderFd, opts->NU12_ARRAY);
+	input = in_demo_create(opts->width, opts->height, opts->encoderFd, opts->NV12_ARRAY);
 	if (input == NULL)
 		return 1;
 	chain[0] = input;

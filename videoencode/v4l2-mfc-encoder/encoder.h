@@ -38,7 +38,7 @@ struct options {
 	int rate;
 	int nctrls;
 	int ctrls[MAX_CTRLS][2];
-	char **NU12_ARRAY;
+	char **NV12_ARRAY;
 };
 
 /*
@@ -71,11 +71,11 @@ void encoderTriggerConversion(  struct options *opts );
 	height:			<int>									-	Image height
  	codex:			<codec>[,param[=val]]	-	Codex and parameters used.
 																		-	Parameters can be seen in ctrls struct above
-	NU12_ARRAY:	<array of arrays>			-	Memory area fro imae to be encoded.
+	NV12_ARRAY:	<array of arrays>			-	Memory area fro imae to be encoded.
 																		-	Must be (width*height)+(width*height)/2
 */
 int parse_args(struct options *opts,
 		char *mfc_name, char *out_name, int width, int height, const char *codex,
-		char **NU12_ARRAY);
+		char **NV12_ARRAY);
 
 #endif
