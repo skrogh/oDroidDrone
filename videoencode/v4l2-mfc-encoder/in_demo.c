@@ -91,16 +91,16 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		int j;
 		for ( j = 0; j < 2; j++ ) {
 			// Covert to 16 bit
-			r16[i] = (int16x8_t) vaddl_u8( bgr[i].val[2], c0 );
-			g16[i] = (int16x8_t) vaddl_u8( bgr[i].val[1], c0 );
-			b16[i] = (int16x8_t) vaddl_u8( bgr[i].val[0], c0 );
+			r16[j] = (int16x8_t) vaddl_u8( bgr[j].val[2], c0 );
+			g16[j] = (int16x8_t) vaddl_u8( bgr[j].val[1], c0 );
+			b16[j] = (int16x8_t) vaddl_u8( bgr[j].val[0], c0 );
 			// Calculate Y
 			// Matrix product
-			int16x8_t y16 = vmulq_n_s16( r16[i], 76 );
-			y16 = vmlaq_n_s16( y16, g16[i], 150 );
-			y16 = vmlaq_n_s16( y16, b16[i], 29 );
+			int16x8_t y16 = vmulq_n_s16( r16[j], 76 );
+			y16 = vmlaq_n_s16( y16, g16[j], 150 );
+			y16 = vmlaq_n_s16( y16, b16[j], 29 );
 			// rounding shift and narrow
-			y8[i] = (uint8x8_t) vrshrn_n_s16( y16, 8 );
+			y8[j] = (uint8x8_t) vrshrn_n_s16( y16, 8 );
 		}
 		// store luma
 		vst1_u8( lumaArray, y8[0] );
