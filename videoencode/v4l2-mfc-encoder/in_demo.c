@@ -64,8 +64,9 @@ static int in_demo_read(struct io_dev *dev, int nbufs, char **bufs, int *lens)
 		return -1;
 	}
 
-	memset( bufs[0], 0, size );
-	memset( bufs[1], 128, size / 2 );
+	// Copy is done while going from BGR to NV12
+	//memset( bufs[0], 0, size );
+	//memset( bufs[1], 128, size / 2 );
 	//memcpy(bufs[0], p->NV12_ARRAY[0], size);
 	//memcpy(bufs[1], p->NV12_ARRAY[1], size / 2);
 
